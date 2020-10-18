@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html async>
+  <head>
+    <title>Template Name</title> <!--Please Add Template Name Here -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="template-built-by" content="Matthew Magin"/>
+    <meta name="scope" content="DTB-000"/>
+    <meta name="build" content="DTB-001"/>
+    <meta name="updates" content="DTB-888, DTB-0000"/>
+
+    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/css/main.css"/>
+    <!--Please Link Your Fonts Here-->
+
+    <style>
+      /*Please Add Your Template Styling Here*/
+      
+    </style>
+  </head>
+  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0"> <!--NEED TO REMOVE / AUDIT THESE DATA ATTRIBUTES HERE-->
+    <div class="page">
+      <div class="bleed">
+        <div class="container">
+          
+        </div>
+      </div>
+    </div>
+
+    
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/main.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/all-images-loaded-callback.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/custom-rich-text.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/dynamic-inject.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/fontfaceobserver.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/hide-empty-titles.js"></script> <!-- This needs an update-->
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/limiters.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/prefixfree.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/qrcode.min.js"></script> <!--TO AUDIT-->
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/textfit.js"></script> <!--TO AUDIT & NEED DOCS-->
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/validate.js"></script> <!--NEED DOCS-->
+    <!--Dynamic Columns & Pages -->
+    <!--<script src="js/dynamic-inject.js"></script>--> <!--You will need a Mutation Observer for this one if you want to use it--><!--Need to write-->
+
+    <script>
+      //console.clear();
+
+      window.addEventListener('load', function(event) {
+        const fonts = []; //List your document fonts here
+        const fontObservers = [];
+
+        fonts.forEach(font => {
+          const obs = new FontFaceObserver(font);
+          fontObservers.push(obs.load())
+        });
+        Promise.all(fontObservers).then(() => {
+          /*Functions To Run After Load*/
+          setOutfitState();
+          setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
+          //hideEmptyTitles();
+          checkCrop();
+          //checkExport();
+          charLimit();
+          observerAndLoad();
+
+          if(getOutfitState() == "document"){
+            imageCompression();
+          }
+          
+          if(getOutfitState() == "template" || getOutfitState() == "document"){
+            setupMutationObserver(document.body, {characterData: true, childList: true, subtree: true, characterDataOldValue: true}, observerAndLoad);
+          }
+          
+          console.info("Document is Print Ready");
+          setTimeout(function() {	document.dispatchEvent(new Event('printready'));	}, 5000);
+        }, function () {
+          console.error("Font is not available");
+        });
+      });
+      
+      function observerAndLoad(){
+        if(getOutfitState() != "preview"){
+          console.log("TESt");
+          maxLineCheck();
+          maxHeightCheck();
+          charLimit();
+        }
+        
+        //hideEmptyTitles();
+        
+        //dataReplace(".dataReplaceTest", [["[year]", "{{year}}"]]);
+      }
+      
+      
+
+      
+      /* STILL TO TEST / DEVELOP
+      function dataReplace(selector, data){
+        let targets = document.querySelectorAll(selector);
+        targets.forEach(function (target) {
+          var original = target.querySelector("[data-original]");
+          var dynamic = target.querySelector("[data-dynamic]");
+
+          data.forEach(item => {
+            let lookup = item[0];
+            let replace = item[1];
+
+            let formatted = (original.innerHTML).replaceAll(lookup, replace);
+            dynamic.innerHTML = formatted;
+            original.style.display = "none";
+          });
+        });
+      }*/
+    </script>
+  </body>
+</html>
