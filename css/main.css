@@ -1,0 +1,269 @@
+/*minireset.css*/
+html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,iframe,hr,h1,h2,h3,h4,h5,h6{margin:0;padding:0}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}ul{list-style:none}button,input,select,textarea{margin:0}html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}img,embed,iframe,object,audio,video{height:auto;max-width:100%}iframe{border:0}table{border-collapse:collapse;border-spacing:0}td,th{padding:0;text-align:left}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  font-size: 16px;
+  color: #000000;
+  word-break: break-word !important;
+}
+
+body{
+  background: #ffffff;
+}
+
+@media screen {
+  .crop .page:not(:last-child) {
+    border-bottom: 1px dotted cyan;
+  }
+}
+
+.page{
+  overflow: hidden;
+  position: relative; 
+  height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.relative {
+  position: relative;
+}
+
+.cover {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.contain {
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.blend {
+  background-blend-mode: overlay;
+}
+
+/** Overflow Styles **/
+.overflow {
+  position: relative !important;
+  border: 1px dashed red;
+  color: red !important;
+}
+
+.overflow * { 
+  color: inherit !important; 
+}
+
+.overflow {
+  border: none;
+  box-shadow: 0 0 0 0.0362rem red;
+  background: rgba(255, 0, 0, 0.4);
+  position: relative;
+  z-index: 999;}
+.overflow h1, 
+.overflow h2, 
+.overflow h3, 
+.overflow h4, 
+.overflow h5, 
+.overflow h6, 
+.overflow p, 
+.overflow li { color: red !important; }
+.overflow::before {
+  content: '+';
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  height: 1em;
+  width: 1em;
+  max-height: 100%;
+  color: red;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 1em;
+  background-color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overflow:hover:before {
+  background-color: red;
+  color: white; }
+.overflow:after {
+  display: none; }
+.overflow:hover:after {
+  display: block;
+  content: 'Max number of lines exceeded!';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: black;
+  color: white;
+  border-radius: 0;
+  padding: 0 1.5em 0 0.5em;
+  box-sizing: border-box;
+  max-height: 100%;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-align: right;
+  line-height: 1em;
+  z-index: 2;
+}
+
+.overflow[data-max-height]:hover:after {
+  content: 'Max height exceeded!';  
+}
+
+.overflow[data-char-limit]:hover:after {
+  content: 'Character limit exceeded';        
+}
+
+.overflow .token-value.token-empty {
+  display: none;
+}
+
+/* Small fix that prevents Superscript and Subscript from breaking the element's line-height */
+sup,
+sub {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;        
+  line-height: 1em;
+}
+
+sub {
+  top: 0.4em;
+}   
+
+/* Hiding Placeholder Elements on Export */
+.is-export-mode .placeholder__container,
+.is-export-mode .placeholder__trigger {
+  display: none;
+}     
+
+/* Dynamic Inject container style */
+.js-dynamicInjectMaster { display: none; }
+
+.js-dynamicInjectMasterReposition {
+  position: absolute;
+  opacity: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.backgroundImage div {
+  width: auto !important;
+  height: auto !important;
+  right: 0;
+  bottom: 0;
+}
+
+/* Helper classes */
+.u-hide { display: none; }
+
+/* Helper class for fixing Reposition tool bug */
+.reposition-fix {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;        
+}
+
+.reposition-fix div {
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.placeholderImage{
+  position: absolute;
+  top: 3mm;
+  left: 3mm;
+  bottom: 3mm;
+  right: 3mm;
+  width: calc(100% - 6mm);
+  height: calc(100% - 6mm);
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.4;
+}
+
+.crop-mark{
+  position: absolute;
+  height: 28.81px;
+  width: 28.81px;
+}
+
+.crop-marks .crop-mark.top-left{
+  top: 0;
+  left: 0;
+}
+
+.crop-marks .crop-mark.top-right{
+  top: 0;
+  right: 0;
+  transform: rotate(90deg);
+}
+
+.crop-marks .crop-mark.bottom-left{
+  bottom: 0;
+  left: 0;
+  transform: rotate(270deg);
+}
+
+.crop-marks .crop-mark.bottom-right{
+  bottom: 0;
+  right: 0;
+  transform: rotate(180deg);
+}
+
+[data-trim="true"] .bleed{
+  --trimOffset: 4.41mm;
+}
+
+[data-trim="false"] .bleed{
+  --trimOffset: -3mm;
+}
+
+.bleed{
+  position: absolute;
+  top: var(--trimOffset);
+  left: var(--trimOffset);
+  bottom: var(--trimOffset);
+  right: var(--trimOffset);
+}
