@@ -28,16 +28,17 @@
 
     
     <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/main.js"></script>
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/all-images-loaded-callback.js"></script>
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/custom-rich-text.js"></script>
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/dynamic-inject.js"></script>
     <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/fontfaceobserver.js"></script>
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/hide-empty-titles.js"></script> <!-- This needs an update-->
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/all-images-loaded-callback.js"></script>
     <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/limiters.js"></script>
     <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/prefixfree.js"></script>
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/qrcode.min.js"></script> <!--TO AUDIT-->
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/textfit.js"></script> <!--TO AUDIT & NEED DOCS-->
-    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/validate.js"></script> <!--NEED DOCS-->
+    
+    <!--<script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/custom-rich-text.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/dynamic-inject.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/hide-empty-titles.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/qrcode.min.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/textfit.js"></script>
+    <script src="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/js/validate.js"></script>-->
     <!--Dynamic Columns & Pages -->
     <!--<script src="js/dynamic-inject.js"></script>--> <!--You will need a Mutation Observer for this one if you want to use it--><!--Need to write-->
 
