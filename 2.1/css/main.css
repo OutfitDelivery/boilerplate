@@ -221,6 +221,8 @@ sub {
   background-repeat: no-repeat;
   background-size: contain;
   opacity: 0.4;
+  z-index:999;
+  pointer-events:none;
 }
 
 .crop-mark{
