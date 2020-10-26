@@ -9,7 +9,7 @@
     <meta name="build" content="DTB-001"/>
     <meta name="updates" content="DTB-888, DTB-0000"/>
 
-    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/delivery-team/build-boilerplate/2.1/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
     <!--Please Link Your Fonts Here-->
 
     <style>
