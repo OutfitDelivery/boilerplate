@@ -4,12 +4,12 @@
     <title>Template Name</title> <!--Please Add Template Name Here -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="template-built-by" content="Matthew Magin"/>
+    <meta name="template-built-by" content=""/>
     <meta name="scope" content="DTB-000"/>
     <meta name="build" content="DTB-001"/>
     <meta name="updates" content="DTB-888, DTB-0000"/>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/css/main.min.css"/>
 
     <!--Please Link Your Fonts Here-->
 
@@ -27,18 +27,18 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/fontfaceobserver.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/all-images-loaded-callback.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/limiters.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/prefixfree.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/fontfaceobserver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/all-images-loaded-callback.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/limiters.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/prefixfree.min.js"></script>
 
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/custom-rich-text.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/dynamic-inject.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/hide-empty-titles.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/formatters.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/custom-rich-text.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/hide-empty-titles.min.js"></script>-->
     <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/qrcode.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/textfit.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/validate.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/textfit.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2/js/validate.min.js"></script>-->
     
 
     <!--Dynamic Columns & Pages -->
@@ -49,6 +49,8 @@
 
       window.addEventListener('load', function(event) {
         const fonts = []; //List your document fonts here
+        return;
+        
         const fontObservers = [];
 
         fonts.forEach(font => {
@@ -57,6 +59,7 @@
         });
         Promise.all(fontObservers).then(() => {
           /*Functions To Run After Load*/
+          console.log("HEYEYEYEYEYY")
           setOutfitState();
           setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
           //hideEmptyTitles();
@@ -82,7 +85,6 @@
       
       function observerAndLoad(){
         if(getOutfitState() != "preview"){
-          console.log("TESt");
           maxLineCheck();
           maxHeightCheck();
           charLimit();
