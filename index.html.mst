@@ -10,7 +10,6 @@
     <meta name="updates" content="DTB-888, DTB-0000"/>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/css/main.min.css"/>
-
     <!--Please Link Your Fonts Here-->
 
     <style>
@@ -18,7 +17,7 @@
       
     </style>
   </head>
-  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0"> <!--NEED TO REMOVE / AUDIT THESE DATA ATTRIBUTES HERE-->
+  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true"> <!--NEED TO REMOVE / AUDIT THESE DATA ATTRIBUTES HERE-->
     <div class="page">
       <div class="bleed">
         <div class="container">
@@ -92,28 +91,6 @@
         //hideEmptyTitles();
         
       }
-      
-      
-
-      
-      
-      /* STILL TO TEST / DEVELOP
-      function dataReplace(selector, data){
-        let targets = document.querySelectorAll(selector);
-        targets.forEach(function (target) {
-          var original = target.querySelector("[data-original]");
-          var dynamic = target.querySelector("[data-dynamic]");
-
-          data.forEach(item => {
-            let lookup = item[0];
-            let replace = item[1];
-
-            let formatted = (original.innerHTML).replaceAll(lookup, replace);
-            dynamic.innerHTML = formatted;
-            original.style.display = "none";
-          });
-        });
-      }*/
     </script>
   </body>
 </html>
