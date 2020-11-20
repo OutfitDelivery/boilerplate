@@ -9,7 +9,7 @@
     <meta name="build" content="DTB-001"/>
     <meta name="updates" content="DTB-888, DTB-0000"/>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/css/main.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/css/main.min.css"/>
     <!--Please Link Your Fonts Here-->
 
     <style>
@@ -26,18 +26,18 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/fontfaceobserver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/all-images-loaded-callback.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/prefixfree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/fontfaceobserver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/limiters.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/all-images-loaded-callback.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/prefixfree.min.js"></script>
 
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/formatters.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/custom-rich-text.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/hide-empty-titles.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/qrcode.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/textfit.min.js"></script>-->
-    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.0/js/validate.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/formatters.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/custom-rich-text.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/hide-empty-titles.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/qrcode.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/textfit.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/validate.min.js"></script>-->
     
 
     <!--Dynamic Columns & Pages -->
