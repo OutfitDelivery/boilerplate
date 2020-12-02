@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/fontfaceobserver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/all-images-loaded-callback.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/prefixfree.min.js"></script>
 
     <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/formatters.min.js"></script>-->
@@ -38,6 +38,7 @@
     <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/qrcode.min.js"></script>-->
     <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/textfit.min.js"></script>-->
     <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/validate.min.js"></script>-->
+    <!--<script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/js/all-images-loaded-callback.min.js"></script>-->
     
 
     <!--Dynamic Columns & Pages -->
