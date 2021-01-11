@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html async>
   <head>
-    <title>Template Name</title> <!--Please Add Template Name Here -->
+  <!--  Template Admin Build Instructions 
+        1. Fill Out Title Meta-Data
+        2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
+        3. Fill Out Build Card Meta-Data
+        4. Remove this comment
+  -->
+    <title>Template Name</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="template-built-by" content=""/>
     <meta name="scope" content="DTB-000"/>
     <meta name="build" content="DTB-001"/>
-    <meta name="updates" content="DTB-888, DTB-0000"/>
+    <meta name="updates" content=""/>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.2.1/css/main.min.css"/>
     <!--Please Link Your Fonts Here-->
@@ -17,7 +23,7 @@
       
     </style>
   </head>
-  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true"> <!--NEED TO REMOVE / AUDIT THESE DATA ATTRIBUTES HERE-->
+  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true">
     <div class="page">
       <div class="bleed">
         <div class="container">
@@ -42,7 +48,7 @@
     
 
     <!--Dynamic Columns & Pages -->
-    <!--<script src="js/dynamic-inject.js"></script>--> <!--You will need a Mutation Observer for this one if you want to use it--><!--Need to write-->
+    <!--<script src="js/dynamic-inject.js"></script>--> <!--You will need a Mutation Observer for this one if you want to use it-->
 
     <script>
       console.clear();
