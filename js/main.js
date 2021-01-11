@@ -231,7 +231,12 @@ function pageHeightSetup(trimMarks, renderer) {
       return "100vh";
     case "2":
       console.info("Renderer 2 Set");
-      return "calc(100vh - 1px)";
+      if(trimMarks){
+		return "calc(100vh - 1px)";
+      } 
+      
+      return "100vh";
+      
     default:
       console.error("Renderer Not Set");
       return "100vh";
