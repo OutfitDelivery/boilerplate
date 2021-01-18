@@ -251,3 +251,12 @@ function validFontList(fontsListed) {
 
   return true;
 }
+
+/**
+ * Returns a background image of a inputed hex at a requested opactiy 
+ * @param {string} colour - Hex code from platform. 
+ * @param {number} opacity - How much traspancy do you want between 1 and 0? 
+ */
+function backgroundOpacityReduce (colour, opacity) {
+  return `url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0 0 50 50' enable-background='new 0 0 50 50' xml:space='preserve'%3E%3Crect opacity='${opacity}' fill='${colour.replace('#','%23')}' width='50' height='50'/%3E%3C/svg%3E")`;
+}
