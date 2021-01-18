@@ -253,10 +253,22 @@ function validFontList(fontsListed) {
 }
 
 /**
- * Returns a background image of a inputed hex at a requested opactiy 
+ * Computes a Background Image of a inputted hex at a requested opactiy.
+ * Sets Background Image CSS property to the computed background image. If no selector parameter is set then the function returns the background image.
  * @param {string} colour - Hex code from platform. 
  * @param {number} opacity - How much traspancy do you want between 1 and 0? 
+ * @param {string} selector - The css selector of the element that should be affected (optional)
  */
-function backgroundOpacityReduce (colour, opacity) {
-  return `url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0 0 50 50' enable-background='new 0 0 50 50' xml:space='preserve'%3E%3Crect opacity='${opacity}' fill='${colour.replace('#','%23')}' width='50' height='50'/%3E%3C/svg%3E")`;
+
+function acctColOpacitySetter(colour, opacity, selector = null) {
+  let backgroundImage = `url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0 0 50 50' enable-background='new 0 0 50 50' xml:space='preserve'%3E%3Crect opacity='${opacity}' fill='${colour.replace('#','%23')}' width='50' height='50'/%3E%3C/svg%3E")`;
+  if(selector == null) return backgroundImage;
+        
+  let elements = document.querySelectorAll(selector);
+  elements.forEach(element => {
+    element.style.backgroundColor = "unset";
+    element.style.background = "unset";
+    element.style.backgroundImage = backgroundImage;
+  });
 }
+
