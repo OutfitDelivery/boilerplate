@@ -85,8 +85,16 @@
           console.error("Font is not available");
         });
       });
+
+      let mto = () => {
+        setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
+        if(getState() == "template" || getState() == "document"){
+          var debounceFunction = debounce(mto, 100);
+          setupObserver(window.parent.document, { childList: true, subtree: true, }, debounceFunction, []);
+        }
+      }
       
-      function observerAndLoad(){
+      let observerAndLoad = () => {
         if(getOutfitState() != "preview"){
           maxLineCheck();
           maxHeightCheck();
@@ -94,8 +102,9 @@
         }
         
         //hideEmptyTitles();
-        
       }
+
+      
     </script>
   </body>
 </html>
