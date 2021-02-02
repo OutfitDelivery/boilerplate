@@ -64,3 +64,13 @@ function showMTOMessage(message, formGroupClassList) {
     formGroup.innerHTML = message;
   }
 }
+
+function getParent() {
+  return window.parent.document;
+}
+
+function getSidebar() {
+  var sidebar = getParent().querySelectorAll(".sidebar .current-list");
+  sidebar = sidebar[sidebar.length - 1];
+  return sidebar;
+}
