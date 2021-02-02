@@ -88,7 +88,7 @@
 
       let mto = () => {
         setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
-        if(getState() == "template" || getState() == "document"){
+        if(getOutfitState() == "template" || getOutfitState() == "document"){
           var debounceFunction = debounce(mto, 100);
           setupObserver(window.parent.document, { childList: true, subtree: true, }, debounceFunction, []);
         }
