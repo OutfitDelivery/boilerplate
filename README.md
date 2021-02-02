@@ -56,3 +56,14 @@ TO WRITE
 ### dynamic-inject
 
 ### dynamic-layout
+
+### [mto.js](js/mto.js) [ALPHA - DO NOT USE]
+The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates.
+
+This function requires:
+- A input defined in the account as `{{{mto-v3}}}` configured to Team Metadata
+- Outfit Account snippet called `mtoV3-params` which contains the following `{'inputName': 'Bakery Selection', 'inputListClassList': '.sidebar-content .form-group .choice-variable .input-options .multichoice-edit-row.p-t-2', 'formGroupClassList': '.sidebar-content .form-group'}` (the inputName can be updated to be account specific)
+- A handleMTOData() function - a function that takes in the array of team metadata and outputs it to a certain template. It is recommended that this be located in Account Snippets)
+- [getOutfitState()](js/main.js#L188)
+- [setOutfitState()](js/main.js#L173)
+- [debounce()](js/main.js#L275)
