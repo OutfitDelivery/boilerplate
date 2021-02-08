@@ -1,9 +1,20 @@
+// render has an issue with replace all causing errors to be thrown which stops the render. This is a pollyfil for all renders 
+function replaceAll(content, replaceFrom, replaceTo) {
+  if (content && replaceFrom && replaceTo) {
+    while(~content.indexOf(replaceFrom)) {
+      content = content.replace(replaceFrom, replaceTo)
+    }
+    console.log(content)
+  }
+  return content;
+}
+
 function removeWord() {
   let elements = document.querySelectorAll("[data-remove-word]");
   elements.forEach((el) => {
     let wordToRemove = el.dataset.removeWord;
     let text = el.innerHTML;
-    var res = text.replaceAll(wordToRemove, "");
+    var res = replaceAll(text, wordToRemove, "");
     el.innerHTML = res;
   });
 }
@@ -26,13 +37,13 @@ function dynamicReplaceMulti(target, data) {
         target.innerText.includes(lookup) != -1 &&
         (inputValue != "" || inputValue.length != 0)
       ) {
-        target.innerHTML = target.innerHTML.replaceAll(lookup, inputValue); //If found replace
+        target.innerHTML = replaceAll(target.innerHTML, lookup, inputValue); //If found replace
       } else {
         //NEED TO FIX
         let lookupSpan = `<span class='lookup-value'>${lookup}</span>`;
         console.log(target.innerHTML);
         let temp = target.innerHTML.split(lookupSpan);
-        temp = temp.map((x) => x.replaceAll(lookup, lookupSpan));
+        temp = temp.map((x) => replaceAll(x, lookup, lookupSpan));
         target.innerHTML = temp.join(lookupSpan);
       }
     });
@@ -50,7 +61,7 @@ function dynamicReplaceSingle() {
     const replace = el.dataset.replaceTo;
 
     if (text.search(lookup) != -1 && (replace != "" || replace.length != 0)) {
-      el.innerHTML = html.replaceAll(lookup, replace);
+      el.innerHTML = replaceAll(html, lookup, replace);
     }
   });
 }
