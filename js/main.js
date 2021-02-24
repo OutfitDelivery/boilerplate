@@ -178,6 +178,8 @@ function setOutfitState() {
     !mode && window.location.href.indexOf("projects") > -1 ? "document" : mode;
   mode =
     !mode && window.location.href.indexOf("preview") > -1 ? "preview" : mode;
+  mode =
+    !mode && window.location.href.indexOf("localhost") > -1 ? "local" : mode;
   if (!mode) {
     mode = "error";
   }
