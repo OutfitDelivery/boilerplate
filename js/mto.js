@@ -14,7 +14,10 @@ function setupMTO(mtoList, mtoParams, inputData, additionalData = null) {
     if ((mtoList == "" || mtoList == null) && state != "template") {
       if (correctInputName(mtoInputName)) {
         //The user has selected into the MTO input, however some their team is not allowed to use MTO, show an error.
-        showMTOMessage("MTO is not available for your team. Please click back to continue editing your document.", formGroupClassList);
+        showMTOMessage(
+          "MTO is not available for your team. Please click back to continue editing your document.",
+          formGroupClassList
+        );
       } else {
         hideInput(mtoInputName);
       }
@@ -29,7 +32,10 @@ function setupMTO(mtoList, mtoParams, inputData, additionalData = null) {
 
     if (state === "template") {
       if (correctInputName(mtoInputName)) {
-        showMTOMessage("MTO functionality is not available on a template level.", formGroupClassList);
+        showMTOMessage(
+          "MTO functionality is not available on a template level.",
+          formGroupClassList
+        );
       }
 
       return;
@@ -45,7 +51,9 @@ function setupMTO(mtoList, mtoParams, inputData, additionalData = null) {
 
     handleMTOData(JSON.parse(inputData), additionalData);
   } catch (error) {
-    console.error("An MTO error has occurred. Please try again later. If the issue still persists please contact Outfit Support");
+    console.error(
+      "An MTO error has occurred. Please try again later. If the issue still persists please contact Outfit Support"
+    );
     console.error("MTO Error: " + error);
     return;
   }
@@ -73,4 +81,29 @@ function getSidebar() {
   var sidebar = getParent().querySelectorAll(".sidebar .current-list");
   sidebar = sidebar[sidebar.length - 1];
   return sidebar;
+}
+
+function correctInputName(expectedInputName) {
+  if (getCurrentInputName() === expectedInputName) {
+    return true;
+  }
+
+  return false;
+}
+
+function getCurrentInputName() {
+  var currentInputName = getSidebar().querySelector(".flex.items-center .h-3.ff-open-sans.truncate").innerText;
+  return currentInputName;
+}
+
+function hideInput(inputValue) {
+  var parentDoc = window.parent.document;
+  var sidebar = parentDoc.querySelector(".sidebar .current-list");
+  var inputs = sidebar.querySelectorAll(".sidebar-items");
+  inputs.forEach(function (input) {
+    var inputName = input.querySelector(".field-variable-tag").innerText;
+    if (inputValue == inputName) {
+      input.style.display = "none";
+    }
+  });
 }

@@ -64,6 +64,7 @@
         Promise.all(fontObservers).then(() => {
           /*Functions To Run After Load*/
           setOutfitState();
+          //mto();
           setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
           //hideEmptyTitles();
           checkCrop();
@@ -90,7 +91,7 @@
         setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
         if(getOutfitState() == "template" || getOutfitState() == "document"){
           var debounceFunction = debounce(mto, 100);
-          setupObserver(window.parent.document, { childList: true, subtree: true, }, debounceFunction, []);
+          setupMutationObserver(window.parent.document, { childList: true, subtree: true, }, debounceFunction, []);
         }
       }
       
