@@ -16,6 +16,7 @@
     <meta name="updates" content=""/>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/css/main.min.css"/>
+
     <style>
       
     </style>
@@ -47,10 +48,19 @@
 
     <!--Dynamic Columns & Pages -->
     <!--<script src="js/dynamic-inject.js"></script>--> <!--You will need a Mutation Observer for this one if you want to use it-->
-
     <script>
-      console.clear();
-
+      	console.clear();
+    	setOutfitState();
+      
+        /*let mto = () => {
+          setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}{{^account.snippets.mtoV3-params}}{}{{/account.snippets.mtoV3-params}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
+          if(getOutfitState() == "template" || getOutfitState() == "document"){
+            var debounceFunction = debounce(mto, 100);
+            setupMutationObserver(window.parent.document, { childList: true, subtree: true }, debounceFunction, []);
+          }
+        }*/
+    </script>
+    <script>
       window.addEventListener('load', function(event) {
         const fonts = []; //List your document fonts here
         if(!validFontList(fonts)) return;
@@ -87,13 +97,7 @@
         });
       });
 
-      let mto = () => {
-        setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
-        if(getOutfitState() == "template" || getOutfitState() == "document"){
-          var debounceFunction = debounce(mto, 100);
-          setupMutationObserver(window.parent.document, { childList: true, subtree: true, }, debounceFunction, []);
-        }
-      }
+      
       
       let observerAndLoad = () => {
         if(getOutfitState() != "preview"){
