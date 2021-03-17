@@ -40,7 +40,7 @@
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/custom-rich-text.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/hide-empty-titles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/textfit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/textfit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/all-images-loaded-callback.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/mto.min.js"></script>-->
