@@ -1,3 +1,5 @@
+[![](https://data.jsdelivr.com/v1/package/gh/OutfitDelivery/boilerplate/badge)](https://www.jsdelivr.com/package/gh/OutfitDelivery/boilerplate)
+
 # Outfit Template Build Boilerplate
 The standard template build boilerplate used by Outfit's Delivery Team.
 
