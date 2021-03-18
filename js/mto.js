@@ -57,7 +57,7 @@
         }
         return;
       }
-      window.hideTeamMetadata = () => {
+      let hideTeamMetadata = () => {
         getSidebar().querySelectorAll('.search-bar-wrapper').forEach(el => el.remove())
         getSidebar().querySelectorAll('.action-buttons').forEach(el => el.remove())
         getSidebar().querySelectorAll(inputListClassList).forEach((inputOption) => {
