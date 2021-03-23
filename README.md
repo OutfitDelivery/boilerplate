@@ -21,13 +21,12 @@ You are ready to get building. You will see a bunch of JS scripts calls. We are 
 
 By default there will be a bunch of scripts commented out. This is simply to save of resourses, not loading files that are not required by the template. Feel free to uncomment files as required.
 
-`STILL WORKING ON THE BELOW STUFF`
 ## Included Functionality
-### [Main.js](js/main.js)
+## [Main.js](js/main.js)
 - setSize()
 TO WRITE
 
-### [Main.js](js/main.js)
+## [Main.js](js/main.js)
 - setSize()
 - setupPlaceholder()
 - setOutfitState() | getOutfitState()
@@ -36,30 +35,38 @@ TO WRITE
 - setupMutationObserver()
 - validFontList()
 
-### [Limiters.js](js/limiters.js)
+## [Limiters.js](js/limiters.js)
 - maxLineCheck()
 - maxHeightCheck()
 - dynamicAssign()
 - charLimit()
 `NOTE TO MATT - NEED TO ADD THE NEW wordLimit FUNCTION TO THIS FILE`
 
-### Formatters
+## formatters
+`dynamicReplaceSingle()`
+replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
 
-###  custom-rich-text
+`dynamicReplaceMulti()`
+replaces more than one text element inside of a DOM selector.
+The 1st element is what the text will be replaced with.
+The 2nd element is what the fuction will look for to replace.
 
-### hide-empty-titles
+dynamicReplaceMulti({TARGET SELECTOR}, [ARRAY OF CHANGES]);
 
-### qrcode
+dynamicReplace('.output.multi', [['!# dogs: /}', 'dogs'], ['dinosaurs', 'birds']]);
 
-### textfit
+`dynamicReplace()`
+This function calls either `dynamicReplaceMulti()` or `dynamicReplaceSingle()` depending on if there are arguments
 
-### validate
+## custom-rich-text
 
-### dynamic-inject
+## qrcode
 
-### dynamic-layout
+## textfit
 
-### [mto.js](js/mto.js) [ALPHA - DO NOT USE]
+## validate
+
+## [mto.js](js/mto.js) [ALPHA - DO NOT USE]
 The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates.
 
 This function requires:

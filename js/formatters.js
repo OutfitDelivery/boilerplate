@@ -1,27 +1,20 @@
-// render has an issue with replace all causing errors to be thrown which stops the render. This is a pollyfil for all renders 
-function replaceAll(content, replaceFrom, replaceTo) {
-  if (content && replaceFrom && replaceTo) {
-    while(~content.indexOf(replaceFrom)) {
-      content = content.replace(replaceFrom, replaceTo)
-    }
-    console.log(content)
+// render has an issue with replaceAll causing errors to be thrown which stops the render. This is a pollyfil for all renders
+String.prototype.replaceAll = function (str, newStr) {
+  // If a regex pattern
+  if (Object.prototype.toString.call(str).toLowerCase() === "[object regexp]") {
+    return this.replace(str, newStr);
   }
-  return content;
-}
-
-function removeWord() {
-  let elements = document.querySelectorAll("[data-remove-word]");
-  elements.forEach((el) => {
-    let wordToRemove = el.dataset.removeWord;
-    let text = el.innerHTML;
-    var res = replaceAll(text, wordToRemove, "");
-    el.innerHTML = res;
-  });
-}
+  // If a string
+  return this.split(str).join(newStr);
+};
 
 function dynamicReplace(selector = null, data = null) {
-  if (selector != null && data != null) dynamicReplaceMulti(selector, data);
-  dynamicReplaceSingle();
+  if (selector != null && data != null) 
+  { 
+    dynamicReplaceMulti(selector, data);
+  } else {
+    dynamicReplaceSingle();
+  }
 }
 
 function dynamicReplaceMulti(target, data) {
@@ -37,13 +30,12 @@ function dynamicReplaceMulti(target, data) {
         target.innerText.includes(lookup) != -1 &&
         (inputValue != "" || inputValue.length != 0)
       ) {
-        target.innerHTML = replaceAll(target.innerHTML, lookup, inputValue); //If found replace
+        target.innerHTML = target.innerHTML.replaceAll(lookup, inputValue); //If found replace
       } else {
-        //NEED TO FIX
         let lookupSpan = `<span class='lookup-value'>${lookup}</span>`;
-        console.log(target.innerHTML);
+        // console.log(target.innerHTML);
         let temp = target.innerHTML.split(lookupSpan);
-        temp = temp.map((x) => replaceAll(x, lookup, lookupSpan));
+        temp = temp.map((x) => x.replaceAll(lookup, lookupSpan));
         target.innerHTML = temp.join(lookupSpan);
       }
     });
@@ -61,7 +53,7 @@ function dynamicReplaceSingle() {
     const replace = el.dataset.replaceTo;
 
     if (text.search(lookup) != -1 && (replace != "" || replace.length != 0)) {
-      el.innerHTML = replaceAll(html, lookup, replace);
+      el.innerHTML = html.replaceAll(lookup, replace);
     }
   });
 }

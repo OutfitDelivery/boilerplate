@@ -69,6 +69,7 @@ function maxLineCheck(orientation = "portrait") {
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
+  return true;
 }
 
 /**
