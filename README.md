@@ -24,7 +24,7 @@ By default there will be a bunch of scripts commented out. This is simply to sav
 ## Included Functionality
 
 ## [Main.js](js/main.js)
-Note: generally template builders do not need to modify or use functions from main.js, so these are general explanations without usage notes.
+Note: the main.js file needs to be included in every template as it contains necessary utilities which are documented below:
 - setSize()
     Sets the font size based on the window width & height, and some other factors.
 - setupPlaceholder()
