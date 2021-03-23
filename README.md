@@ -22,18 +22,24 @@ You are ready to get building. You will see a bunch of JS scripts calls. We are 
 By default there will be a bunch of scripts commented out. This is simply to save of resourses, not loading files that are not required by the template. Feel free to uncomment files as required.
 
 ## Included Functionality
-## [Main.js](js/main.js)
-- setSize()
-TO WRITE
 
 ## [Main.js](js/main.js)
+Note: the main.js file needs to be included in every template as it contains necessary utilities which are documented below:
 - setSize()
+    Sets the font size based on the window width & height, and some other factors.
 - setupPlaceholder()
-- setOutfitState() | getOutfitState()
+    If certain conditions are met, this function creates and inserts a div class="placeholderImage" at the beginning of the <page>.
+- setOutfitState()
+    Determines if the window is in mode of exports, templates, projects, preview or localhost, adds a correspdonding HTML attribute "document-state" with that value, e.g. document-state="exports", and returns that value.
 - imageCompression()
+    Selects any img element with a [data-custom-compression] attribute and adds a query flag to the image URL so that large images don't affect performance in preview mode.
 - pageHeightSetup()
+    Based on the renderer (either "1" or "2"), returns the appropriate page height. For renderer 1, or if renderer is not set, this is 100vh. For renderer 2, this is calc(100vh - 1px) to adjust for the "magic pixel" error.
 - setupMutationObserver()
-- validFontList()
+    creates a new MutationObserver from the provided parameters.
+- invalidFontList()
+    checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid)
+
 
 ## [Limiters.js](js/limiters.js)
 - maxLineCheck()
