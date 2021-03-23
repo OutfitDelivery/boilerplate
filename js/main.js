@@ -33,18 +33,6 @@ function checkCrop() {
     });
 }
 
-// TODO ASK MATT
-/*document.querySelectorAll(".bleed").forEach(bleed => {
-  bleed.style.cssText
-});
-Array.prototype.slice.call(document.querySelectorAll('.bleed'))
-.forEach(function(bleed) {
-    bleed.style.cssText = !!window.showCrop 
-    ? 'position: absolute; top: 4.41mm; right: 4.41mm; bottom: 4.41mm; left: 4.41mm;'
-    : 'position: absolute; top: -3mm; right: -3mm; bottom: -3mm; left: -3mm';
-});  
-*/
-
 Array.prototype.slice
   .call(document.querySelectorAll(".bleed"))
   .forEach(function (bleed) {
@@ -104,7 +92,6 @@ if (navigator.userAgent.includes("Firefox")) document.body.classList.add("is-fir
 // Detecting if user is on MAC operating system
 if (window.navigator.appVersion.includes("Mac")) document.body.classList.add("is-mac");
 
-// TODO ASK MATT
 // Check if current browser is Edge for wordbreak break-word fix
 if (navigator.userAgent.includes("Edge")) {
   let wordBreakSelector = document.querySelector("html");

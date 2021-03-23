@@ -30,33 +30,24 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/fontfaceobserver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/prefixfree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/fontfaceobserver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/limiters.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script>
 
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/formatters.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/custom-rich-text.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/hide-empty-titles.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/qrcode.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/textfit.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/validate.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/all-images-loaded-callback.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/mto.min.js"></script>-->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/formatters.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/custom-rich-text.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/hide-empty-titles.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/qrcode.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/textfit.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/validate.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/all-images-loaded-callback.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
     
     <script>
       console.clear();
     	const state = setOutfitState();
 
-      /* let mto = () => {
-        setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}{{^account.snippets.mtoV3-params}}{}{{/account.snippets.mtoV3-params}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
-        // TODO ASK MATT
-        if(getOutfitState() == "template" || getOutfitState() == "document"){
-          var debounceFunction = debounce(mto, 100);
-          setupMutationObserver(window.parent.document, { childList: true, subtree: true }, debounceFunction, []);
-        }
-      }*/
-      
       window.addEventListener('DOMContentLoaded', (event) => {
         const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
         if(invalidFontList(fonts)) return;
@@ -65,31 +56,27 @@
           return new FontFaceObserver(font).load();
         })).then(async (load) => {
           /* Functions To Run After Load */
-          // mto();
           setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
 
           checkCrop();
 
-          await observerAndLoad();
+          observerAndLoad();
 
           if (state === "document") {
             imageCompression();
           }
-          
           if (state === "template" || state === "document") {
             setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
           }
 
+          document.dispatchEvent(new Event('printready'))
           console.info("Document is Print Ready");
-          setTimeout(() => {
-            document.dispatchEvent(new Event('printready'))
-          }, 5000);
         }).catch((err) => {
           throw err;
         });
       });
 
-      let observerAndLoad = async () => {
+      let observerAndLoad = () => {
         if (state !== "preview") {
           maxLineCheck();
           maxHeightCheck();
