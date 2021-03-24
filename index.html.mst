@@ -52,14 +52,17 @@
         const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
         if(invalidFontList(fonts)) return;
         
+        window.addEventListener('load', (event) => {
+          log.textContent = log.textContent + 'load\n';
+        });
+
         Promise.all(fonts.map(font => {
           return new FontFaceObserver(font).load();
         })).then(async (load) => {
           /* Functions To Run After Load */
           setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-
           checkCrop();
-
+          
           observerAndLoad();
 
           if (state === "document") {
@@ -68,9 +71,8 @@
           if (state === "template" || state === "document") {
             setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
           }
-
-          document.dispatchEvent(new Event('printready'))
-          console.info("Document is Print Ready");
+         
+          completeRender()
         }).catch((err) => {
           throw err;
         });

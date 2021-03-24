@@ -249,3 +249,18 @@ function debounce(func, wait, immediate) {
   };
 };
 
+// check if page is fully loaded before running callback 
+function winLoad(callback) {
+  if (document.readyState === 'complete') {
+    callback();
+  } else {
+    window.addEventListener("load", callback);
+  }
+}
+// send a event to stop the render 
+function completeRender () {
+  winLoad(() => {
+    console.info("Document is Print Ready");
+    document.dispatchEvent(new Event('printready'))
+  });
+}
