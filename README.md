@@ -25,55 +25,96 @@ By default there will be a bunch of scripts commented out. This is simply to sav
 
 ## [Main.js](js/main.js)
 Note: the main.js file needs to be included in every template as it contains necessary utilities which are documented below:
-- setSize()
-    Sets the font size based on the window width & height, and some other factors.
-- setupPlaceholder()
-    If certain conditions are met, this function creates and inserts a div class="placeholderImage" at the beginning of the <page>.
-- setOutfitState()
-    Determines if the window is in mode of exports, templates, projects, preview or localhost, adds a correspdonding HTML attribute "document-state" with that value, e.g. document-state="exports", and returns that value.
-- imageCompression()
-    Selects any img element with a [data-custom-compression] attribute and adds a query flag to the image URL so that large images don't affect performance in preview mode.
-- pageHeightSetup()
-    Based on the renderer (either "1" or "2"), returns the appropriate page height. For renderer 1, or if renderer is not set, this is 100vh. For renderer 2, this is calc(100vh - 1px) to adjust for the "magic pixel" error.
-- setupMutationObserver()
-    creates a new MutationObserver from the provided parameters.
-- invalidFontList()
-    checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid)
+- `setSize()`
+    * Sets the font size based on the window width & height, and some other factors
+- `setupPlaceholder()`
+    * If certain conditions are met, this function creates and inserts a div class="placeholderImage" at the beginning of the `<page>`
+- `setOutfitState()`
+    * Determines if the window is in mode of exports, templates, projects, preview or localhost, adds a correspdonding HTML attribute "document-state" with that value, e.g. document-state="exports", and returns that value
+- `imageCompression()`
+    * Selects any img element with a `[data-custom-compression]` attribute and adds a query flag to the image URL so that large images don't affect performance in preview mode
+- `pageHeightSetup()`
+    * Based on the renderer (either "1" or "2"), returns the appropriate page height
+    * For renderer 1, or if renderer is not set, this is `100vh`
+    * For renderer 2, this is `calc(100vh - 1px)` to adjust for the "magic pixel" error
+- `setupMutationObserver()`
+    * Creates a new MutationObserver from the provided parameters
+- `invalidFontList()`
+    * Checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid)
 
 
 ## [Limiters.js](js/limiters.js)
-- maxLineCheck()
-    Selects all elements with a [data-max-line] attribute. Then, for each of those elements, counts its lines and compares that count against the max-line value provided from the element's dataset. If counted lines exceeds max-line value, an overflow class is added to the element.
-- maxHeightCheck()
-    Selects all elements with a [data-max-height] attribute. For each of those elements, it gets their .scrollHeight. It then gets the max-height: if the max-height value from the attribute is "css", then it takes takes the max-height from the element using .getComputedStyle(), otherwise it takes the value provided directly from the [data-max-height] attribute. If the height of the element exceeds the max-height, an overflow class is added to the element.
-- dynamicAssign()
-    Sets an element's data-max-height attribute equal to the parent element's height minus the height of any other children of that parent that have a class of "js-subtrahend". Also sets an attribute on the element of max-height-dynamic="true", and sets the parent element's overflow to visible.
-- charLimit()
+- `maxLineCheck()`
+    * Selects all elements with a `[data-max-line]` attribute. 
+    * For each of those elements, counts its lines and compares that count against the max-line value provided from the element's dataset. 
+    * If counted lines exceeds max-line value, an overflow class is added to the element.
+- `maxHeightCheck()`
+    * Selects all elements with a `[data-max-height]` attribute. 
+    * For each of those elements, it gets their .scrollHeight. 
+    * It then gets the max-height: if the max-height value from the attribute is "css", then it takes takes the max-height from the element using .getComputedStyle(), otherwise it takes the value provided directly from the `[data-max-height]` attribute. 
+    * If the height of the element exceeds the max-height, an overflow class is added to the element.
+- `dynamicAssign()`
+    * Sets an element's data-max-height attribute equal to the parent element's height minus the height of any other children of that parent that have a class of "js-subtrahend". 
+    * Also sets an attribute on the element of `max-height-dynamic="true"`, and sets the parent element's overflow to visible.
+- `charLimit()`
+    * Selects all elements with a `[data-char-limit]` attribute.
 `NOTE TO MATT - NEED TO ADD THE NEW wordLimit FUNCTION TO THIS FILE`
 
+
 ## formatters
-`dynamicReplaceSingle()`
-replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
+`NOTE TO MATT/SAM - SHOULD WE ADD replaceData() (banks function) to this file?`
+- `dynamicReplaceSingle()`
+    * Takes no arguments
+    * Selects all elements with a `[data-replace-from]` attribute
+    * For each of those elements, replaces all instances in the element of the value of `data-replace-from=` with the value of `data-replace-to=`
+- `dynamicReplaceMulti(target, data)`
+    * Replaces more than one text element inside of a DOM selector
+    * param {string} target - DOM selector
+    * param {array} data - an array with nested arrays holding pairs of strings
+        * The 1st string is what the text will be replaced with, aka "replace-to"
+        * The 2nd string is what the function will look for to replace, aka "replace-from"
+    * e.g. `dynamicReplaceMulti('.output.multi', [['cats', 'dogs'], ['dinosaurs', 'birds']]);`
+- `dynamicReplace()`
+    * This function calls either `dynamicReplaceMulti()` or `dynamicReplaceSingle()` depending on whether arguments are passed to it
+    * e.g. calling `dynamicReplaceMulti()` via `dynamicReplace`:
+        * `dynamicReplace('.output.multi', [['cats', 'dogs'], ['dinosaurs', 'birds']]);`
+    * e.g. calling `dynamicReplaceSingle()` via `dynamicReplace`:
+        * `dynamicReplace();`
 
-`dynamicReplaceMulti()`
-replaces more than one text element inside of a DOM selector.
-The 1st element is what the text will be replaced with.
-The 2nd element is what the fuction will look for to replace.
-
-dynamicReplaceMulti({TARGET SELECTOR}, [ARRAY OF CHANGES]);
-
-dynamicReplace('.output.multi', [['!# dogs: /}', 'dogs'], ['dinosaurs', 'birds']]);
-
-`dynamicReplace()`
-This function calls either `dynamicReplaceMulti()` or `dynamicReplaceSingle()` depending on if there are arguments
 
 ## custom-rich-text
+    * Allows users to use rich text formatting inside spreadsheet inputs
+    * Selects all elements with a `js-customRichText-src` class
+    * Hides those elements
+    * Maps particular character combinations to html tages with a map object, e.g. `'{b': '<strong>', 'b}': '</strong>', '{h1': '<h1>', 'h1}': '</h1>'`
+    * For each of the selected elements, uses regex and the map object to run the required replacements
+    * Creates and appends a new element with a `js-customRichText-target` class
+
+## dynamic-flowing-content
+    * Creates a column structure, allowing even individual elements (e.g. a `<p>`) to flow between columns
+
+## fontfaceobserver
+    * External web font loader
+    * Load a font by creating a new FontFaceObserver instance and calling its load method
+    * This will load the font and return a promise that is resolved when the font has loaded, or rejected if the font fails to load
+    * This allows us to load all fonts and only then run other functions (see `index.html.mst` for usage)
+
+## hide-empty-tiles
+    * A temporary solution used because conditional tags for text inputs that include heading formatting don't (or weren't) working in some instances
+    * Selects all elements with a clase of 'u-heading-patch'
+    * For each of those elements, it then selects the element's child nodes and hides any of those that are empty by adding a class of 'u-hide'
 
 ## qrcode
+    * An external javascript library for creating QRCodes
 
 ## textfit
+    *
 
 ## validate
+    * An external javascript library for validating javascript objects
+
+## prefixfree
+    * External tool for adding the current browser’s prefix to any CSS code, only when it’s needed.
 
 ## [mto.js](js/mto.js) [ALPHA - DO NOT USE]
 `setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}{{^account.snippets.mtoV3-params}}{}{{/account.snippets.mtoV3-params}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`);`
