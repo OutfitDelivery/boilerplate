@@ -43,8 +43,11 @@ Note: the main.js file needs to be included in every template as it contains nec
 
 ## [Limiters.js](js/limiters.js)
 - maxLineCheck()
+    Selects all elements with a [data-max-line] attribute. Then, for each of those elements, counts its lines and compares that count against the max-line value provided from the element's dataset. If counted lines exceeds max-line value, an overflow class is added to the element.
 - maxHeightCheck()
+    Selects all elements with a [data-max-height] attribute. For each of those elements, it gets their .scrollHeight. It then gets the max-height: if the max-height value from the attribute is "css", then it takes takes the max-height from the element using .getComputedStyle(), otherwise it takes the value provided directly from the [data-max-height] attribute. If the height of the element exceeds the max-height, an overflow class is added to the element.
 - dynamicAssign()
+    Sets an element's data-max-height attribute equal to the parent element's height minus the height of any other children of that parent that have a class of "js-subtrahend". Also sets an attribute on the element of max-height-dynamic="true", and sets the parent element's overflow to visible.
 - charLimit()
 `NOTE TO MATT - NEED TO ADD THE NEW wordLimit FUNCTION TO THIS FILE`
 
