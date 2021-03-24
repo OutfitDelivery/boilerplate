@@ -51,10 +51,6 @@
       window.addEventListener('DOMContentLoaded', (event) => {
         const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
         if(invalidFontList(fonts)) return;
-        
-        window.addEventListener('load', (event) => {
-          log.textContent = log.textContent + 'load\n';
-        });
 
         Promise.all(fonts.map(font => {
           return new FontFaceObserver(font).load();
@@ -62,7 +58,7 @@
           /* Functions To Run After Load */
           setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
           checkCrop();
-          
+
           observerAndLoad();
 
           if (state === "document") {
