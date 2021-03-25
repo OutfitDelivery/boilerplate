@@ -20,7 +20,7 @@ pages.forEach((page) => {
 });
 
 // Fix for the resizable background images - fullscreen and digital vairaitons only
-function checkCrop() {
+const checkCrop = () => {
   document
     .querySelectorAll("[data-trim='false'] .outfit-resizable-background")
     .forEach((el) => {
@@ -41,7 +41,7 @@ Array.prototype.slice
       : "position: absolute; top: -3mm; right: -3mm; bottom: -3mm; left: -3mm";
   });
 
-function setSize() {
+const setSize = () => {
   const vw = (trimMarks ? window.innerWidth : window.innerWidth + 57.62) / 100;
   const vh =
     (trimMarks ? window.innerHeight : window.innerHeight + 57.62) / 100;
@@ -203,15 +203,6 @@ function pageHeightSetup(trimMarks, renderer) {
       return "100vh";
   }
 }
-
-function invalidFontList(fontsListed) {
-  if (fontsListed.length < 1 || fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE") {
-    console.error("No fonts were listed in the Font Oberserver array.");
-    return true;
-  }
-  return false;
-}
-
 /**
  * Computes a Background Image of a inputted hex at a requested opactiy.
  * Sets Background Image CSS property to the computed background image. If no selector parameter is set then the function returns the background image.
@@ -249,18 +240,113 @@ function debounce(func, wait, immediate) {
   };
 };
 
-// check if page is fully loaded before running callback 
-function winLoad(callback) {
-  if (document.readyState === 'complete') {
-    callback();
-  } else {
-    window.addEventListener("load", callback);
+// run requried functions  
+cosnt preflightChecks = (fontsListed) => {
+  window.state = setOutfitState();
+
+  if (fontsListed.length < 1 || fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE") {
+    console.error("No fonts were listed in the Font Oberserver array.");
+    return true;
   }
+
+  Promise.all(fontsListed.map(font => {
+    return new FontFaceObserver(font).load();
+  })).then(() => {
+    checkCrop();
+
+    if (state !== "preview") {
+      onTextChange();
+    }
+    if (state === "document") {
+      imageCompression();
+    }
+    // if (state === "template" || state === "document") {
+    //   setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, () => {
+    //     if (state !== "preview") {
+    //       onTextChange();
+    //     }
+    //   });
+    // }
+    if (state === "template" || state === "document") {
+      let textObserver = new MutationObserver((mutationsList) => {
+        for(let mutation of mutationsList) {
+          console.log(mutation.type);
+          if (typeof onTextChange === 'function') {
+            onTextChange(mutation.target)
+          }
+        }
+      });
+      textObserver.observe(document.body, { characterData: true, subtree: true });
+
+      let attributeObserver = new MutationObserver((mutationsList) => {
+        for(let mutation of mutationsList) {
+          if (typeof onAttributeChange === 'function') {
+            onAttributeChange(mutation.target)
+          }
+        }
+      });
+      attributeObserver.observe(document.body, { attributes: true, subtree: true });
+
+      let childObserver = new MutationObserver((mutationsList) => {
+        for(let mutation of mutationsList) {
+          if (typeof onElementChange === 'function') {
+            onElementChange(mutation.target)
+          }
+        }
+      });
+      childObserver.observe(document.body, { childList: true, subtree: true });
+    }
+    
+  }).catch((err) => {
+    throw err;
+  });
 }
+cosnt run = await (fonts) => {
+  return new Promise((resolve, reject) => {
+    if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") {
+      preflightChecks(fonts)
+    } else {
+      window.addEventListener('DOMContentLoaded', () => preflightChecks(fonts))
+    }
+  });
+}
+
+// fuctionaly that used to be in all-images-loaded-callback.js converted into a promise fuction
+const imageLoadedCheck = new Promise((imagesLoaded, imagesFailed) => {
+  Promise.all(Array.from(document.images).map(img => {
+    if (img.complete)
+        if (img.naturalHeight !== 0)
+            return Promise.resolve();
+        else
+            return Promise.reject(img);
+    return new Promise((resolve, reject) => {
+        img.addEventListener("load", resolve);
+        img.addEventListener("error", () => reject(img));
+    });
+  })).then(() => {
+    imagesLoaded('All images loaded!');
+  }, badImg => {
+    imagesFailed(`${badImg} didn't load`)
+  });
+});
+
+const winLoad = new Promise((resolve, reject) => {
+  if (document.readyState === 'complete') {
+    resolve();
+  } else {
+    window.addEventListener("load", resolve);
+    window.addEventListener("error", reject);
+  }
+});
+
 // send a event to stop the render 
 function completeRender () {
-  winLoad(() => {
-    console.info("Document is Print Ready");
+  let checkList = [winLoad, imageLoadedCheck]
+  Promise.all(checkList).then((values) => {
+    console.info("Document has finished rendering");
     document.dispatchEvent(new Event('printready'))
+  }).catch(err => {
+    console.error(err);
+    throw '⚠️ Render failed for above reason ⤴️'
   });
 }

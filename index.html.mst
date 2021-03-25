@@ -45,44 +45,31 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
     
     <script>
-      console.clear();
-    	const state = setOutfitState();
-
-      window.addEventListener('DOMContentLoaded', (event) => {
-        const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
-        if(invalidFontList(fonts)) return;
-
-        Promise.all(fonts.map(font => {
-          return new FontFaceObserver(font).load();
-        })).then(async (load) => {
-          /* Functions To Run After Load */
-          setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-          checkCrop();
-
-          observerAndLoad();
-
-          if (state === "document") {
-            imageCompression();
-          }
-          if (state === "template" || state === "document") {
-            setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
-          }
-         
-          completeRender()
-        }).catch((err) => {
-          throw err;
-        });
-      });
-
-      let observerAndLoad = () => {
-        if (state !== "preview") {
-          maxLineCheck();
-          maxHeightCheck();
-          charLimit();
-          // dynamicReplace();
-          // Place Textfit here
-        }
+      // This function will run whenever there is a change to any text input
+      const onTextChange = (target) => {
+        maxLineCheck();
+        maxHeightCheck();
+        charLimit();
+        // dynamicReplace();
+        // textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.2, maxFontSize: 1.3 })
       }
+      const onAttributeChange = (target) => {
+
+      }
+      const onElementChange = (target) => {
+        
+      }
+
+      // This is where all code should be added that needs to only run once
+      const main = () => {
+        setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
+        // ADD_CODE_HERE
+
+        completeRender();
+      }
+
+      // Please put all fonts needed for the tempate into the array 
+      run(['PUT_ALL_FONT_NAMES_HERE']).then(main).catch(console.trace);
     </script>
   </body>
 </html>
