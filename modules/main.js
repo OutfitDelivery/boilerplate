@@ -1,4 +1,4 @@
-import FontFaceObserver from './fontFaceObserver.js'
+import FontFaceObserver from './fontfaceobserver.js'
 import { setSize, setOutfitState } from './pageSetup.js'
 
 // functionly that used to be in all-images-loaded-callback.js converted into a promise function
