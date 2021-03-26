@@ -18,6 +18,7 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css"/>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
       /* ADD_ROOT_STYLES_HERE */
     </style>
   </head>
@@ -30,10 +31,10 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/fontfaceobserver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script> -->
 
     <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/formatters.min.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/custom-rich-text.min.js"></script> -->
@@ -44,21 +45,26 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/all-images-loaded-callback.min.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
     
-    <script>
+    <script type="module">
+      import { 
+          run, 
+          completeRender,
+          setupPlaceholder,
+         } from './modules/index.js';
 
       // This function will run whenever there is a change to any text input
-      const onTextChange = (target) => {
-        maxLineCheck();
-        maxHeightCheck();
-        charLimit();
+      window.onTextChange = () => {
+        console.log('onTextChange')
+        // maxLineCheck();
+        // maxHeightCheck();
+        // charLimit();
         // dynamicReplace();
         // textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.2, maxFontSize: 1.3 })
-      }
+      } 
 
-      // Please put all fonts needed for the tempate into the array 
-      run(['PUT_ALL_FONT_NAMES_HERE']).then(() => {
-        setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-        // ADD_CODE_HERE
+      // Please put all fonts needed for the tempate into the array bellow
+      run(['Noto Sans JP']).then(() => {
+        // setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
 
         completeRender();
       }).catch(console.trace);

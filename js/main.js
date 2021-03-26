@@ -1,5 +1,4 @@
 //--------------------------- crop and bleed -----------------------------------
-
 var cropSVG =
   '<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>';
 
@@ -83,7 +82,6 @@ const setSize = () => {
 
   document.documentElement.style.fontSize = `${finalCalc}px`;
 }
-window.addEventListener("resize", setSize);
 setSize();
 
 // Check if current browser is Firefox
@@ -124,17 +122,7 @@ function setupPlaceholder(placeholderVisibility, placeholderImages) {
   });
 }
 
-function setupMutationObserver(target, observerOptions, callback, params) {
-  let mutationObserver = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      callback.apply(this, params);
-    });
-  });
-
-  mutationObserver.observe(target, observerOptions);
-}
-
-function setOutfitState() {
+function setOutfitState () {
   var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
   mode =
     !mode && window.location.href.indexOf("templates") > -1 ? "template" : mode;
@@ -151,6 +139,7 @@ function setOutfitState() {
   document.body.setAttribute("document-state", mode);
   return mode;
 }
+window.state = setOutfitState();
 
 function imageCompression() {
   var imageCompressEl = document.querySelectorAll("[data-custom-compression]");
@@ -240,94 +229,45 @@ function debounce(func, wait, immediate) {
   };
 };
 
-// run requried functions  
-cosnt preflightChecks = (fontsListed) => {
-  window.state = setOutfitState();
-
-  if (fontsListed.length < 1 || fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE") {
-    console.error("No fonts were listed in the Font Oberserver array.");
-    return true;
-  }
-
-  Promise.all(fontsListed.map(font => {
-    return new FontFaceObserver(font).load();
-  })).then(() => {
-    checkCrop();
-
-    if (state !== "preview") {
-      onTextChange();
-    }
-    if (state === "document") {
-      imageCompression();
-    }
-    // if (state === "template" || state === "document") {
-    //   setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, () => {
-    //     if (state !== "preview") {
-    //       onTextChange();
-    //     }
-    //   });
-    // }
-    if (state === "template" || state === "document") {
-      let textObserver = new MutationObserver((mutationsList) => {
-        for(let mutation of mutationsList) {
-          console.log(mutation.type);
-          if (typeof onTextChange === 'function') {
-            onTextChange(mutation.target)
-          }
-        }
+// functionly that used to be in all-images-loaded-callback.js converted into a promise function
+const imageLoadedCheck = (imagesLoaded) => {
+  return new Promise((imagesLoaded, imagesFailed) => { 
+    Promise.all(Array.from(document.images).map(img => {
+      if (img.complete)
+          if (img.naturalHeight !== 0)
+              return Promise.resolve();
+          else
+              return Promise.reject(img);
+      return new Promise((resolve, reject) => {
+          img.addEventListener("load", resolve);
+          img.addEventListener("error", () => reject(img));
       });
-      textObserver.observe(document.body, { characterData: true, subtree: true });
-
-      let attributeObserver = new MutationObserver((mutationsList) => {
-        for(let mutation of mutationsList) {
-          if (typeof onAttributeChange === 'function') {
-            onAttributeChange(mutation.target)
-          }
-        }
-      });
-      attributeObserver.observe(document.body, { attributes: true, subtree: true });
-
-      let childObserver = new MutationObserver((mutationsList) => {
-        for(let mutation of mutationsList) {
-          if (typeof onElementChange === 'function') {
-            onElementChange(mutation.target)
-          }
-        }
-      });
-      childObserver.observe(document.body, { childList: true, subtree: true });
-    }
-    
-  }).catch((err) => {
-    throw err;
-  });
-}
-cosnt run = await (fonts) => {
-  return new Promise((resolve, reject) => {
-    if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") {
-      preflightChecks(fonts)
-    } else {
-      window.addEventListener('DOMContentLoaded', () => preflightChecks(fonts))
-    }
-  });
-}
-
-// fuctionaly that used to be in all-images-loaded-callback.js converted into a promise fuction
-const imageLoadedCheck = new Promise((imagesLoaded, imagesFailed) => {
-  Promise.all(Array.from(document.images).map(img => {
-    if (img.complete)
-        if (img.naturalHeight !== 0)
-            return Promise.resolve();
-        else
-            return Promise.reject(img);
-    return new Promise((resolve, reject) => {
-        img.addEventListener("load", resolve);
-        img.addEventListener("error", () => reject(img));
+    })).then(() => {
+      imagesLoaded('All images loaded!');
+    }, badImg => {
+      imagesFailed(`${badImg.src} didn't load`)
     });
-  })).then(() => {
-    imagesLoaded('All images loaded!');
-  }, badImg => {
-    imagesFailed(`${badImg} didn't load`)
   });
+}
+
+const fontsLoaded = (fontsListed) => {
+  return new Promise((resolve, reject) => {
+      if (fontsListed && fontsListed.length < 1 || fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE") {
+          reject("No fonts were listed in the Font Oberserver array.")
+      }
+      Promise.all(fontsListed.map((font) => {
+          return new FontFaceObserver(font).load();
+      })).then(resolve).catch(reject)
+  });
+}
+
+const domReady = new Promise((resolve, reject) => {
+  if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") {
+    resolve()
+  } else {
+    window.addEventListener("DOMContentLoaded", resolve);
+    window.addEventListener("error", reject);
+  }
 });
 
 const winLoad = new Promise((resolve, reject) => {
@@ -339,8 +279,33 @@ const winLoad = new Promise((resolve, reject) => {
   }
 });
 
-// send a event to stop the render 
-function completeRender () {
+const run = (fonts) => {
+  return new Promise((resolve, reject) => {
+    let checkList = [domReady, fontsLoaded(fonts)]
+    Promise.all(checkList).then(() => {
+      console.log('DOMContentLoaded AND FONTS');
+      checkCrop();
+
+      window.addEventListener("resize", () => {
+        setSize();
+        if (state !== "preview") {
+          if (typeof onTextChange === "function") {
+            onTextChange()
+          }
+        }
+      });
+  
+      if (state === "document") {
+        imageCompression();
+      }
+
+      resolve()
+    }).catch(reject);
+  });
+}
+
+// send a event to stop a render 
+const completeRender = () => {
   let checkList = [winLoad, imageLoadedCheck]
   Promise.all(checkList).then((values) => {
     console.info("Document has finished rendering");
