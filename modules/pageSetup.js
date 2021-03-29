@@ -170,4 +170,4 @@ const setSize = () => {
   });
 };
 
-export { setSize, addCrop, pageHeightSetup, setOutfitState };
+export { setSize, addCrop, pageHeightSetup, setOutfitState, imageCompression };
