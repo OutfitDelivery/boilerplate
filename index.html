@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html async>
-  <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
   <head>
   <!--  Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
@@ -16,9 +15,9 @@
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css"/>
+    <link href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css" rel="stylesheet" rel="preload" as="style"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
       /* ADD_ROOT_STYLES_HERE */
     </style>
   </head>
@@ -26,48 +25,36 @@
     <div class="page">
       <div class="bleed">
         <div class="container">
-          
+          <p data-max-line="1">hey there this is for some testing</p>
         </div>
       </div>
     </div>
 
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/fontfaceobserver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script> -->
+    <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
+    <script type="module" async>
+      import boilerplate from '/modules/boilerplate.js';
 
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/formatters.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/custom-rich-text.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/hide-empty-titles.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/qrcode.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/textfit.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/validate.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/all-images-loaded-callback.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
-    
-    <script type="module">
-      import { 
-          run, 
-          completeRender,
-          setupPlaceholder,
-         } from './modules/index.js';
+      let template = new boilerplate({
+        fonts: ['Noto Sans JP'],
+        ensureImagesLoad: true,
+      });
+
+      // Please put all fonts needed for the tempate into the array bellow
+      template.start().then(() => {
+        template.setupPlaceholder("hide", ["https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg"]);
+
+        template.completeRender();
+      }).catch(console.trace);
 
       // This function will run whenever there is a change to any text input
       window.onTextChange = () => {
-        console.log('onTextChange')
-        // maxLineCheck();
-        // maxHeightCheck();
-        // charLimit();
-        // dynamicReplace();
-        // textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.2, maxFontSize: 1.3 })
-      } 
-
-      // Please put all fonts needed for the tempate into the array bellow
-      run(['Noto Sans JP']).then(() => {
-        // setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-
-        completeRender();
-      }).catch(console.trace);
+        console.log('onTextChange');
+        template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.2, maxFontSize: 1.3 })
+        // template.maxLineCheck();
+        // template.maxHeightCheck();
+        // template.charLimit();
+        // template.dynamicReplace();
+      }
     </script>
   </body>
 </html>

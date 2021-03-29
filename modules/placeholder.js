@@ -1,5 +1,5 @@
-function setupPlaceholder(placeholderVisibility, placeholderImages) {
-    //If array length < 1 or the first item is "" or null or undefined
+export default function setupPlaceholder(placeholderVisibility, placeholderImages) {
+    // If array length < 1 or the first item is "" or null or undefined
     if (
       placeholderImages.length < 1 ||
       placeholderImages[0] == "" ||
@@ -23,4 +23,3 @@ function setupPlaceholder(placeholderVisibility, placeholderImages) {
       page.insertAdjacentHTML("afterbegin", placeholderStructure);
     });
   }
-export { setupPlaceholder }
