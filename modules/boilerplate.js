@@ -2,6 +2,8 @@ import './prefixfree.js';
 import FontFaceObserver from './fontfaceobserver.js'
 import { setSize, setOutfitState, addCrop } from './pageSetup.js'
 
+
+
 // functionly that used to be in all-images-loaded-callback.js converted into a promise function
 const imageLoadedCheck = (imagesLoaded) => {
     return new Promise((imagesLoaded, imagesFailed) => { 

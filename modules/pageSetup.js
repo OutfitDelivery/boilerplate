@@ -1,6 +1,41 @@
 const trimMarks = document.body.dataset.trim == "true" ? true : false;
 const renderer = document.body.dataset.renderer;
 
+const imageCompression = () => {
+  var imageCompressEl = document.querySelectorAll("[data-custom-compression]");
+  var editorString = "?qual=editor";
+
+  function checkURL(editorString, url) {
+    if (url.includes(editorString) || url.includes(".svg")) return false;
+    return true;
+  }
+
+  imageCompressEl.forEach((el) => {
+    //Non Repo Images with data-custom-compression on img element itself
+    var imgSrc = el.getAttribute("src");
+    console.log(imgSrc);
+    if (imgSrc != null) {
+      //src attribute exists assume that this is an <img> element
+      if (!checkURL(editorString, imgSrc)) return;
+      el.setAttribute("src", imgSrc + editorString);
+    } else {
+      var imgEl = el.querySelector("img");
+      if (imgEl == null) return;
+      var imgURL = imgEl.getAttribute("src");
+      if (!checkURL(editorString, imgURL)) return;
+      imgEl.setAttribute("src", imgURL + editorString);
+
+      var bkgImgEl = el.querySelector(".outfit-resizable-background");
+      if (bkgImgEl == null) return;
+      var bkgUrl = bkgImgEl.style.backgroundImage
+        .slice(4, -1)
+        .replace(/"/g, "");
+      if (!checkURL(editorString, bkgUrl)) return;
+      bkgImgEl.style.backgroundImage = `url("${bkgUrl}${editorString}")`;
+    }
+  });
+}
+
 const setOutfitState = () => {
   return new Promise((resolve) => {
     var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
