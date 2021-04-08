@@ -204,12 +204,12 @@ function pageHeightSetup(trimMarks, renderer) {
   }
 }
 
-function invalidFontList(fontsListed) {
+function validFontList(fontsListed) {
   if (fontsListed.length < 1 || fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE") {
     console.error("No fonts were listed in the Font Oberserver array.");
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 /**
