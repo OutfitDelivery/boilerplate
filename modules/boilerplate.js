@@ -106,7 +106,7 @@ class boilerplate {
       checkList.push(imageLoadedCheck)
     }
     Promise.all(checkList).then((values) => {
-      let loadTime = window.performance.timing.domContentLoadedEventEnd- window.performance.timing.navigationStart;
+      let loadTime = Date.now() - window.performance.timing.navigationStart
       console.info(`Document has finished rendering in ${loadTime}ms`);
       document.dispatchEvent(new Event('printready'))
     }).catch(err => {

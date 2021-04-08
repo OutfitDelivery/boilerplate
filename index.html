@@ -41,7 +41,7 @@
 
       // Please put all fonts needed for the tempate into the array bellow
       template.start().then(() => {
-        template.setupPlaceholder("hide", ["https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg"]);
+        template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
 
         template.completeRender();
       }).catch(console.trace);

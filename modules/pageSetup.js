@@ -1,5 +1,4 @@
 const trimMarks = document.body.dataset.trim == "true" ? true : false;
-const renderer = document.body.dataset.renderer;
 
 const imageCompression = () => {
   var imageCompressEl = document.querySelectorAll("[data-custom-compression]");
@@ -61,20 +60,28 @@ const setOutfitState = () => {
   });
 };
 
-function pageHeightSetup(trimMarks, renderer) {
-  switch (renderer) {
-    case "1":
-      console.info("Renderer 1 Set");
-      return "100vh";
-    case "2":
-      console.info("Renderer 2 Set");
-      if (trimMarks) {
-        return "calc(100vh - 1px)";
-      }
-      return "100vh";
-    default:
-      console.error("Renderer Not Set");
-      return "100vh";
+function pageHeightSetup(trimMarks) {
+  let agent = avigator.userAgent;
+  if (agent.includes('(OPTION 2.1;')) {
+    console.info("Renderer 2.1 Set");
+    if (trimMarks) {
+      return "calc(100vh - 1px)";
+    }
+  } else if (agent.includes('(OPTION 1.1)')) {
+    console.info("Renderer 1.1 Set");
+    return "100vh";
+  } else if (agent.includes('(OPTION 1.0)')) {
+    console.warn("Renderer set to 1.0. Please update to 1.1");
+    return "100vh";
+  } else if (agent.includes('(OPTION 2.0;')) {
+    console.warn("Renderer 2.0 Set. Please update to 2.1");
+    if (trimMarks) {
+      return "calc(100vh - 1px)";
+    }
+    return "100vh";
+  } else {
+    console.error("Renderer Not Set");
+    return "100vh";
   }
 }
 
@@ -86,7 +93,7 @@ const addCrop = () => {
       '<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>';
 
     document.querySelectorAll(".page").forEach((page) => {
-      page.style.height = pageHeightSetup(trimMarks, renderer);
+      page.style.height = pageHeightSetup(trimMarks);
       if (trimMarks) {
         page.insertAdjacentHTML(
           "afterbegin",
