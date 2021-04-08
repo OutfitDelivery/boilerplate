@@ -69,13 +69,13 @@ function maxLineCheck(orientation = "portrait") {
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
+  return true;
 }
 
 /**
 *Detailed instruction can be found here:
  https://github.com/aleks-frontend/max-height-check
 */
-
 function maxHeightCheck(variation = "primary") {
   const isExportMode = window.location.href.indexOf("exports") > -1;
   const isLocalDev = window.location.href.indexOf("localhost") > -1;

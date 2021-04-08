@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html async>
+  <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
   <head>
   <!--  Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
@@ -7,18 +8,17 @@
         3. Fill Out Build Card Meta-Data
         4. Remove this comment
   -->
-    <title>Template Name</title>
+    <title>PUT_TEMPLATE_NAME_HERE</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="template-built-by" content=""/>
-    <meta name="scope" content="DTB-000"/>
-    <meta name="build" content="DTB-001"/>
+    <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>
+    <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
+    <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/css/main.min.css"/>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css"/>
     <style>
-      
+      /* ADD_ROOT_STYLES_HERE */
     </style>
   </head>
   <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true">
@@ -30,86 +30,59 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/fontfaceobserver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/prefixfree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/fontfaceobserver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/limiters.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script>
 
-
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/formatters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/custom-rich-text.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/hide-empty-titles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/js/textfit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/all-images-loaded-callback.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.3/js/mto.min.js"></script>-->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/formatters.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/custom-rich-text.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/hide-empty-titles.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/qrcode.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/textfit.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/validate.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/all-images-loaded-callback.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
     
-
-    <!--Dynamic Columns & Pages -->
-    <!--<script src="js/dynamic-inject.js"></script>--> <!--You will need a Mutation Observer for this one if you want to use it-->
     <script>
-      	console.clear();
-    	setOutfitState();
-      
-        /*let mto = () => {
-          setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}{{^account.snippets.mtoV3-params}}{}{{/account.snippets.mtoV3-params}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`, []);
-          if(getOutfitState() == "template" || getOutfitState() == "document"){
-            var debounceFunction = debounce(mto, 100);
-            setupMutationObserver(window.parent.document, { childList: true, subtree: true }, debounceFunction, []);
-          }
-        }*/
-    </script>
-    <script>
-      window.addEventListener('load', function(event) {
-        const fonts = []; //List your document fonts here
-        if(!validFontList(fonts)) return;
-        
-        const fontObservers = [];
+      console.clear();
+    	const state = setOutfitState();
 
-        fonts.forEach(font => {
-          const obs = new FontFaceObserver(font);
-          fontObservers.push(obs.load())
-        });
-        Promise.all(fontObservers).then(() => {
-          /*Functions To Run After Load*/
-          setOutfitState();
-          //mto();
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
+        if(invalidFontList(fonts)) return;
+
+        Promise.all(fonts.map(font => {
+          return new FontFaceObserver(font).load();
+        })).then(async (load) => {
+          /* Functions To Run After Load */
           setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-          //hideEmptyTitles();
           checkCrop();
-          //checkExport();
-          charLimit();
+
           observerAndLoad();
 
-          if(getOutfitState() == "document"){
+          if (state === "document") {
             imageCompression();
           }
-          
-          if(getOutfitState() == "template" || getOutfitState() == "document"){
-            setupMutationObserver(document.body, {characterData: true, childList: true, subtree: true, characterDataOldValue: true}, observerAndLoad);
+          if (state === "template" || state === "document") {
+            setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
           }
-          
-          console.info("Document is Print Ready");
-          setTimeout(function() {	document.dispatchEvent(new Event('printready'));	}, 5000);
-        }, function () {
-          console.error("Font is not available");
+         
+          completeRender()
+        }).catch((err) => {
+          throw err;
         });
       });
 
-      
-      
       let observerAndLoad = () => {
-        if(getOutfitState() != "preview"){
+        if (state !== "preview") {
           maxLineCheck();
           maxHeightCheck();
           charLimit();
+          // dynamicReplace();
+          // Place Textfit here
         }
-        
-        //hideEmptyTitles();
       }
-
-      
     </script>
   </body>
 </html>
