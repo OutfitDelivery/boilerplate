@@ -159,7 +159,7 @@
     if (
       settings.detectMultiLine &&
       !multiLine &&
-      innerSpan.scrollHeight >=
+      innerHeight(innerSpan) >=
         parseFloat(window.getComputedStyle(innerSpan)["font-size"], 10) * 2
     ) {
       multiLine = true;
@@ -180,9 +180,9 @@
       mid = parseFloat(((high + low) / 2).toFixed(2));
       innerSpan.style.fontSize = mid + settings.fontUnit;
 
-      var scrollWidth = innerSpan.scrollWidth <= originalWidth;
-      var scrollHeight =
-        settings.widthOnly || innerSpan.scrollHeight <= originalHeight;
+      var currentWidth = innerWidth(innerSpan) <= originalWidth;
+      var currentlHeight =
+        settings.widthOnly || innerHeight(innerSpan) <= originalHeight;
 
       // check if too many lines and if it is then we need to adjust the font size accordingly
       var maxLines = false;
@@ -191,7 +191,7 @@
         maxLines = lineCount > maxLine;
       }
 
-      if (scrollWidth && scrollHeight && !maxLines) {
+      if (currentWidth && currentlHeight && !maxLines) {
         size = mid;
         low = mid + settings.fontChangeSize;
       } else {
@@ -232,7 +232,7 @@
       }
       // detect if the content is larger than it's parent
       if (settings.stopOverflow) {
-        var overflow = innerHeight(el) < innerSpan.scrollHeight;
+        var overflow = innerHeight(el) < innerHeight(innerSpan);
         if (overflow) {
           el.classList.add("overflow");
         }
@@ -241,7 +241,7 @@
     // Our height is finalized. If we are aligning vertically, set that up.
     if (settings.alignVert) {
       addStyleSheet();
-      var height = innerSpan.scrollHeight;
+      var height = innerHeight(innerSpan);
       if (window.getComputedStyle(el)["position"] === "static") {
         el.style["position"] = "relative";
       }
