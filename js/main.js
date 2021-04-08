@@ -6,16 +6,18 @@ var cropSVG =
 const trimMarks = document.body.dataset.trim == "true" ? true : false;
 const renderer = document.body.dataset.renderer;
 const pages = document.querySelectorAll(".page");
-pages.forEach((page) => {
+pages.forEach(function (page) {
   page.style.height = pageHeightSetup(trimMarks, renderer);
 
   if (trimMarks) {
-    page.insertAdjacentHTML("afterbegin", `<div class="crop-marks">
-      <div class="crop-mark top-left">${cropSVG}</div>
-      <div class="crop-mark top-right">${cropSVG}</div>
-      <div class="crop-mark bottom-left">${cropSVG}</div>
-      <div class="crop-mark bottom-right">${cropSVG}</div>
-    </div>`);
+    var cropString = `<div class="crop-marks">
+         <div class="crop-mark top-left">${cropSVG}</div>
+         <div class="crop-mark top-right">${cropSVG}</div>
+         <div class="crop-mark bottom-left">${cropSVG}</div>
+         <div class="crop-mark bottom-right">${cropSVG}</div>
+       </div>`;
+
+    page.insertAdjacentHTML("afterbegin", cropString);
   }
 });
 
@@ -33,6 +35,18 @@ function checkCrop() {
     });
 }
 
+/*document.querySelectorAll(".bleed").forEach(bleed => {
+  bleed.style.cssText
+});
+Array.prototype.slice.call(document.querySelectorAll('.bleed'))
+.forEach(function(bleed) {
+    bleed.style.cssText = !!window.showCrop 
+    ? 'position: absolute; top: 4.41mm; right: 4.41mm; bottom: 4.41mm; left: 4.41mm;'
+    : 'position: absolute; top: -3mm; right: -3mm; bottom: -3mm; left: -3mm';
+});  
+*/
+// setSize
+
 Array.prototype.slice
   .call(document.querySelectorAll(".bleed"))
   .forEach(function (bleed) {
@@ -40,6 +54,8 @@ Array.prototype.slice
       ? "position: absolute; top: 4.41mm; right: 4.41mm; bottom: 4.41mm; left: 4.41mm;"
       : "position: absolute; top: -3mm; right: -3mm; bottom: -3mm; left: -3mm";
   });
+
+window.addEventListener("resize", setSize);
 
 function setSize() {
   const vw = (trimMarks ? window.innerWidth : window.innerWidth + 57.62) / 100;
@@ -83,20 +99,40 @@ function setSize() {
 
   document.documentElement.style.fontSize = `${finalCalc}px`;
 }
-window.addEventListener("resize", setSize);
+
 setSize();
 
 // Check if current browser is Firefox
-if (navigator.userAgent.includes("Firefox")) document.body.classList.add("is-firefox");
+function firefoxCheck() {
+  if (navigator.userAgent.includes("Firefox"))
+    document.body.classList.add("is-firefox");
+}
+
+firefoxCheck();
 
 // Detecting if user is on MAC operating system
-if (window.navigator.appVersion.includes("Mac")) document.body.classList.add("is-mac");
+function detectSystem() {
+  const isMac = window.navigator.appVersion.includes("Mac");
+  if (isMac) document.body.classList.add("is-mac");
+}
+
+detectSystem();
 
 // Check if current browser is Edge for wordbreak break-word fix
-if (navigator.userAgent.includes("Edge")) {
-  let wordBreakSelector = document.querySelector("html");
-  wordBreakSelector.style.wordBreak = "break-all";
+function edgeCheck() {
+  if (navigator.userAgent.includes("Edg")) {
+    return true;
+  }
+  return false;
 }
+
+function wordBreakHotFix() {
+  if (edgeCheck()) {
+    let wordBreakSelector = document.querySelector("html");
+    wordBreakSelector.style.wordBreak = "break-all";
+  }
+}
+wordBreakHotFix();
 
 function setupPlaceholder(placeholderVisibility, placeholderImages) {
   //If array length < 1 or the first item is "" or null or undefined
@@ -149,7 +185,10 @@ function setOutfitState() {
   }
 
   document.body.setAttribute("document-state", mode);
-  return mode;
+}
+
+function getOutfitState() {
+  return document.body.getAttribute("document-state");
 }
 
 function imageCompression() {
@@ -195,9 +234,11 @@ function pageHeightSetup(trimMarks, renderer) {
     case "2":
       console.info("Renderer 2 Set");
       if(trimMarks){
-		    return "calc(100vh - 1px)";
+		return "calc(100vh - 1px)";
       } 
+      
       return "100vh";
+      
     default:
       console.error("Renderer Not Set");
       return "100vh";
@@ -205,10 +246,11 @@ function pageHeightSetup(trimMarks, renderer) {
 }
 
 function validFontList(fontsListed) {
-  if (fontsListed.length < 1 || fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE") {
+  if (fontsListed.length < 1) {
     console.error("No fonts were listed in the Font Oberserver array.");
     return false;
   }
+
   return true;
 }
 
@@ -219,6 +261,7 @@ function validFontList(fontsListed) {
  * @param {number} opacity - How much traspancy do you want between 1 and 0? 
  * @param {string} selector - The css selector of the element that should be affected (optional)
  */
+
 function acctColOpacitySetter(colour, opacity, selector = null) {
   let backgroundImage = `url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0 0 50 50' enable-background='new 0 0 50 50' xml:space='preserve'%3E%3Crect opacity='${opacity}' fill='${colour.replace('#','%23')}' width='50' height='50'/%3E%3C/svg%3E")`;
   if(selector == null) return backgroundImage;
@@ -233,6 +276,7 @@ function acctColOpacitySetter(colour, opacity, selector = null) {
 
 function debounce(func, wait, immediate) {
   var timeout;
+
   return function executedFunction() {
     var context = this;
     var args = arguments;
