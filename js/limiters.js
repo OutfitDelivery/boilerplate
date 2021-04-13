@@ -5,15 +5,15 @@ function countLines(target) {
   testBox.style.display = "inline-block";
   testBox.innerText = "⠀";
   target.appendChild(testBox);
-  let oneLineHeight = innerHeight(testBox);
+  let oneLineHeight = getHeight(testBox);
   testBox.remove();
-  let lines = innerHeight(target) / oneLineHeight;
+  let lines = getHeight(target) / oneLineHeight;
   target.dataset.lineCount = lines; // adds property for CSS targeting
   return lines;
 }
 
 // Calculate height without padding.
-function innerHeight(el) {
+function getHeight(el) {
   var style = window.getComputedStyle(el, null);
   var height = parseFloat(style.getPropertyValue("height"));
   var box_sizing = style.getPropertyValue("box-sizing");
@@ -30,7 +30,7 @@ function innerHeight(el) {
 }
 
 // Calculate width without padding.
-function innerWidth(el) {
+function getWidth(el) {
   var style = window.getComputedStyle(el, null);
   var width = parseFloat(style.getPropertyValue("width"));
   var box_sizing = style.getPropertyValue("box-sizing");

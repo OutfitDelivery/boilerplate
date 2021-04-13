@@ -105,8 +105,8 @@
 
     // Get element data.
     originalHTML = el.innerHTML;
-    originalWidth = innerWidth(el);
-    originalHeight = innerHeight(el);
+    originalWidth = getWidth(el);
+    originalHeight = getHeight(el);
 
     // Don't process if we can't find box dimensions
     if (!originalWidth || (!settings.widthOnly && !originalHeight)) {
@@ -159,7 +159,7 @@
     if (
       settings.detectMultiLine &&
       !multiLine &&
-      innerHeight(innerSpan) >=
+      getHeight(innerSpan) >=
         parseFloat(window.getComputedStyle(innerSpan)["font-size"], 10) * 2
     ) {
       multiLine = true;
@@ -180,9 +180,9 @@
       mid = parseFloat(((high + low) / 2).toFixed(2));
       innerSpan.style.fontSize = mid + settings.fontUnit;
 
-      var currentWidth = innerWidth(innerSpan) <= originalWidth;
+      var currentWidth = getWidth(innerSpan) <= originalWidth;
       var currentlHeight =
-        settings.widthOnly || innerHeight(innerSpan) <= originalHeight;
+        settings.widthOnly || getHeight(innerSpan) <= originalHeight;
 
       // check if too many lines and if it is then we need to adjust the font size accordingly
       var maxLines = false;
@@ -232,7 +232,7 @@
       }
       // detect if the content is larger than it's parent
       if (settings.stopOverflow) {
-        var overflow = innerHeight(el) < innerHeight(innerSpan);
+        var overflow = getHeight(el) < getHeight(innerSpan);
         if (overflow) {
           el.classList.add("overflow");
         }
@@ -241,7 +241,7 @@
     // Our height is finalized. If we are aligning vertically, set that up.
     if (settings.alignVert) {
       addStyleSheet();
-      var height = innerHeight(innerSpan);
+      var height = getHeight(innerSpan);
       if (window.getComputedStyle(el)["position"] === "static") {
         el.style["position"] = "relative";
       }
@@ -259,7 +259,7 @@
   }
 
   // Calculate height without padding.
-  function innerHeight(el) {
+  function getHeight(el) {
     var style = window.getComputedStyle(el, null);
     var height = parseFloat(style.getPropertyValue("height"));
     var box_sizing = style.getPropertyValue("box-sizing");
@@ -275,7 +275,7 @@
   }
 
   // Calculate width without padding.
-  function innerWidth(el) {
+  function getWidth(el) {
     var style = window.getComputedStyle(el, null);
     var width = parseFloat(style.getPropertyValue("width"));
     var box_sizing = style.getPropertyValue("box-sizing");
@@ -313,9 +313,9 @@
     testBox.style.display = 'inline-block';
     testBox.innerText = '⠀';
     target.appendChild(testBox);
-    var oneLineHeight = innerHeight(testBox);
+    var oneLineHeight = getHeight(testBox);
     testBox.remove();
-    var lines = innerHeight(target) / oneLineHeight;
+    var lines = getHeight(target) / oneLineHeight;
     return lines;
   }
 
