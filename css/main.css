@@ -340,21 +340,20 @@ sub {
         display: none; }
       .overflow:hover:after {
         display: block;
-        content: 'Max number of lines exceeded!';
+        content: "Max number of lines exceeded!";
         position: absolute;
         top: 0;
         right: 0;
-        background-color: black;
-        color: white;
+        background-color: #000;
+        color: #fff;
+        max-height: unset!important;
         border-radius: 0;
-        padding: 0 1.5em 0 0.5em;
+        padding: 0.3em 1.5em 0.3em .5em;
         box-sizing: border-box;
-        max-height: 100%;
-        font-family: 'Arial';
-        font-size: 0.8em;
+        font-size: .8em;
         font-weight: 400;
         text-align: right;
-        line-height: 1.2em;
+        line-height: 1em;
         z-index: 2;
       }
 

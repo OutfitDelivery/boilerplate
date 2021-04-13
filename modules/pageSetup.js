@@ -60,8 +60,15 @@ const setOutfitState = () => {
   });
 };
 
-function pageHeightSetup(trimMarks) {
-  let agent = avigator.userAgent;
+function blockRender(v) {
+  document.querySelector("body").innerHTML = `<style>html, body { background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem;}  body { margin: 1rem; width: 80%!important;} p { font-size: 0.4rem; } </style>
+  <h4>⚠️ Please enable <code>allowLegacyRendering: true</code>
+   on the boilerplate or update renderer to version 2.1 or 1.1 </h4>
+   <p>Please contact support if you see this message saying that this template is using renderer ${v}</p>`
+}
+
+function pageHeightSetup(trimMarks, allowLegacyRendering) {
+  let agent = navigator.userAgent;
   if (agent.includes('(OPTION 2.1;')) {
     console.info("Renderer 2.1 Set");
     if (trimMarks) {
@@ -72,28 +79,36 @@ function pageHeightSetup(trimMarks) {
     return "100vh";
   } else if (agent.includes('(OPTION 1.0)')) {
     console.warn("Renderer set to 1.0. Please update to 1.1");
+    if (!allowLegacyRendering) {
+      blockRender('1.0')
+    }
     return "100vh";
   } else if (agent.includes('(OPTION 2.0;')) {
     console.warn("Renderer 2.0 Set. Please update to 2.1");
+    if (!allowLegacyRendering) {
+      blockRender('2.0')
+    }
     if (trimMarks) {
       return "calc(100vh - 1px)";
     }
     return "100vh";
   } else {
-    console.error("Renderer Not Set");
+    // console.error("Renderer Not Set");
     return "100vh";
   }
 }
 
 // Fix for the resizable background images - fullscreen and digital vairaitons only
-const addCrop = () => {
+const addCrop = (allowLegacyRendering) => {
   return new Promise((resolve) => {
     // crop and bleed
     var cropSVG =
       '<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>';
 
+    let pageHeight = pageHeightSetup(trimMarks, allowLegacyRendering);
+
     document.querySelectorAll(".page").forEach((page) => {
-      page.style.height = pageHeightSetup(trimMarks);
+      page.style.height = pageHeight;
       if (trimMarks) {
         page.insertAdjacentHTML(
           "afterbegin",

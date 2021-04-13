@@ -1,47 +1,58 @@
 <!DOCTYPE html>
 <html async>
-  <head>
+<head>
   <!--  Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data
         4. Remove this comment
   -->
-    <title>PUT_TEMPLATE_NAME_HERE</title>
+    <title>z</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
-
-    <link href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css" rel="stylesheet" rel="preload" as="style"/>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
-      /* ADD_ROOT_STYLES_HERE */
+    <style type="text/less">
+      /* ADD_ONLY_ROOT_STYLES_HERE
+      All styles should be put in css/styles.less file for consistency */
+      :root {
+        --white: #fff;
+      }
+      h1 {
+        letter-spacing: 0.2rem;
+        color: green;
+      } 
     </style>
   </head>
-  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true">
+  <body data-trim="{{trim-marks}}" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0">
     <div class="page">
       <div class="bleed">
         <div class="container">
-          <p data-max-line="1">hey there this is for some testing</p>
+          <h1>Hello world <span>:)</span></h1>
         </div>
       </div>
     </div>
 
     <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
-    <script type="module" async>
-      import boilerplate from '/modules/boilerplate.js';
-
+   <script src="/dist/boilerplate.js"></script>
+   <script>
       let template = new boilerplate({
-        fonts: ['Noto Sans JP'],
+        fonts: ['PUT_ALL_FONT_NAMES_HERE'],
         ensureImagesLoad: true,
+        allowLegacyRendering: true,
+        reduceExportFontSizeByPercent: 0,
+        reduceFirefoxFontSizeByPercent: 0,
+        variables: {
+          var1: 'red',
+          var2: 'black'
+        }
       });
 
       // Please put all fonts needed for the tempate into the array bellow
       template.start().then(() => {
-        template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
+        // template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
 
         template.completeRender();
       }).catch(console.trace);
@@ -49,8 +60,8 @@
       // This function will run whenever there is a change to any text input
       window.onTextChange = () => {
         console.log('onTextChange');
-        template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.2, maxFontSize: 1.3 })
-        // template.maxLineCheck();
+        template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
+        template.maxLineCheck();
         // template.maxHeightCheck();
         // template.charLimit();
         // template.dynamicReplace();

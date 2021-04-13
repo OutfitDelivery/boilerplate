@@ -1,5 +1,3 @@
-import 'https://polyfill.io/v3/polyfill.min.js';
-
 // render has an issue with replaceAll causing errors to be thrown which stops the render. This is a pollyfil for all renders
 String.prototype.replaceAll = function (str, newStr) {
   // If a regex pattern

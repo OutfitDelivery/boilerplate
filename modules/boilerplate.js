@@ -1,6 +1,12 @@
+// import './less.js';
+var less = require('less');
 import './prefixfree.js';
 import FontFaceObserver from './fontfaceobserver.js'
 import { setSize, setOutfitState, addCrop, imageCompression } from './pageSetup.js'
+import { dynamicReplace } from './replace.js';
+import setupPlaceholder from './placeholder.js';
+import textFit from './textFit.js';
+import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, innerWidth, innerHeight, countLines } from './limiters';
 
 // functionly that used to be in all-images-loaded-callback.js converted into a promise function
 const imageLoadedCheck = (imagesLoaded) => {
@@ -22,9 +28,40 @@ const imageLoadedCheck = (imagesLoaded) => {
       });
     });
   }
-
-// ensure that all fonts are loaded check
-const fontsLoaded = (fontsListed) => {
+  // ensure that the user has changed important tempalte metadata
+  const defaultsRemoved = () => {
+    return new Promise((resolve, reject) => {
+      let title = document.title;
+      let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
+      let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
+      let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
+      let comment = document.createTreeWalker(
+        document.head, 
+        NodeFilter.SHOW_COMMENT, 
+        null,
+        false
+      )
+      if (title == '' || title == 'PUT_TEMPLATE_NAME_HERE') {
+        reject('Please name template in the title of the document')
+      } else
+      if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
+        reject('Please add your name to the metadata')
+      } else 
+      if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+        reject('Please add the scope card to the metadata')
+      } else
+      if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+        reject('Please add the build card to the metadata')
+      } else
+      if (comment && comment.nextNode() && comment.nextNode().nodeValue.includes('Template Admin Build Instructions')) {
+        reject('Please remove the Template Admin Build Instructions from the top of the document')
+      } else {
+        resolve()
+      }
+    });
+  }
+  // ensure that all fonts are loaded check
+  const fontsLoaded = (fontsListed) => {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(fontsListed)) {
         fontsListed = [fontsListed]
@@ -68,16 +105,45 @@ const winLoad = new Promise((resolve, reject) => {
   }
 });
 
+const loadCSS = (variables) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let res = await fetch('./css/styles.less');
+      res = await res.text();
+      let cssOutput = await less.render(res, { globalVars: variables })
+
+      let styleCode = document.createElement('link');
+      styleCode.setAttribute('type', 'text/css');
+      styleCode.setAttribute('rel', 'stylesheet');
+      styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/css/main.min.css');
+      document.head.insertAdjacentElement('beforeEnd', styleCode);
+
+      document.head.insertAdjacentHTML('beforeEnd', `<style>${cssOutput.css}</style>`);
+
+      resolve()
+    } catch (e) { reject(e) }
+  });
+}
+
 class boilerplate {
-  constructor({ fonts, ensureImagesLoad = true }) {
+  constructor({ fonts = '',
+    ensureImagesLoad = true,
+    allowLegacyRendering = false,
+    reduceExportFontSizeByPercent = 0,
+    reduceFirefoxFontSizeByPercent = 0,
+    variables = {}
+   }) {
     this.fonts = fonts;
     this.ensureImagesLoad = ensureImagesLoad;
+    this.allowLegacyRendering = allowLegacyRendering;
+    this.reduceExportFontSizeByPercent = reduceExportFontSizeByPercent;
+    this.reduceFirefoxFontSizeByPercent = reduceFirefoxFontSizeByPercent;
+    this.variables = variables;
   }
   async start() {
     return new Promise((resolve, reject) => {
       // all these checks need to be done before the tempalte code can be run 
-      let checkList = [domReady, fontsLoaded(this.fonts), setSize(), setOutfitState(), addCrop()];
-  
+      let checkList = [domReady, loadCSS(this.variables), defaultsRemoved(), fontsLoaded(this.fonts), setSize(), setOutfitState(), addCrop(this.allowLegacyRendering)];
       Promise.all(checkList)
         .then(() => {
           console.log("DOMContentLoaded + Fonts loaded");
@@ -116,38 +182,29 @@ class boilerplate {
   }
 
   async dynamicReplace () {
-    const module = await import('./replace.js');
-    module.dynamicReplace.apply(null, arguments);
+    dynamicReplace.apply(null, arguments);
   }
   async textFit () {
-    const module = await import('./textFit.js');
-    module.default.apply(null, arguments);
+    textFit.apply(null, arguments);
   }
   async setupPlaceholder () {
-    const module = await import('./placeholder.js');
-    module.default.apply(null, arguments);
+    setupPlaceholder.apply(null, arguments);
   }
   async maxLineCheck () {
-    const module = await import('./limiters.js');
-    module.maxLineCheck.apply(null, arguments);
+    maxLineCheck.apply(null, arguments);
   }
   async maxHeightCheck () {
-    const module = await import('./limiters.js');
-    module.maxHeightCheck.apply(null, arguments);
+    maxHeightCheck.apply(null, arguments);
   }
   async charLimit () {
-    const module = await import('./limiters.js');
-    module.charLimit.apply(null, arguments);
+    charLimit.apply(null, arguments);
   }
   async dynamicAssign () {
-    const module = await import('./limiters.js');
-    module.dynamicAssign.apply(null, arguments);
+    dynamicAssign.apply(null, arguments);
   }
   async countLines () {
-    const module = await import('./limiters.js');
-    module.countLines.apply(null, arguments);
+    countLines.apply(null, arguments);
   }
 }
-
 
 export default boilerplate;
