@@ -32,32 +32,30 @@ const imageLoadedCheck = (imagesLoaded) => {
   const defaultsRemoved = () => {
     return new Promise((resolve, reject) => {
       let title = document.title;
-      let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
-      let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
-      let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
-      let comment = document.createTreeWalker(
-        document.head, 
-        NodeFilter.SHOW_COMMENT, 
-        null,
-        false
-      )
       if (title == '' || title == 'PUT_TEMPLATE_NAME_HERE') {
-        reject('Please name template in the title of the document')
-      } else
-      if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
-        reject('Please add your name to the metadata')
-      } else 
-      if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
-        reject('Please add the scope card to the metadata')
-      } else
-      if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
-        reject('Please add the build card to the metadata')
-      } else
-      if (comment && comment.nextNode() && comment.nextNode().nodeValue.includes('Template Admin Build Instructions')) {
-        reject('Please remove the Template Admin Build Instructions from the top of the document')
-      } else {
-        resolve()
+        reject('Please put the name of the template in the title of the document')
       }
+      let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
+      if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
+        reject('Please add your name in the document meta tags')
+      } 
+      let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
+      if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+        reject('Please add the scope card ID in the document meta tags')
+      }
+      let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
+      if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+        reject('Please add the build card ID in the document meta tags')
+      } 
+      if ([...document.head.childNodes].some(node => {
+        if (node && node.data && node.nodeType  == 8) {
+          return node.data.includes('Template Admin Build Instructions')
+        }
+      })) {
+        reject('Please remove the "Template Admin Build Instructions" comment from the top of the document')
+      }
+     
+      resolve();
     });
   }
   // ensure that all fonts are loaded check
@@ -125,15 +123,16 @@ const loadCSS = (variables) => {
   });
 }
 
-class boilerplate {
-  constructor({ fonts = '',
+export default class boilerplate {
+  constructor({ 
+    fonts = [],
     ensureImagesLoad = true,
     allowLegacyRendering = false,
     reduceExportFontSizeByPercent = 0,
     reduceFirefoxFontSizeByPercent = 0,
     variables = {}
-   }) {
-    this.fonts = fonts;
+   } = {}) {
+    this.fonts = fonts || '';
     this.ensureImagesLoad = ensureImagesLoad;
     this.allowLegacyRendering = allowLegacyRendering;
     this.reduceExportFontSizeByPercent = reduceExportFontSizeByPercent;
@@ -143,7 +142,7 @@ class boilerplate {
   async start() {
     return new Promise((resolve, reject) => {
       // all these checks need to be done before the tempalte code can be run 
-      let checkList = [domReady, loadCSS(this.variables), defaultsRemoved(), fontsLoaded(this.fonts), setSize(), setOutfitState(), addCrop(this.allowLegacyRendering)];
+      let checkList = [domReady, defaultsRemoved(), fontsLoaded(this.fonts), setSize(), setOutfitState(), addCrop(this.allowLegacyRendering)];
       Promise.all(checkList)
         .then(() => {
           console.log("DOMContentLoaded + Fonts loaded");
@@ -206,5 +205,3 @@ class boilerplate {
     countLines.apply(null, arguments);
   }
 }
-
-export default boilerplate;

@@ -18,7 +18,16 @@ module.exports = {
     libraryTarget: 'umd',
     libraryExport: 'default' 
   },
-
+  
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: [/node_modules/],
+        use: ['babel-loader'],
+      }
+    ],
+  },
   // Default mode for Webpack is production.
   // Depending on mode Webpack will apply different things
   // on the final bundle. For now, we don't need production's JavaScript 
