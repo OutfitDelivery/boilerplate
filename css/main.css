@@ -11,7 +11,7 @@ html {
   word-break: break-word !important;
 }
 
-body{
+body {
   background: #ffffff;
 }
 
@@ -21,7 +21,7 @@ body{
   }
 }
 
-.page{
+.page {
   overflow: hidden;
   position: relative; 
   height: 100vh;
@@ -121,36 +121,6 @@ body{
   width: auto;
 }
 
-/*[data-limit-exceeded="true"]:after {
-  display: none; }
-*/
-
-/*[data-limit-exceeded="true"]:hover:after {
-  display: block;
-  content: '<svg></svg>Max number of lines exceeded!';
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: black;
-  color: white;
-  border-radius: 0;
-  padding: 0 1.5em 0 0.5em;
-  box-sizing: border-box;
-  max-height: 100%;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: right;
-  line-height: 1em;
-  z-index: 2;
-}*/
-/*
-[data-limit-exceeded="true"][data-max-height]:hover:after {
-  content: 'Max height exceeded!';  
-}
-
-[data-limit-exceeded="true"][data-char-limit]:hover:after {
-  content: 'Character limit exceeded';        
-}*/
 
 [data-limit-exceeded="true"] .token-value.token-empty {
   display: none;
@@ -225,7 +195,7 @@ sub {
   height: 100% !important;
 }
 
-.placeholderImage{
+.placeholderImage {
   position: absolute;
   top: 3mm;
   left: 3mm;
@@ -240,136 +210,50 @@ sub {
   pointer-events:none;
 }
 
-.crop-mark{
+.crop-mark {
   position: absolute;
   height: 28.81px;
   width: 28.81px;
 }
 
-.crop-marks .crop-mark.top-left{
+.crop-marks .crop-mark.top-left {
   top: 0;
   left: 0;
 }
 
-.crop-marks .crop-mark.top-right{
+.crop-marks .crop-mark.top-right { 
   top: 0;
   right: 0;
   transform: rotate(90deg);
 }
 
-.crop-marks .crop-mark.bottom-left{
+.crop-marks .crop-mark.bottom-left {
   bottom: 0;
   left: 0;
   transform: rotate(270deg);
 }
 
-.crop-marks .crop-mark.bottom-right{
+.crop-marks .crop-mark.bottom-right {
   bottom: 0;
   right: 0;
   transform: rotate(180deg);
 }
 
-[data-trim="true"] .bleed{
+[data-trim="true"] .bleed {
   --trimOffset: 4.41mm;
 }
 
-[data-trim="false"] .bleed{
+[data-trim="false"] .bleed {
   --trimOffset: -3mm;
 }
 
-.bleed{
+.bleed {
   position: absolute;
   top: var(--trimOffset);
   left: var(--trimOffset);
   bottom: var(--trimOffset);
   right: var(--trimOffset);
 }
-
-/*OLD OVERFLOW STYLES - TO BE REMOVED*/
-/** Overflow Styles **/
-      .overflow {
-        position: relative !important;
-        border: 1px dashed red;
-        color: red !important;
-      }
-
-      .overflow * { 
-        color: inherit !important; 
-      }
-
-      .overflow {
-        border: none;
-        box-shadow: 0 0 0 0.0362rem red;
-        background: rgba(255, 0, 0, 0.4);
-        position: relative;
-        z-index: 999;}
-      .overflow h1, 
-      .overflow h2, 
-      .overflow h3, 
-      .overflow h4, 
-      .overflow h5, 
-      .overflow h6, 
-      .overflow p, 
-      .overflow li { color: red !important; }
-      .overflow::before {
-        content: '+';
-        position: absolute;
-        z-index: 5;
-        top: 0;
-        right: 0;
-        height: 1.2em;
-        width: 1.2em;
-        max-height: 100%;
-        color: red;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Arial';
-        font-size: 0.8em;
-        text-align: center;
-        line-height: 1.2em;
-        background-color: white;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .overflow:hover:before {
-        background-color: red;
-        color: white; }
-      .overflow:after {
-        display: none; }
-      .overflow:hover:after {
-        display: block;
-        content: 'Max number of lines exceeded!';
-        position: absolute;
-        top: 0;
-        right: 0;
-        background-color: black;
-        color: white;
-        border-radius: 0;
-        padding: 0 1.5em 0 0.5em;
-        box-sizing: border-box;
-        max-height: 100%;
-        font-family: 'Arial';
-        font-size: 0.8em;
-        font-weight: 400;
-        text-align: right;
-        line-height: 1.2em;
-        z-index: 2;
-      }
-
-      .overflow[data-max-height]:hover:after {
-        content: 'Max height exceeded!';  
-      }
-
-      .overflow[data-char-limit]:hover:after {
-        content: 'Character limit exceeded';        
-      }
-
-      .overflow[data-custom-overflow-message]:hover:after {
-        content: attr(data-custom-overflow-message);
-      }
-
-      .overflow .token-value.token-empty {
-        display: none;
-      }
+a { 
+  display: inline-block;
+} 
