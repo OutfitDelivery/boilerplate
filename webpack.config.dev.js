@@ -1,6 +1,5 @@
 // Webpack uses this to work with directories
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 // This is the main configuration object.
 // Here, you write different options and tell Webpack what to do
@@ -29,9 +28,10 @@ module.exports = {
       }
     ],
   },
-  plugins: [
-    new CleanWebpackPlugin()
-  ],
-  mode: 'production',
-  devtool: 'source-map',
+  // Default mode for Webpack is production.
+  // Depending on mode Webpack will apply different things
+  // on the final bundle. For now, we don't need production's JavaScript 
+  // minifying and other things, so let's set mode to development
+  mode: 'development',
+  devtool: 'inline-source-map'
 };
