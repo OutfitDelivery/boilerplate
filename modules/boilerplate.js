@@ -69,7 +69,7 @@ const imageLoadedCheck = (imagesLoaded) => {
       (fontsListed && fontsListed.length < 1) ||
       fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE"
     ) {
-      reject("No fonts were listed in the run function");
+      reject("No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }");
     } else {
         Promise.all(fontsListed.map((font) => {
             return new FontFaceObserver(font).load();
