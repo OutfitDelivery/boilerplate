@@ -47,8 +47,7 @@
     <script>
       console.clear();
     	const state = setOutfitState();
-
-      window.addEventListener('DOMContentLoaded', (event) => {
+      window.addEventListener('load', (event) => {
         const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
         if(invalidFontList(fonts)) return;
 
@@ -64,9 +63,9 @@
           if (state === "document") {
             imageCompression();
           }
-          if (state === "template" || state === "document") {
-            setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
-          }
+          // if (state === "template" || state === "document") {
+          //   setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
+          // }
          
           completeRender()
         }).catch((err) => {
@@ -80,7 +79,6 @@
           maxHeightCheck();
           charLimit();
           // dynamicReplace();
-          // Place Textfit here
         }
       }
     </script>
