@@ -257,3 +257,6 @@ sub {
 a { 
   display: inline-block;
 } 
+.isEdge {
+  overflow-wrap: break-word;
+}

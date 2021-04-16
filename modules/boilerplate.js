@@ -1,8 +1,8 @@
-// import './less.js';
 var less = require('less');
+// import './less.js';
 import './prefixfree.js';
 import FontFaceObserver from './fontfaceobserver.js'
-import { setSize, setOutfitState, addCrop, imageCompression } from './pageSetup.js'
+import { setSize, setOutfitState, addCrop, imageCompression, setBrowserType } from './pageSetup.js'
 import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
@@ -10,56 +10,56 @@ import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, innerWidth, inn
 
 // functionly that used to be in all-images-loaded-callback.js converted into a promise function
 const imageLoadedCheck = (imagesLoaded) => {
-    return new Promise((imagesLoaded, imagesFailed) => { 
-      Promise.all(Array.from(document.images).map(img => {
-        if (img.complete)
-            if (img.naturalHeight !== 0)
-                return Promise.resolve();
-            else
-                return Promise.reject(img);
-        return new Promise((resolve, reject) => {
-            img.addEventListener("load", resolve);
-            img.addEventListener("error", () => reject(img));
-        });
-      })).then(() => {
-        imagesLoaded('All images loaded!');
-      }, badImg => {
-        imagesFailed(`${badImg.src} didn't load`)
+  return new Promise((imagesLoaded, imagesFailed) => { 
+    Promise.all(Array.from(document.images).map(img => {
+      if (img.complete)
+          if (img.naturalHeight !== 0)
+              return Promise.resolve();
+          else
+              return Promise.reject(img);
+      return new Promise((resolve, reject) => {
+          img.addEventListener("load", resolve);
+          img.addEventListener("error", () => reject(img));
       });
+    })).then(() => {
+      imagesLoaded('All images loaded!');
+    }, badImg => {
+      imagesFailed(`${badImg.src} didn't load`)
     });
-  }
-  // ensure that the user has changed important tempalte metadata
-  const defaultsRemoved = () => {
-    return new Promise((resolve, reject) => {
-      let title = document.title;
-      if (title == '' || title == 'PUT_TEMPLATE_NAME_HERE') {
-        reject('Please put the name of the template in the title of the document')
+  });
+}
+// ensure that the user has changed important tempalte metadata
+const defaultsRemoved = () => {
+  return new Promise((resolve, reject) => {
+    let title = document.title;
+    if (title == '' || title == 'PUT_TEMPLATE_NAME_HERE') {
+      reject('Please put the name of the template in the title of the document')
+    }
+    let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
+    if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
+      reject('Please add your name in the document meta tags')
+    } 
+    let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
+    if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+      reject('Please add the scope card ID in the document meta tags')
+    }
+    let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
+    if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+      reject('Please add the build card ID in the document meta tags')
+    } 
+    if ([...document.head.childNodes].some(node => {
+      if (node && node.data && node.nodeType  == 8) {
+        return node.data.includes('Template Admin Build Instructions')
       }
-      let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
-      if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
-        reject('Please add your name in the document meta tags')
-      } 
-      let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
-      if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
-        reject('Please add the scope card ID in the document meta tags')
-      }
-      let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
-      if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
-        reject('Please add the build card ID in the document meta tags')
-      } 
-      if ([...document.head.childNodes].some(node => {
-        if (node && node.data && node.nodeType  == 8) {
-          return node.data.includes('Template Admin Build Instructions')
-        }
-      })) {
-        reject('Please remove the "Template Admin Build Instructions" comment from the top of the document')
-      }
-     
-      resolve();
-    });
-  }
+    })) {
+      reject('Please remove the "Template Admin Build Instructions" comment from the top of the document')
+    }
+    
+    resolve();
+  });
+}
   // ensure that all fonts are loaded check
-  const fontsLoaded = (fontsListed) => {
+const fontsLoaded = (fontsListed) => {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(fontsListed)) {
         fontsListed = [fontsListed]
@@ -118,7 +118,7 @@ const loadCSS = (variables) => {
 
       document.head.insertAdjacentHTML('beforeEnd', `<style>${cssOutput.css}</style>`);
 
-      resolve()
+      resolve();
     } catch (e) { reject(e) }
   });
 }
@@ -142,7 +142,15 @@ export default class boilerplate {
   async start() {
     return new Promise((resolve, reject) => {
       // all these checks need to be done before the tempalte code can be run 
-      let checkList = [domReady, defaultsRemoved(), fontsLoaded(this.fonts), setSize(), setOutfitState(), addCrop(this.allowLegacyRendering)];
+      let checkList = [
+        domReady,
+        defaultsRemoved(),
+        fontsLoaded(this.fonts),
+        setBrowserType(),
+        setSize(),
+        setOutfitState(),
+        addCrop(this.allowLegacyRendering)
+      ];
       Promise.all(checkList)
         .then(() => {
           console.log("DOMContentLoaded + Fonts loaded");
@@ -176,7 +184,7 @@ export default class boilerplate {
       document.dispatchEvent(new Event('printready'))
     }).catch(err => {
         console.error(err);
-        throw '⚠️ Render failed for above reason ⤴️'
+        throw '⚠️ Render failed for logged reason ⤴️'
     });
   }
 

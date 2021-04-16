@@ -85,13 +85,33 @@ const setSize = () => {
 setSize();
 
 // Check if current browser is Firefox
-if (navigator.userAgent.includes("Firefox")) document.body.classList.add("is-firefox");
+let browser = {
+  // Opera 8.0+
+  isOpera: (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0,
+  // Firefox 1.0+
+  isFirefox: typeof InstallTrigger !== 'undefined',
+  // Safari 3.0+ "[object HTMLElementConstructor]" 
+  isSafari: /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification)),
+  // Internet Explorer 6-11
+  isIE: /*@cc_on!@*/false || !!document.documentMode,
+  // Edge 20+
+  isEdge: !isIE && !!window.StyleMedia,
+  // Chrome 1 - 79
+  isChrome:  !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime),
+  // Edge (based on chromium) detection
+  isEdgeChromium:  isChrome && (navigator.userAgent.indexOf("Edg") != -1),
+  // Blink engine detection
+  isBlink: (isChrome || isOpera) && !!window.CSS,
+  isMac: window.navigator.appVersion.includes("Mac")
+}
+
+if (isFirefox) document.body.classList.add("is-firefox");
 
 // Detecting if user is on MAC operating system
-if (window.navigator.appVersion.includes("Mac")) document.body.classList.add("is-mac");
+if (browser.isMac) document.body.classList.add("is-mac");
 
 // Check if current browser is Edge for wordbreak break-word fix
-if (navigator.userAgent.includes("Edge")) {
+if (isEdge && !isEdgeChromium) {
   let wordBreakSelector = document.querySelector("html");
   wordBreakSelector.style.wordBreak = "break-all";
 }

@@ -26,7 +26,6 @@ var afterSha = getShaOfBundle();
 // reset anything that was stashed
 exec('git stash pop');
 
-console.log(beforeSha,afterSha)
 if (beforeSha !== afterSha) {
     throw new Error("Need to bundle before committing. Don't worry about it I just built it for you. Add the extra files in /dist/ and commit again");
 }

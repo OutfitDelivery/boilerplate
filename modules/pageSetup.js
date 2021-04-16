@@ -34,6 +34,35 @@ const imageCompression = () => {
     }
   });
 }
+const setBrowserType = () => {
+  return new Promise((resolve) => {
+    let browser = {
+      // Opera 8.0+
+      isOpera: (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0,
+      // Firefox 1.0+
+      isFirefox: typeof InstallTrigger !== 'undefined',
+      // Safari 3.0+ "[object HTMLElementConstructor]" 
+      isSafari: /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification)),
+      // Internet Explorer 6-11
+      isIE: /*@cc_on!@*/false || !!document.documentMode,
+      // Chrome 1 - 79
+      isChrome:  !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime),
+      // mac detection
+      isMac: window.navigator.appVersion.includes("Mac")
+    }
+    //  Edge 20+
+    browser['isEdge'] = !browser.isIE && !!window.StyleMedia;
+    // Edge (based on chromium) detection
+    browser['isEdgeChromium'] = browser.isChrome && (navigator.userAgent.indexOf("Edg") != -1);
+    // Blink engine detection
+    browser['isBlink'] = (browser.isChrome || browser.isOpera) && !!window.CSS;
+
+    document.body.classList += ' ' + Object.keys(browser).filter(function(key) {
+      return browser[key]
+    }).join(' ');
+    resolve(browser)
+  });
+}
 
 const setOutfitState = () => {
   return new Promise((resolve) => {
@@ -53,7 +82,6 @@ const setOutfitState = () => {
     if (!mode) {
       mode = "error";
     }
-
     document.body.setAttribute("document-state", mode);
     window.state = mode;
     resolve(mode);
@@ -192,4 +220,4 @@ const setSize = () => {
   });
 };
 
-export { setSize, addCrop, pageHeightSetup, setOutfitState, imageCompression };
+export { setSize, addCrop, pageHeightSetup, setOutfitState, imageCompression, setBrowserType };
