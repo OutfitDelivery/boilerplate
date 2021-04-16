@@ -49,7 +49,7 @@
     	const state = setOutfitState();
       window.addEventListener('load', (event) => {
         const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
-        if(invalidFontList(fonts)) return;
+        if(!validFontList(fonts)) return;
 
         Promise.all(fonts.map(font => {
           return new FontFaceObserver(font).load();
