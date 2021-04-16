@@ -16,7 +16,7 @@
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/css/main.min.css"/>
     <style>
       /* ADD_ROOT_STYLES_HERE */
     </style>
