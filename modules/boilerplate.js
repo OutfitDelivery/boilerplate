@@ -1,6 +1,3 @@
-// var less = 
-// import './less.js';
-
 import FontFaceObserver from './fontfaceobserver.js'
 import { imageCompression } from './pageSetup.js'
 import { dynamicReplace } from './replace.js';
@@ -28,36 +25,6 @@ const imageLoadedCheck = (imagesLoaded) => {
     });
   });
 }
-// ensure that the user has changed important tempalte metadata
-const defaultsRemoved = () => {
-  return new Promise((resolve, reject) => {
-    let title = document.title;
-    if (title == '' || title == 'PUT_TEMPLATE_NAME_HERE') {
-      reject('Please put the name of the template in the title of the document')
-    }
-    let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
-    if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
-      reject('Please add your name in the document meta tags')
-    } 
-    let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
-    if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
-      reject('Please add the scope card ID in the document meta tags')
-    }
-    let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
-    if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
-      reject('Please add the build card ID in the document meta tags')
-    } 
-    if ([...document.head.childNodes].some(node => {
-      if (node && node.data && node.nodeType  == 8) {
-        return node.data.includes('Template Admin Build Instructions')
-      }
-    })) {
-      reject('Please remove the "Template Admin Build Instructions" comment from the top of the document')
-    }
-    
-    resolve();
-  });
-}
 
 
 // display a message to block rendering for major issues
@@ -65,7 +32,8 @@ const blockRender = (v) => {
   document.querySelector("body").innerHTML = `<style>html, body { background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem;}  body { margin: 1rem; width: 80%!important;} p { font-size: 0.4rem; } </style>
   <h4>⚠️ Please enable <code>allowLegacyRendering: true</code>
    on the boilerplate or update renderer to version 2.1 or 1.1 </h4>
-   <p>Please contact support if you see this message saying that this template is using renderer ${v}</p>`
+   <p>Please contact support if you see this message saying that this template is using renderer ${v}</p>`;
+   document.dispatchEvent(new Event('printready'))
 }
 
 // wait for the dom to laod or continue if it has already loaded
@@ -131,17 +99,17 @@ export default class boilerplate {
       let checkList = [
         domReady,
         loadLESS(),
-        defaultsRemoved(),
+        this.setOutfitState(),
         this.fontsLoaded(),
         this.setBrowserType(),
         this.setSize(),
-        this.setOutfitState(),
         this.addCrop()
       ];
       Promise.all(checkList)
         .then(() => {
           console.log("DOMContentLoaded + Fonts loaded");
-  
+
+
           window.addEventListener("resize", async (e) => {
             await this.setSize();
             if (state !== "preview" && typeof onTextChange === "function") {
@@ -165,6 +133,7 @@ export default class boilerplate {
           }
           if (state === "document") {
             imageCompression();
+            this.defaultsRemoved();
           }
           resolve();
         })
@@ -380,7 +349,44 @@ export default class boilerplate {
         throw '⚠️ Render failed for logged reason ⤴️'
     });
   }
-
+  async defaultsRemoved () {
+    // ensure that the user has changed important tempalte metadata
+    return new Promise((resolve, reject) => {
+      let title = document.title;
+      if (title == '' || title == 'PUT_TEMPLATE_NAME_HERE') {
+        reject('Please put the name of the template in the title of the document')
+      }
+      let builtBy = document.querySelector('meta[name="template-built-by"]').getAttribute('content');
+      if (builtBy == '' || builtBy == 'PUT_YOUR_NAME_HERE') {
+        reject('Please add your name in the document meta tags')
+      } 
+      let scopeCard = document.querySelector('meta[name="scope"]').getAttribute('content');
+      if (scopeCard == '' || scopeCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+        reject('Please add the scope card ID in the document meta tags')
+      }
+      let builtCard = document.querySelector('meta[name="build"]').getAttribute('content');
+      if (builtCard == '' || builtCard == 'DTB-PUT_JIRA_NUMBER_HERE') {
+        reject('Please add the build card ID in the document meta tags')
+      } 
+      if ([...document.head.childNodes].some(node => {
+        if (node && node.data && node.nodeType  == 8) {
+          return node.data.includes('Template Admin Build Instructions')
+        }
+      })) {
+        reject('Please remove the "Template Admin Build Instructions" comment from the top of the document')
+      }
+      resolve();
+    });
+  }
+  
+  async fsSync () {
+    if (this.state == 'document' && typeof BroadcastChannel === 'function') {
+      let bc = new BroadcastChannel('fs-sync');
+      bc.onmessage = (ev) => { 
+        window.top.location.reload()
+      }
+    }
+  }
   async dynamicReplace () {
     dynamicReplace.apply(null, arguments);
   }

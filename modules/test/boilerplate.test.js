@@ -50,7 +50,7 @@ describe('import tests', () => {
       // there should always be an error meaning this line is used to detect when an error isn't thrown
       expect(true).toBe(false); 
     } catch (e) {
-      expect(e).toBe("Please put the name of the template in the title of the document");
+      expect(e).toBe("No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }");
     }
   });
 });
@@ -63,7 +63,7 @@ describe('defaultsRemoved', function () {
     let template = new boilerplate();
     document.head.innerHTML = `
       <title>PUT_TEMPLATE_NAME_HERE</title>`;
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please put the name of the template in the title of the document');
@@ -72,7 +72,7 @@ describe('defaultsRemoved', function () {
   test('check start() throws expected errors if title is missing 2', () => {
     let template = new boilerplate();
     document.head.innerHTML = `<title></title>`;
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please put the name of the template in the title of the document');
@@ -83,7 +83,7 @@ describe('defaultsRemoved', function () {
     document.head.innerHTML = `
       <title>Title</title>
       <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>`
-      return template.start().then(() => {
+      return template.defaultsRemoved().then(() => {
         expect(true).toBe(false);
         }).catch(e => {
         expect(e).toBe('Please add your name in the document meta tags');
@@ -94,7 +94,7 @@ describe('defaultsRemoved', function () {
     document.head.innerHTML = `
     <title>Title</title>
     <meta name="template-built-by" content=""/>`
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add your name in the document meta tags');
@@ -106,7 +106,7 @@ describe('defaultsRemoved', function () {
     <title>Title</title>
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>`
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the scope card ID in the document meta tags');
@@ -118,7 +118,7 @@ describe('defaultsRemoved', function () {
     <title>Title</title>
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content=""/>`
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the scope card ID in the document meta tags');
@@ -131,7 +131,7 @@ describe('defaultsRemoved', function () {
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-123"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>`
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the build card ID in the document meta tags');
@@ -144,7 +144,7 @@ describe('defaultsRemoved', function () {
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-123"/>
     <meta name="build" content=""/>`
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the build card ID in the document meta tags');
@@ -162,7 +162,7 @@ describe('defaultsRemoved', function () {
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-123"/>
     <meta name="build" content="DTB-456"/>`
-    return template.start().then(() => {
+    return template.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please remove the "Template Admin Build Instructions" comment from the top of the document');

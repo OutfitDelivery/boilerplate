@@ -22,7 +22,7 @@
         --white: #fff;
       }
     </style>
-    <link rel="stylesheet" type="text/less" href="css/styles.less">
+    <link rel="stylesheet" type="text/less" href="css/style.less">
   </head>
   <body>
     <div class="page">
@@ -42,14 +42,13 @@
 
       // Please put all fonts needed for the tempate into the array bellow
       template.start().then(() => {
+        template.fsSync()
         // template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-
-        template.completeRender();
-      }).catch(console.trace);
+        template.completeRender()
+      }).catch(console.trace)
 
       // This function will run whenever there is a change to any text input
       window.onTextChange = (element) => {
-        console.log('onTextChange');
         // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
         // template.maxLineCheck();
         // template.maxHeightCheck();
