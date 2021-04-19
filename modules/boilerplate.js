@@ -28,7 +28,7 @@ const imageLoadedCheck = (imagesLoaded) => {
 
 // display a message to block rendering for major issues
 const blockRender = (v) => {
-  document.querySelector("body").innerHTML = `<style>html, body { background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem;}  body { margin: 1rem; width: 80%!important;} p { font-size: 0.4rem; } </style>
+  document.querySelector("body").innerHTML = `<style>html, body { background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: 100000;}  body { margin: 1rem; width: 80%!important;} p { font-size: 0.4rem; } </style>
   <h4>⚠️ Please enable <code>allowLegacyRendering: true</code>
    on the boilerplate or update renderer to version 2.1 or 1.1 </h4>
    <p>Please contact support if you see this message saying that this template is using renderer ${v}</p>`;
@@ -85,13 +85,14 @@ export default class boilerplate {
     trimMarks = false,
     variables = {}
    } = {}) {
-    this.fonts = fonts || '';
-    this.ensureImagesLoad = ensureImagesLoad;
-    this.allowLegacyRendering = allowLegacyRendering;
-    this.exportReduceFont = exportReduceFont;
-    this.firefoxReduceFont = firefoxReduceFont;
-    this.trimMarks = trimMarks;
-    this.variables = variables;
+     console.clear();
+     this.fonts = fonts || '';
+     this.ensureImagesLoad = ensureImagesLoad;
+     this.allowLegacyRendering = allowLegacyRendering;
+     this.exportReduceFont = exportReduceFont;
+     this.firefoxReduceFont = firefoxReduceFont;
+     this.trimMarks = trimMarks;
+     this.variables = variables;
   }
   start() {
     return new Promise((resolve, reject) => {
@@ -107,8 +108,6 @@ export default class boilerplate {
       ];
       Promise.all(checkList)
         .then(() => {
-          console.log("DOMContentLoaded + Fonts loaded");
-
           window.addEventListener("resize", async (e) => {
             await this.setSize();
             if (state !== "preview" && typeof onTextChange === "function") {
@@ -134,6 +133,7 @@ export default class boilerplate {
           if (state !== "preview" && typeof window.onTextChange === "function") {
             window.onTextChange();
           }
+          console.log("DOMContentLoaded + Fonts loaded");
           resolve();
         })
         .catch(reject);
@@ -267,13 +267,11 @@ export default class boilerplate {
       console.info("Renderer 1.1 Set");
       return "100vh";
     } else if (agent.includes('(OPTION 1.0)')) {
-      console.warn("Renderer set to 1.0. Please update to 1.1");
       if (!this.allowLegacyRendering) {
         blockRender('1.0')
       }
       return "100vh";
     } else if (agent.includes('(OPTION 2.0;')) {
-      console.warn("Renderer 2.0 Set. Please update to 2.1");
       if (!this.allowLegacyRendering) {
         blockRender('2.0')
       }
