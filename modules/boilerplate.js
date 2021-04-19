@@ -3,7 +3,7 @@ import { imageCompression } from './pageSetup.js'
 import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
-import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight } from './limiters';
+import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck } from './limiters';
 
 // functionly that used to be in all-images-loaded-callback.js converted into a promise function
 const imageLoadedCheck = (imagesLoaded) => {
@@ -70,6 +70,7 @@ const loadLESS = () => {
       require('less');
       require('prefixfree');
 
+      resolve()
     } catch (e) { reject(e) }
   });
 }
@@ -92,7 +93,7 @@ export default class boilerplate {
     this.trimMarks = trimMarks;
     this.variables = variables;
   }
-  async start() {
+  start() {
     return new Promise((resolve, reject) => {
       // all these checks need to be done before the tempalte code can be run 
       let checkList = [
@@ -108,31 +109,30 @@ export default class boilerplate {
         .then(() => {
           console.log("DOMContentLoaded + Fonts loaded");
 
-
           window.addEventListener("resize", async (e) => {
             await this.setSize();
             if (state !== "preview" && typeof onTextChange === "function") {
-              onTextChange(e.target);
+              window.onTextChange(e.target);
             }
           });
           if (state == 'preview') {
-            OutfitIframeShared.eventEmitter.addListener(
-              'token-value:change', (e) => {
-              if (state !== "preview" && typeof onTextChange === "function") {
-                if (e.currentTarget.parentNode) {
-                  onTextChange(e.currentTarget.parentNode);
-                } else {
-                  onTextChange();
-                }
-              }
-            });
-          }
-          if (state !== "preview" && typeof onTextChange === "function") {
-              onTextChange();
+            // OutfitIframeShared.eventEmitter.addListener(
+            //   'token-value:change', (e) => {
+            //   if (state !== "preview" && typeof window.onTextChange === "function") {
+            //     if (e.currentTarget.parentNode) {
+            //       window.onTextChange(e.currentTarget.parentNode);
+            //     } else {
+            //       window.onTextChange();
+            //     }
+            //   }
+            // });
           }
           if (state === "document") {
-            imageCompression();
             this.defaultsRemoved();
+            imageCompression();
+          }
+          if (state !== "preview" && typeof window.onTextChange === "function") {
+            window.onTextChange();
           }
           resolve();
         })
@@ -141,7 +141,7 @@ export default class boilerplate {
   }
 
   // ensure that all fonts are loaded check
-  async fontsLoaded() {
+  fontsLoaded() {
     return new Promise((resolve, reject) => {
       let fontsListed = this.fonts
       if (!Array.isArray(fontsListed)) {
@@ -163,7 +163,7 @@ export default class boilerplate {
     });
   };
 
-  async setBrowserType () {
+  setBrowserType () {
     return new Promise((resolve) => {
       let browser = {
         // Opera 8.0+
@@ -194,7 +194,7 @@ export default class boilerplate {
     });
   }
   
-  async setOutfitState () {
+  setOutfitState () {
     return new Promise((resolve) => {
       var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
       mode =
@@ -220,7 +220,7 @@ export default class boilerplate {
     });
   }
   
-  async setSize () {
+  setSize () {
     return new Promise((resolve) => {
       const vw =
         (this.trimMarks ? window.innerWidth : window.innerWidth + 57.62) / 100;
@@ -256,7 +256,7 @@ export default class boilerplate {
     });
   }
 
-  async pageHeightSetup() {
+  pageHeightSetup() {
     let agent = navigator.userAgent;
     if (agent.includes('(OPTION 2.1;')) {
       console.info("Renderer 2.1 Set");
@@ -288,7 +288,7 @@ export default class boilerplate {
   }
   
   // Fix for the resizable background images - fullscreen and digital vairaitons only
-  async addCrop() {
+  addCrop() {
     return new Promise((resolve) => {
       // crop and bleed
       var cropSVG =
@@ -334,7 +334,7 @@ export default class boilerplate {
   }
 
   // send a event to stop a render 
-  async completeRender() {
+  completeRender() {
     let checkList = [winLoad]
     if (this.ensureImagesLoad) {
       checkList.push(imageLoadedCheck)
@@ -348,7 +348,7 @@ export default class boilerplate {
         throw '⚠️ Render failed for logged reason ⤴️'
     });
   }
-  async defaultsRemoved () {
+  defaultsRemoved () {
     // ensure that the user has changed important tempalte metadata
     return new Promise((resolve, reject) => {
       let title = document.title;
@@ -377,8 +377,7 @@ export default class boilerplate {
       resolve();
     });
   }
-  
-  async fsSync () {
+  fsSync () {
     if (this.state == 'document' && typeof BroadcastChannel === 'function') {
       let bc = new BroadcastChannel('fs-sync');
       bc.onmessage = (ev) => { 
@@ -386,25 +385,25 @@ export default class boilerplate {
       }
     }
   }
-  async dynamicReplace () {
+  dynamicReplace () {
     dynamicReplace.apply(null, arguments);
   }
-  async textFit () {
+  textFit () {
     textFit.apply(null, arguments);
   }
-  async setupPlaceholder () {
+  setupPlaceholder () {
     setupPlaceholder.apply(null, arguments);
   }
-  async maxLineCheck () {
+  maxLineCheck () {
     maxLineCheck.apply(null, arguments);
   }
-  async maxHeightCheck () {
+  maxHeightCheck () {
     maxHeightCheck.apply(null, arguments);
   }
-  async charLimit () {
+  charLimit () {
     charLimit.apply(null, arguments);
   }
-  async dynamicAssign () {
+  dynamicAssign () {
     dynamicAssign.apply(null, arguments);
   }
 }
