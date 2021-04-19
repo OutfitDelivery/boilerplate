@@ -1,3 +1,4 @@
+// import { setSize } from '../pageSetup.js'
 const boilerplate = require('../boilerplate').default;
 
 beforeEach(() => {
@@ -17,12 +18,50 @@ beforeEach(() => {
     </style>`
 });
 describe('setSize working', () => {
-  test('check setSize() runs on start()', async () => {
-    var template = new boilerplate({fonts: ["IBM Plex Sans"]});
-    return template.start().then(() => {
-      // expect(document.html).toHaveStyle({ 'font-size': '25px' })
+  test('check setSize() runs', () => {
+    let template = new boilerplate();
+    return template.setSize().then(() => {
+      expect(document.querySelector('html').style.fontSize).toBe('48.16748px')
     }).catch((e) => {
-      // expect(e).toBe(false);
+      expect(e).toBe(false);
     });
+  });
+  test('check setSize() runs at known size', () => {
+    // Change the viewport to 500px.
+    global.innerWidth = 500;
+    global.innerHeight = 500;
+    let template = new boilerplate();
+    return template.setSize().then(() => {
+      expect(document.querySelector('html').style.fontSize).toBe('30.11148px')
+    }).catch((e) => {
+      expect(e).toBe(false);
+    });
+  });
+  test('check setSize() runs at known size2', () => {
+    // Change the viewport to 500px.
+    global.innerWidth = 1500;
+    global.innerHeight = 1500;
+    let template = new boilerplate();
+    return template.setSize().then(() => {
+      expect(document.querySelector('html').style.fontSize).toBe('84.11147999999999px')
+    }).catch((e) => {
+      expect(e).toBe(false);
+    });
+  });
+  test('check setSize() runs at resize', async () => {
+    let template = new boilerplate();
+    // Change the viewport to 500px.
+    global.innerWidth = 1500;
+    global.innerHeight = 1500;
+
+    await template.setSize()
+    expect(document.querySelector('html').style.fontSize).toBe('84.11147999999999px');
+
+    // Change the viewport to 500px.
+    global.innerWidth = 100;
+    global.innerHeight = 1500;
+    global.dispatchEvent(new Event('resize'));
+
+    expect(document.querySelector('html').style.fontSize).toBe('84.11147999999999px');
   });
 });

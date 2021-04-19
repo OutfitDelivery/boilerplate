@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html async>
-  <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
   <head>
   <!--  Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
@@ -15,53 +14,48 @@
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.4/css/main.min.css"/>
-    <style>
-      /* ADD_ROOT_STYLES_HERE */
+    <style type="text/less">
+      /* ADD_ONLY_ROOT_STYLES_HERE
+      All styles should be put in css/styles.less file for consistency */
+      :root {
+        --black: #000;
+        --white: #fff;
+      }
     </style>
+    <link rel="stylesheet" type="text/less" href="css/styles.less">
   </head>
-  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true">
+  <body>
     <div class="page">
       <div class="bleed">
         <div class="container">
-          
+          <h1>Hello world <span>:)</span></h1>
         </div>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/fontfaceobserver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/dist/boilerplate.js"></script>
+   <script>
+      let template = new boilerplate({
+        fonts: ['PUT_ALL_FONT_NAMES_HERE'],
+        trimMarks: '{{trim-marks}}'
+      });
 
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/formatters.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/custom-rich-text.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/hide-empty-titles.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/qrcode.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/textfit.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/validate.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/all-images-loaded-callback.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
-    
-    <script>
+      // Please put all fonts needed for the tempate into the array bellow
+      template.start().then(() => {
+        // template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
+
+        template.completeRender();
+      }).catch(console.trace);
 
       // This function will run whenever there is a change to any text input
-      const onTextChange = (target) => {
-        maxLineCheck();
-        maxHeightCheck();
-        charLimit();
-        // dynamicReplace();
-        // textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.2, maxFontSize: 1.3 })
+      window.onTextChange = (element) => {
+        console.log('onTextChange');
+        // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
+        // template.maxLineCheck();
+        // template.maxHeightCheck();
+        // template.charLimit();
+        // template.dynamicReplace();
       }
-
-      // Please put all fonts needed for the tempate into the array 
-      run(['PUT_ALL_FONT_NAMES_HERE']).then(() => {
-        setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-        // ADD_CODE_HERE
-
-        completeRender();
-      }).catch(console.trace);
     </script>
   </body>
 </html>

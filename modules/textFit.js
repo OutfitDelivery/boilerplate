@@ -1,4 +1,4 @@
-import { innerWidth, innerHeight } from './limiters.js'
+import { getWidth, getHeight } from './limiters.js'
 /**
  * textFit v3.1.0
  * Previously known as jQuery.textFit
@@ -106,8 +106,8 @@ import { innerWidth, innerHeight } from './limiters.js'
 
     // Get element data.
     originalHTML = el.innerHTML;
-    originalWidth = innerWidth(el);
-    originalHeight = innerHeight(el);
+    originalWidth = getWidth(el);
+    originalHeight = getHeight(el);
 
     // Don't process if we can't find box dimensions
     if (!originalWidth || (!settings.widthOnly && !originalHeight)) {
@@ -233,7 +233,7 @@ import { innerWidth, innerHeight } from './limiters.js'
       }
       // detect if the content is larger than it's parent
       if (settings.stopOverflow) {
-        var overflow = innerHeight(el) < innerSpan.scrollHeight;
+        var overflow = getHeight(el) < getHeight(innerSpan);
         if (overflow) {
           el.classList.add("overflow");
         }
@@ -282,9 +282,9 @@ import { innerWidth, innerHeight } from './limiters.js'
     testBox.style.display = 'inline-block';
     testBox.innerText = '⠀';
     target.appendChild(testBox);
-    var oneLineHeight = innerHeight(testBox);
+    var oneLineHeight = getHeight(testBox);
     testBox.remove();
-    var lines = innerHeight(target) / oneLineHeight;
+    var lines = getHeight(target) / oneLineHeight;
     return lines;
   }
 

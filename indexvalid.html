@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html async>
 <head>
-  <!--  Template Admin Build Instructions 
-        1. Fill Out Title Meta-Data
-        2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
-        3. Fill Out Build Card Meta-Data
-        4. Remove this comment
-  -->
     <title>name</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,11 +16,11 @@
       }
       h1 {
         letter-spacing: 0.2rem;
-        color: green;
       } 
     </style>
+    <link rel="stylesheet" type="text/less" href="css/styles.less"
   </head>
-  <body data-trim="{{trim-marks}}" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0">
+  <body>
     <div class="page">
       <div class="bleed">
         <div class="container">
@@ -39,15 +33,12 @@
    <script src="/dist/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
-        fonts: ['PUT_ALL_FONT_NAMES_HERE'],
+        fonts: ['IBM Plex Sans'],
         ensureImagesLoad: true,
         allowLegacyRendering: true,
         reduceExportFontSizeByPercent: 0,
         reduceFirefoxFontSizeByPercent: 0,
-        variables: {
-          var1: 'red',
-          var2: 'black'
-        }
+        trimMarks: true
       });
 
       // Please put all fonts needed for the tempate into the array bellow
@@ -58,8 +49,8 @@
       }).catch(console.trace);
 
       // This function will run whenever there is a change to any text input
-      window.onTextChange = () => {
-        console.log('onTextChange');
+      window.onTextChange = (element) => {
+        console.log('onTextChange', element);
         template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
         template.maxLineCheck();
         // template.maxHeightCheck();

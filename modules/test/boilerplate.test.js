@@ -21,8 +21,8 @@ describe('import tests', () => {
     expect(template.fonts).toStrictEqual([]);
     expect(template.ensureImagesLoad).toStrictEqual(true);
     expect(template.allowLegacyRendering).toStrictEqual(false);
-    expect(template.reduceExportFontSizeByPercent).toStrictEqual(0);
-    expect(template.reduceFirefoxFontSizeByPercent).toStrictEqual(0);
+    expect(template.exportReduceFont).toStrictEqual(0);
+    expect(template.firefoxReduceFont).toStrictEqual(0);
     expect(template.variables).toStrictEqual({});
   });
   test('check values can be changed', () => {
@@ -30,19 +30,17 @@ describe('import tests', () => {
       fonts : ['Test'],
       ensureImagesLoad : false,
       allowLegacyRendering : true,
-      reduceExportFontSizeByPercent : 0.4,
-      reduceFirefoxFontSizeByPercent : 555,
-      variables: {
-        var: 'test'
-      }
+      exportReduceFont : 0.4,
+      firefoxReduceFont : 555,
+      variables: { var1: 'test' }
     });
     expect(template.fonts).toStrictEqual(['Test']);
     expect(template.ensureImagesLoad).toStrictEqual(false);
     expect(template.allowLegacyRendering).toStrictEqual(true);
-    expect(template.reduceExportFontSizeByPercent).toStrictEqual(0.4);
-    expect(template.reduceFirefoxFontSizeByPercent).toStrictEqual(555);
+    expect(template.exportReduceFont).toStrictEqual(0.4);
+    expect(template.firefoxReduceFont).toStrictEqual(555);
     expect(template.variables).toStrictEqual({
-      var: 'test'
+      var1: 'test'
     });
   });
   test('check start() error get thrown if no html is found', async () => {
