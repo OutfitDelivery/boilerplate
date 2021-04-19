@@ -26,7 +26,6 @@ const imageLoadedCheck = (imagesLoaded) => {
   });
 }
 
-
 // display a message to block rendering for major issues
 const blockRender = (v) => {
   document.querySelector("body").innerHTML = `<style>html, body { background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem;}  body { margin: 1rem; width: 80%!important;} p { font-size: 0.4rem; } </style>

@@ -19,7 +19,6 @@ module.exports = {
     libraryTarget: 'umd',
     libraryExport: 'default' 
   },
-  
   module: {
     rules: [
       {
@@ -32,6 +31,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin()
   ],
-  mode: 'production',
+
+  mode: 'development',
   devtool: 'source-map',
 };
