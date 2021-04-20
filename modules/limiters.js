@@ -3,7 +3,7 @@ function countLines(target) {
   let testBox = document.createElement("span");
   testBox.style.fontSize = target.style.fontSize;
   testBox.style.display = "inline-block";
-  testBox.innerText = "";
+  testBox.innerText = " ";
   target.appendChild(testBox);
   let oneLineHeight = getHeight(testBox);
   testBox.remove();
