@@ -26,6 +26,7 @@ function getHeight(el) {
     );
     height = height - padding_top - padding_bottom - border_top - border_bottom;
   }
+  el.dataset.calculatedHeight = height; // adds property for debuging
   return height;
 }
 
@@ -41,6 +42,7 @@ function getWidth(el) {
     var border_right = parseFloat(style.getPropertyValue("border-right-width"));
     width = width - padding_left - padding_right - border_left - border_right;
   }
+  el.dataset.calculatedWidth = width; // adds property for debuging
   return width;
 }
 

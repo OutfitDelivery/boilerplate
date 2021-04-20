@@ -42,13 +42,14 @@
 
       // Please put all fonts needed for the tempate into the array bellow
       template.start().then(() => {
-        template.fsSync()
+        template.hotReloadOnChange() // remove hotReloadOnChange after you have finished editing the template
+
         // template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
         template.completeRender()
       }).catch(console.trace)
 
-      // This function will run whenever there is a change to any text input
-      window.onTextChange = (element) => {
+      // This function will run whenever there is a change to any text input, resize and on inital load
+      onTextChange = (element) => {
         // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
         // template.maxLineCheck();
         // template.maxHeightCheck();

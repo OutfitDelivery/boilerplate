@@ -375,7 +375,7 @@ export default class boilerplate {
       resolve();
     });
   }
-  fsSync () {
+  hotReloadOnChange () {
     if (this.state == 'document' && typeof BroadcastChannel === 'function') {
       let bc = new BroadcastChannel('fs-sync');
       bc.onmessage = (ev) => { 
