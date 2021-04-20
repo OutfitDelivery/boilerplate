@@ -111,7 +111,7 @@ export default class boilerplate {
           window.addEventListener("resize", async (e) => {
             await this.setSize();
             if (state !== "preview" && typeof onTextChange === "function") {
-              window.onTextChange(e.target);
+              window.onTextChange('resize');
             }
           });
           if (state == 'preview') {
@@ -130,7 +130,7 @@ export default class boilerplate {
             this.defaultsRemoved();
             imageCompression();
           }
-          if (state !== "preview" && typeof window.onTextChange === "function") {
+          if (typeof window.onTextChange === "function") {
             window.onTextChange();
           }
           console.log("DOMContentLoaded + Fonts loaded");

@@ -24,7 +24,7 @@
     <div class="page">
       <div class="bleed">
         <div class="container">
-          <h1>Hello world <span>:)</span></h1>
+          <h1 data-max-line='1'>Hello world <span>:)</span></h1>
         </div>
       </div>
     </div>
@@ -33,12 +33,7 @@
    <script src="/dist/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
-        fonts: ['IBM Plex Sans'],
-        ensureImagesLoad: true,
-        allowLegacyRendering: true,
-        reduceExportFontSizeByPercent: 0,
-        reduceFirefoxFontSizeByPercent: 0,
-        trimMarks: true
+        fonts: ['IBM Plex Sans']
       });
 
       // Please put all fonts needed for the tempate into the array bellow
@@ -51,7 +46,7 @@
       // This function will run whenever there is a change to any text input
       window.onTextChange = (element) => {
         console.log('onTextChange', element);
-        template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
+        // template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 1.5 });
         template.maxLineCheck();
         // template.maxHeightCheck();
         // template.charLimit();

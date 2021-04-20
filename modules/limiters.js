@@ -1,13 +1,15 @@
 // count the number of lines inside of the current direct element
 function countLines(target) {
   let testBox = document.createElement("span");
-  testBox.style.fontSize = target.style.fontSize;
+  let targetFix = target.firstChild ? target.firstChild.classList == "textFitted" ? target.firstChild : target : target; 
+  testBox.classList = "lineCounter";
   testBox.style.display = "inline-block";
-  testBox.innerText = " ";
-  target.appendChild(testBox);
+  // testBox.style.fontSize = targetFix.style.fontSize;
+  testBox.innerText = "​";
+  targetFix.insertAdjacentElement('afterbegin', testBox) 
   let oneLineHeight = getHeight(testBox);
-  testBox.remove();
-  let lines = getHeight(target) / oneLineHeight;
+  // testBox.remove();
+  let lines = getHeight(targetFix) / oneLineHeight;
   target.dataset.lineCount = lines; // adds property for CSS targeting
   return lines;
 }

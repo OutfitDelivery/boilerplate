@@ -38,14 +38,14 @@ import { getWidth, getHeight } from './limiters.js'
     stopOverflow: false, // if true, a error we be thrown if the content is overflowing
     maxLine: false, // if true, textFit will throw and error if the text is over the supplied number of lines
     detectMultiLine: true, // disable to turn off automatic multi-line sensing
-    fontUnit: "px", // what unit should the final font be. using rems or mm is sometimes useful
+    fontUnit: "rem", // what unit should the final font be. using rems or mm is sometimes useful
     fontChangeSize: 0.1, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
-    minFontSize: 6,
-    display: "inline-block", // in case you need to change this
-    maxFontSize: 80,
+    minFontSize: 0.3,
+    maxFontSize: 1,
     reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
     widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
     alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
+    display: "inline-block", // in case you need to change this
   };
 
   export default function textFit(els, options) {
@@ -181,9 +181,9 @@ import { getWidth, getHeight } from './limiters.js'
       mid = parseFloat(((high + low) / 2).toFixed(2));
       innerSpan.style.fontSize = mid + settings.fontUnit;
 
-      var scrollWidth = innerSpan.scrollWidth <= originalWidth;
+      var scrollWidth = getWidth(innerSpan) <= originalWidth;
       var scrollHeight =
-        settings.widthOnly || innerSpan.scrollHeight <= originalHeight;
+        settings.widthOnly || getHeight(innerSpan) <= originalHeight;
 
       // check if too many lines and if it is then we need to adjust the font size accordingly
       var maxLines = false;
@@ -201,7 +201,7 @@ import { getWidth, getHeight } from './limiters.js'
       // await injection point
     }
     if (startingSize !== size + settings.fontUnit) {
-      console.log("textFit font changed size: ", size + settings.fontUnit);
+      console.log("textFit font changed to:", size + settings.fontUnit);
     }
     // updating font if differs:
     if (innerSpan.style.fontSize != size + settings.fontUnit)
