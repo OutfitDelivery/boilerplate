@@ -9,6 +9,7 @@ html {
   font-size: 16px;
   color: #000000;
   word-break: break-word;
+  line-height: 1; /* This fixes countLines rounding. You need a value for this but it can be anything */
 }
 
 body {
@@ -187,9 +188,23 @@ sub {
   bottom: var(--trimOffset);
   right: var(--trimOffset);
 }
+
 a { 
   display: inline-block;
 }
-.lineCounter {
-  display: inline-block;
+
+/* textfit styles */
+.textFitAlignVert {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.textFitAlignVertFlex {
+  display: flex;
+}
+.textFitAlignVertFlex .textFitAlignVert {
+  position: static;
 }

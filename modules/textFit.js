@@ -209,15 +209,14 @@ import { getWidth, getHeight } from './limiters.js'
 
     // add the required CSS in order to stop overflows
     if (Number.isInteger(maxLine) || settings.stopOverflow) {
-      if (!document.getElementById("overflowStyleSheet")) {
-        var style = [".overflow > span {", "overflow: hidden;", "}"].join("");
-
-        var css = document.createElement("style");
-        css.type = "text/css";
-        css.id = "overflowStyleSheet";
-        css.innerHTML = style;
-        document.body.appendChild(css);
-      }
+      // if (!document.getElementById("overflowStyleSheet")) {
+      //   var style = [".overflow > span {", "overflow: hidden;", "}"].join("");
+      //   var css = document.createElement("style");
+      //   css.type = "text/css";
+      //   css.id = "overflowStyleSheet";
+      //   css.innerHTML = style;
+      //   document.body.appendChild(css);
+      // }
 
       // detect if data max lines has been exceeded
       if (Number.isInteger(maxLine)) {
@@ -241,7 +240,7 @@ import { getWidth, getHeight } from './limiters.js'
     }
     // Our height is finalized. If we are aligning vertically, set that up.
     if (settings.alignVert) {
-      addStyleSheet();
+      // addStyleSheet();
       var height = innerSpan.scrollHeight;
       if (window.getComputedStyle(el)["position"] === "static") {
         el.style["position"] = "relative";
