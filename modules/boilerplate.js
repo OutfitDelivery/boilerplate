@@ -378,8 +378,11 @@ export default class boilerplate {
   hotReloadOnChange () {
     if (this.state == 'document' && typeof BroadcastChannel === 'function') {
       let bc = new BroadcastChannel('fs-sync');
-      bc.onmessage = (ev) => { 
-        window.top.location.reload()
+      bc.onmessage = (ev) => {
+        if (!window.top.reloading) {
+          window.top.reloading = true;
+          window.top.location.reload()
+        }
       }
     }
   }
