@@ -58,7 +58,7 @@ const winLoad = new Promise((resolve, reject) => {
   }
 });
  
-const loadLESS = () => {
+const loadLESS = (variables = {}) => {
   return new Promise(async (resolve, reject) => {
     try {
       let styleCode = document.createElement('link');
@@ -67,8 +67,14 @@ const loadLESS = () => {
       styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/css/main.min.css');
       document.head.insertAdjacentElement('afterbegin', styleCode);
   
+      // less = {
+      //   globalVars: variables
+      // };
+
       require('less');
       require('prefixfree');
+
+      document.querySelectorAll('style[media=""][data-href$=".less"]:not([href])').forEach(e => e.remove());
 
       resolve()
     } catch (e) { reject(e) }
@@ -85,7 +91,7 @@ export default class boilerplate {
     trimMarks = false,
     variables = {}
    } = {}) {
-     console.clear();
+    
      this.fonts = fonts || '';
      this.ensureImagesLoad = ensureImagesLoad;
      this.allowLegacyRendering = allowLegacyRendering;
@@ -93,13 +99,20 @@ export default class boilerplate {
      this.firefoxReduceFont = firefoxReduceFont;
      this.trimMarks = trimMarks;
      this.variables = variables;
+  
+    if (!this.keepConsole) {
+      console.clear();
+    }
+    if (JSON.stringify(variables) !== '{}') {
+      console.table(variables)
+    }
   }
   start() {
     return new Promise((resolve, reject) => {
       // all these checks need to be done before the tempalte code can be run 
       let checkList = [
         domReady,
-        loadLESS(),
+        loadLESS(this.variables),
         this.setOutfitState(),
         this.fontsLoaded(),
         this.setBrowserType(),
@@ -258,24 +271,25 @@ export default class boilerplate {
 
   pageHeightSetup() {
     let agent = navigator.userAgent;
-    if (agent.includes('(OPTION 2.1;')) {
+    if (agent.includes('OPTION 2.1')) {
       console.info("Renderer 2.1 Set");
-      if (this.trimMarks) {
+      if (!this.trimMarks) {
         return "calc(100vh - 1px)";
       }
-    } else if (agent.includes('(OPTION 1.1)')) {
+      return "100vh";
+    } else if (agent.includes('OPTION 1.1')) {
       console.info("Renderer 1.1 Set");
       return "100vh";
-    } else if (agent.includes('(OPTION 1.0)')) {
+    } else if (agent.includes('OPTION 1.0')) {
       if (!this.allowLegacyRendering) {
         blockRender('1.0')
       }
       return "100vh";
-    } else if (agent.includes('(OPTION 2.0;')) {
+    } else if (agent.includes('OPTION 2.0')) {
       if (!this.allowLegacyRendering) {
         blockRender('2.0')
       }
-      if (this.trimMarks) {
+      if (!this.trimMarks) {
         return "calc(100vh - 1px)";
       }
       return "100vh";

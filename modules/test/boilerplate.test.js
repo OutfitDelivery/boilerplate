@@ -44,14 +44,13 @@ describe('import tests', () => {
     });
   });
   test('check start() error get thrown if no html is found', async () => {
-    var template = new boilerplate();
-    try {
-      await template.start()
+    var template = new boilerplate({variables: { test: 'hey'}});
+    return template.start().then(d => {
       // there should always be an error meaning this line is used to detect when an error isn't thrown
       expect(true).toBe(false); 
-    } catch (e) {
+    }).catch(e => {
       expect(e).toBe("No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }");
-    }
+    });
   });
 });
 describe('defaultsRemoved', function () {
