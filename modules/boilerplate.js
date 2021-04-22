@@ -67,9 +67,9 @@ const loadLESS = (variables = {}) => {
       styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/css/main.min.css');
       document.head.insertAdjacentElement('afterbegin', styleCode);
   
-      // less = {
-      //   globalVars: variables
-      // };
+      var less = {
+        globalVars: variables
+      };
 
       require('less');
       require('prefixfree');
