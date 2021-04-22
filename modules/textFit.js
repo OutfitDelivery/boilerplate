@@ -1,4 +1,4 @@
-import { getWidth, getHeight } from './limiters.js'
+import { getWidth, getHeight, countLines } from './limiters.js'
 /**
  * textFit v3.1.0
  * Previously known as jQuery.textFit
@@ -271,20 +271,6 @@ import { getWidth, getHeight } from './limiters.js'
 
   function hasClass(element, cls) {
     return (" " + element.className + " ").indexOf(" " + cls + " ") > -1;
-  }
-
-  // count the number of lines inside of the current direct element  
-  function countLines(target) {
-    var testBox = document.createElement("span")
-    // testBox.setAttribute('style', target.getAttribute('style'));
-    testBox.style.fontSize = target.style.fontSize;
-    testBox.style.display = 'inline-block';
-    testBox.innerText = '⠀';
-    target.appendChild(testBox);
-    var oneLineHeight = getHeight(testBox);
-    testBox.remove();
-    var lines = getHeight(target) / oneLineHeight;
-    return lines;
   }
 
   // Better than a stylesheet dependency
