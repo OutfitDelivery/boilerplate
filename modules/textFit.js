@@ -124,8 +124,9 @@ import { getWidth, getHeight, countLines } from './limiters.js'
             " before using textFit!"
         );
     }
+    let textFittedSpan = el.querySelector("span.textFitted")
     // Add textFitted span inside this container.
-    if (originalHTML.indexOf("textFitted") === -1) {
+    if (!textFittedSpan) {
       innerSpan = document.createElement("span");
       innerSpan.className = "textFitted";
       // Inline block ensure it takes on the size of its contents, even if they are enclosed
@@ -136,7 +137,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
       el.appendChild(innerSpan);
     } else {
       // Reprocessing.
-      innerSpan = el.querySelector("span.textFitted");
+      innerSpan = textFittedSpan;
       // Remove vertical align if we're reprocessing.
       if (innerSpan.classList.includes("textFitAlignVert")) {
         innerSpan.className = innerSpan.className.replace(
