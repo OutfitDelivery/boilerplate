@@ -35,7 +35,7 @@ const imageCompression = () => {
 
 // https://blog.crimx.com/2017/03/09/get-all-images-in-dom-including-background-en/
 // time out is set to 60 seconds as that is as long as the platform timeout
-const ensureAllImagesLoaded = (doc, timeout = 6e4) => {
+const ensureAllImagesLoaded = (doc = document, timeout = 6e4) => {
   return new Promise((resolve, reject) => {
     loadAllImages(Array.from(searchDOM(doc)), timeout)
       .then(resolve, reject)
