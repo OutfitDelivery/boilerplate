@@ -41,6 +41,7 @@
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
+    "eslint-config-airbnb-base": "^14.2.1",
     "less": "^4.1.1",
     "prefixfree": "^1.0.0"
   }
