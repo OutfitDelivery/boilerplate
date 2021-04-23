@@ -11,19 +11,19 @@ const imageCompression = () => {
     //Non Repo Images with data-custom-compression on img element itself
     var imgSrc = el.getAttribute("src");
     console.log(imgSrc);
-    if (imgSrc != null) {
+    if (imgSrc) {
       //src attribute exists assume that this is an <img> element
       if (!checkURL(editorString, imgSrc)) return;
       el.setAttribute("src", imgSrc + editorString);
     } else {
       var imgEl = el.querySelector("img");
-      if (imgEl == null) return;
+      if (!imgEl) return;
       var imgURL = imgEl.getAttribute("src");
       if (!checkURL(editorString, imgURL)) return;
       imgEl.setAttribute("src", imgURL + editorString);
 
       var bkgImgEl = el.querySelector(".outfit-resizable-background");
-      if (bkgImgEl == null) return;
+      if (!bkgImgEl) return;
       var bkgUrl = bkgImgEl.style.backgroundImage
         .slice(4, -1)
         .replace(/"/g, "");

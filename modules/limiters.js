@@ -1,7 +1,7 @@
 // count the number of lines inside of the current direct element
 function countLines(target) {
   let testBox = document.createElement("div");
-  let targetFix = target.firstChild ? target.firstChild.classList == "textFitted" ? target.firstChild : target : target; 
+  let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
   testBox.classList = "lineCounter";
   // testBox.style.fontFamily = "-webkit-pictograph";
   // testBox.style.display = "block";
@@ -20,7 +20,7 @@ function getHeight(el) {
   var style = window.getComputedStyle(el, null);
   var height = parseFloat(style.getPropertyValue("height"));
   var box_sizing = style.getPropertyValue("box-sizing");
-  if (box_sizing == "border-box") {
+  if (box_sizing === "border-box") {
     var padding_top = parseFloat(style.getPropertyValue("padding-top"));
     var padding_bottom = parseFloat(style.getPropertyValue("padding-bottom"));
     var border_top = parseFloat(style.getPropertyValue("border-top-width"));
@@ -38,7 +38,7 @@ function getWidth(el) {
   var style = window.getComputedStyle(el, null);
   var width = parseFloat(style.getPropertyValue("width"));
   var box_sizing = style.getPropertyValue("box-sizing");
-  if (box_sizing == "border-box") {
+  if (box_sizing === "border-box") {
     var padding_left = parseFloat(style.getPropertyValue("padding-left"));
     var padding_right = parseFloat(style.getPropertyValue("padding-right"));
     var border_left = parseFloat(style.getPropertyValue("border-left-width"));
@@ -90,29 +90,26 @@ function maxHeightCheck(element = null) {
 
   const blocks = document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    const dynamicCheck =
-      block.dataset.maxHeight == "dynamic" ||
-      block.dataset.maxHeightDynamic == "true";
-    if (dynamicCheck) dynamicAssign(block);
+    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeightDynamic === "true") dynamicAssign(block);
 
-    const cssCheck = block.dataset.maxHeight == "css";
-    const bodyComputedStyle = window.getComputedStyle(document.body);
-    const blockHeight = block.scrollHeight;
-    const unit = block.dataset.maxHeightUnit || "px";
-    const maxHeightAlt = block.dataset.maxHeightAlt || block.dataset.maxHeight;
-    let maxHeight = block.dataset.maxHeight ;
+    const blockHeight = getHeight(block);
+    const maxHeight = block.dataset.maxHeight;
 
-    // TODO
-    if (cssCheck) {
+    // TODO improve this 
+    if (block.dataset.maxHeight === "css") {
       const computedBlockStyle = window.getComputedStyle(block);
-      maxHeight = parseFloat(computedBlockStyle.maxHeight);
+      const cssMaxHeight = parseFloat(computedBlockStyle.maxHeight);
+      if (!cssMaxHeight) {
+        console.error('There needs to be a max height set on the element if you want to use data-max-height="css"')
+      }
+      maxHeight = cssMaxHeight
     } else {
       // Setting the element's max-height
-      block.style.maxHeight = maxHeight + unit;
+      block.style.maxHeight = maxHeight + block.dataset.maxHeightUnit || "px";
 
       // Recalculating maxHeight in case 'rem' is set as a unit
-      if (unit == "rem") {
-        maxHeight = maxHeight * parseFloat(bodyComputedStyle.fontSize);
+      if (block.dataset.maxHeightUnit === "rem") {
+        maxHeight = maxHeight * parseFloat(window.getComputedStyle(document.body).fontSize);
       }
     }
 
@@ -134,6 +131,8 @@ function dynamicAssign(element = null) {
   const containerHeight = Math.floor(
     containerComputed.height - containerComputed.top - containerComputed.bottom
   );
+
+  // TODO work out what subtrahend is 
   const subtrahends = [...container.querySelectorAll(".js-subtrahend")];
 
   const subtrahendsHeight = subtrahends.reduce((totalHeight, subtrahend) => {
@@ -162,7 +161,7 @@ function charLimit(element = null) {
   blocks.forEach((element) => {
     const limit = element.dataset.charLimit;
 
-    if (element == null) {
+    if (element === null) {
       return;
     }
     var tokenValue = element.querySelectorAll(".token-value");
