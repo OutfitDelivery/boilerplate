@@ -113,13 +113,13 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     if (!originalWidth || (!settings.widthOnly && !originalHeight)) {
       if (!settings.widthOnly)
         throw new Error(
-          "Set a static height and width on the target element " +
+          "Set a height and width on the target element " +
             el.outerHTML +
             " before using textFit!"
         );
       else
         throw new Error(
-          "Set a static width on the target element " +
+          "Set a width on the target element " +
             el.outerHTML +
             " before using textFit!"
         );
@@ -138,7 +138,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
       // Reprocessing.
       innerSpan = el.querySelector("span.textFitted");
       // Remove vertical align if we're reprocessing.
-      if (hasClass(innerSpan, "textFitAlignVert")) {
+      if (innerSpan.classList.includes("textFitAlignVert")) {
         innerSpan.className = innerSpan.className.replace(
           "textFitAlignVert",
           ""
@@ -160,8 +160,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     if (
       settings.detectMultiLine &&
       !multiLine &&
-      innerSpan.scrollHeight >=
-        parseFloat(window.getComputedStyle(innerSpan)["font-size"], 10) * 2
+      countLines(innerSpan) > 1
     ) {
       multiLine = true;
     }
@@ -241,17 +240,17 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     // Our height is finalized. If we are aligning vertically, set that up.
     if (settings.alignVert) {
       // addStyleSheet();
-      var height = innerSpan.scrollHeight;
+      var height = getHeight(innerSpan);
       if (window.getComputedStyle(el)["position"] === "static") {
         el.style["position"] = "relative";
       }
-      if (!hasClass(innerSpan, "textFitAlignVert")) {
+      if (!innerSpan.classList.includes("textFitAlignVert")) {
         innerSpan.className = innerSpan.className + " textFitAlignVert";
       }
       innerSpan.style["height"] = height + "px";
       if (
         settings.alignVertWithFlexbox &&
-        !hasClass(el, "textFitAlignVertFlex")
+        !el.classList.includes("textFitAlignVertFlex")
       ) {
         el.className = el.className + " textFitAlignVertFlex";
       }
@@ -268,35 +267,3 @@ import { getWidth, getHeight, countLines } from './limiters.js'
           o.nodeType === 1 &&
           typeof o.nodeName === "string";
   }
-
-  function hasClass(element, cls) {
-    return (" " + element.className + " ").indexOf(" " + cls + " ") > -1;
-  }
-
-  // Better than a stylesheet dependency
-  function addStyleSheet() {
-    if (document.getElementById("textFitStyleSheet")) return;
-    var style = [
-      ".textFitAlignVert{",
-      "position: absolute;",
-      "top: 0; right: 0; bottom: 0; left: 0;",
-      "margin: auto;",
-      "display: flex;",
-      "justify-content: center;",
-      "flex-direction: column;",
-      "}",
-      ".textFitAlignVertFlex{",
-      "display: flex;",
-      "}",
-      ".textFitAlignVertFlex .textFitAlignVert{",
-      "position: static;",
-      "}",
-    ].join("");
-
-    var css = document.createElement("style");
-    css.type = "text/css";
-    css.id = "textFitStyleSheet";
-    css.innerHTML = style;
-    document.body.appendChild(css);
-  }
-// });

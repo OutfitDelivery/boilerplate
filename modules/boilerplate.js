@@ -1,38 +1,27 @@
 import FontFaceObserver from './fontfaceobserver.js'
-import { imageCompression } from './pageSetup.js'
+import { imageCompression, ensureAllImagesLoaded } from './pageSetup.js'
 import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
 import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck } from './limiters';
 
-// functionly that used to be in all-images-loaded-callback.js converted into a promise function
-const imageLoadedCheck = (imagesLoaded) => {
-  return new Promise((imagesLoaded, imagesFailed) => { 
-    Promise.all(Array.from(document.images).map(img => {
-      if (img.complete)
-          if (img.naturalHeight !== 0)
-              return Promise.resolve();
-          else
-              return Promise.reject(img);
-      return new Promise((resolve, reject) => {
-          img.addEventListener("load", resolve);
-          img.addEventListener("error", () => reject(img));
-      });
-    })).then(() => {
-      imagesLoaded('All images loaded!');
-    }, badImg => {
-      imagesFailed(`${badImg.src} didn't load`)
-    });
-  });
+const highestZ = () => {
+return Array.from(document.querySelectorAll('body *'))
+      .map(a => parseFloat(window.getComputedStyle(a).zIndex))
+      .filter(a => !isNaN(a))
+      .sort()
+      .pop() + 1;
 }
 
 // display a message to block rendering for major issues
 const blockRender = (v) => {
-  document.querySelector("body").innerHTML = `<style>html, body { background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: 100000;}  body { margin: 1rem; width: 80%!important;} p { font-size: 0.4rem; } </style>
-  <h4>⚠️ Please enable <code>allowLegacyRendering: true</code>
-   on the boilerplate or update renderer to version 2.1 or 1.1 </h4>
-   <p>Please contact support if you see this message saying that this template is using renderer ${v}</p>`;
-   document.dispatchEvent(new Event('printready'))
+  document.querySelector("body").innerHTML = `<style>html { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: ${highestZ()}; height: 100%; width: 100%;}  body { margin: 1rem; width: 80%!important; } p { font-size: 0.4rem; } </style>
+  <h2>⚠️ Legacy render detected</h2>
+  <h4>⚠Please enable <code>{ allowLegacyRendering: true }</code>
+   in the boilerplate or update this template to version 1.1 or 2.1</h4>
+   <p>This template is using renderer ${v}</p>
+   <p>Please contact support if you see this message.</p>`;
+   document.dispatchEvent(new Event('printready'));
 }
 
 // wait for the dom to laod or continue if it has already loaded
@@ -121,13 +110,16 @@ export default class boilerplate {
       ];
       Promise.all(checkList)
         .then(() => {
+          if (typeof window.onTextChange === "function") {
+            window.onTextChange();
+          }
           window.addEventListener("resize", async (e) => {
             await this.setSize();
             if (state !== "preview" && typeof onTextChange === "function") {
               window.onTextChange('resize');
             }
           });
-          if (state == 'preview') {
+          if (state === 'document') {
             // OutfitIframeShared.eventEmitter.addListener(
             //   'token-value:change', (e) => {
             //   if (state !== "preview" && typeof window.onTextChange === "function") {
@@ -140,13 +132,13 @@ export default class boilerplate {
             // });
           }
           if (state === "document") {
-            this.defaultsRemoved();
             imageCompression();
+            // set timeout is used here to push this to the end of the heap which means it will load after everything else 
+            setTimeout(() => {
+              this.defaultsRemoved();
+            },0);
           }
-          if (typeof window.onTextChange === "function") {
-            window.onTextChange();
-          }
-          console.log("DOMContentLoaded + Fonts loaded");
+          console.log("Content checks ran 😎");
           resolve();
         })
         .catch(reject);
@@ -349,7 +341,7 @@ export default class boilerplate {
   completeRender() {
     let checkList = [winLoad]
     if (this.ensureImagesLoad) {
-      checkList.push(imageLoadedCheck)
+      checkList.push(ensureAllImagesLoaded)
     }
     Promise.all(checkList).then((values) => {
       let loadTime = Date.now() - window.performance.timing.navigationStart
@@ -420,5 +412,8 @@ export default class boilerplate {
   }
   dynamicAssign () {
     dynamicAssign.apply(null, arguments);
+  }
+  highestZindex () {
+    return highestZ();
   }
 }

@@ -1,5 +1,3 @@
-// const trimMarks = document.body.dataset.trim == "true" ? true : false;
-
 const imageCompression = () => {
   var imageCompressEl = document.querySelectorAll("[data-custom-compression]");
   var editorString = "?qual=editor";
@@ -34,172 +32,71 @@ const imageCompression = () => {
     }
   });
 }
-// const setBrowserType = () => {
-//   return new Promise((resolve) => {
-//     let browser = {
-//       // Opera 8.0+
-//       isOpera: (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0,
-//       // Firefox 1.0+
-//       isFirefox: typeof InstallTrigger !== 'undefined',
-//       // Safari 3.0+ "[object HTMLElementConstructor]" 
-//       isSafari: /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification)),
-//       // Internet Explorer 6-11
-//       isIE: /*@cc_on!@*/false || !!document.documentMode,
-//       // Chrome 1 - 79
-//       isChrome:  !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime),
-//       // mac detection
-//       isMac: window.navigator.appVersion.includes("Mac")
-//     }
-//     //  Edge 20+
-//     browser['isEdge'] = !browser.isIE && !!window.StyleMedia;
-//     // Edge (based on chromium) detection
-//     browser['isEdgeChromium'] = browser.isChrome && (navigator.userAgent.indexOf("Edg") != -1);
-//     // Blink engine detection
-//     browser['isBlink'] = (browser.isChrome || browser.isOpera) && !!window.CSS;
 
-//     document.body.classList += ' ' + Object.keys(browser).filter(function(key) {
-//       return browser[key]
-//     }).join(' ');
-//     resolve(browser)
-//   });
-// }
+// https://blog.crimx.com/2017/03/09/get-all-images-in-dom-including-background-en/
+// time out is set to 60 seconds as that is as long as the platform timeout
+const ensureAllImagesLoaded = (doc, timeout = 6e4) => {
+  return new Promise((resolve, reject) => {
+    loadAllImages(Array.from(searchDOM(doc)), timeout)
+      .then(resolve, reject)
+  })
+}
 
-// const setOutfitState = () => {
-//   return new Promise((resolve) => {
-//     var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
-//     mode =
-//       !mode && window.location.href.indexOf("templates") > -1
-//         ? "template"
-//         : mode;
-//     mode =
-//       !mode && window.location.href.indexOf("projects") > -1
-//         ? "document"
-//         : mode;
-//     mode =
-//       !mode && window.location.href.indexOf("preview") > -1 ? "preview" : mode;
-//     mode =
-//       !mode && window.location.href.indexOf("localhost") > -1 ? "local" : mode;
-//     if (!mode) {
-//       mode = "error";
-//     }
-//     document.body.setAttribute("document-state", mode);
-//     window.state = mode;
-//     resolve(mode);
-//   });
-// };
+const searchDOM = (doc) => {
+  const srcChecker = /url\(\s*?['"]?\s*?(\S+?)\s*?["']?\s*?\)/i
+  return Array.from(doc.querySelectorAll('*'))
+    .reduce((collection, node) => {
+      // bg src
+      let prop = window.getComputedStyle(node, null)
+        .getPropertyValue('background-image')
+      // match `url(...)`
+      let match = srcChecker.exec(prop)
+      if (match) {
+        collection.add(match[1])
+      }
+      if (/^img$/i.test(node.tagName)) {
+        // src from img tag
+        collection.add(node.src)
+      } else if (/^frame$/i.test(node.tagName)) {
+        // iframe
+        try {
+          searchDOM(node.contentDocument || node.contentWindow.document)
+            .forEach(img => {
+              if (img) { collection.add(img) }
+            })
+        } catch (e) {}
+      }
+      return collection
+    }, new Set())
+}
 
+const loadImage = (src, timeout = 5000) => {
+  var imgPromise = new Promise((resolve, reject) => {
+    let img = new Image()
+    img.onload = () => {
+      resolve({
+        src: src,
+        width: img.naturalWidth,
+        height: img.naturalHeight
+      })
+    }
+    img.onerror = reject
+    img.src = src
+  })
+  var timer = new Promise((resolve, reject) => {
+    setTimeout(reject, timeout)
+  })
+  return Promise.race([imgPromise, timer])
+}
 
-// function pageHeightSetup(trimMarks, allowLegacyRendering) {
-//   let agent = navigator.userAgent;
-//   if (agent.includes('(OPTION 2.1;')) {
-//     console.info("Renderer 2.1 Set");
-//     if (trimMarks) {
-//       return "calc(100vh - 1px)";
-//     }
-//   } else if (agent.includes('(OPTION 1.1)')) {
-//     console.info("Renderer 1.1 Set");
-//     return "100vh";
-//   } else if (agent.includes('(OPTION 1.0)')) {
-//     console.warn("Renderer set to 1.0. Please update to 1.1");
-//     if (!allowLegacyRendering) {
-//       blockRender('1.0')
-//     }
-//     return "100vh";
-//   } else if (agent.includes('(OPTION 2.0;')) {
-//     console.warn("Renderer 2.0 Set. Please update to 2.1");
-//     if (!allowLegacyRendering) {
-//       blockRender('2.0')
-//     }
-//     if (trimMarks) {
-//       return "calc(100vh - 1px)";
-//     }
-//     return "100vh";
-//   } else {
-//     // console.error("Renderer Not Set");
-//     return "100vh";
-//   }
-// }
+const loadAllImages = (imgList, timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+    Promise.all(
+      imgList
+        .map(src => loadImage(src, timeout))
+        .map(p => p.catch(e => false))
+    ).then(results => resolve(results.filter(r => r)))
+  })
+}
 
-// // Fix for the resizable background images - fullscreen and digital vairaitons only
-// const addCrop = (trimMarks, allowLegacyRendering) => {
-//   return new Promise((resolve) => {
-//     // crop and bleed
-//     var cropSVG =
-//       '<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>';
-
-//     let pageHeight = pageHeightSetup(trimMarks, allowLegacyRendering);
-
-//     document.querySelectorAll(".page").forEach((page) => {
-//       page.style.height = pageHeight;
-//       if (trimMarks) {
-//         page.insertAdjacentHTML(
-//           "afterbegin",
-//           `<div class="crop-marks">
-//           <div class="crop-mark top-left">${cropSVG}</div>
-//           <div class="crop-mark top-right">${cropSVG}</div>
-//           <div class="crop-mark bottom-left">${cropSVG}</div>
-//           <div class="crop-mark bottom-right">${cropSVG}</div>
-//         </div>`
-//         );
-//       }
-//     });
-
-//     Array.prototype.slice
-//       .call(document.querySelectorAll(".bleed"))
-//       .forEach(function (bleed) {
-//         bleed.style.cssText = trimMarks
-//           ? "position: absolute; top: 4.41mm; right: 4.41mm; bottom: 4.41mm; left: 4.41mm;"
-//           : "position: absolute; top: -3mm; right: -3mm; bottom: -3mm; left: -3mm";
-//       });
-
-//     document
-//       .querySelectorAll("[data-trim='false'] .outfit-resizable-background")
-//       .forEach((el) => {
-//         el.parentNode.style.left = "0";
-//         el.parentNode.style.right = "0";
-//         el.parentNode.style.top = "0";
-//         el.parentNode.style.bottom = "0";
-//         el.parentNode.style.width = "100%";
-//         el.parentNode.style.height = "100%";
-//       });
-//     resolve();
-//   });
-// };
-
-// const setSize = (trimMarks, exportReduceFont, firefoxReduceFont) => {
-//   return new Promise((resolve) => {
-//     const vw =
-//       (trimMarks ? window.innerWidth : window.innerWidth + 57.62) / 100;
-//     const vh =
-//       (trimMarks ? window.innerHeight : window.innerHeight + 57.62) / 100;
-//     const vmin = Math.min(vw, vh);
-//     const vmax = Math.max(vw, vh);
-
-//     // Saving the preliminary font size calculation
-//     const preliminaryCalc = vmin * 2 + vmax * 1.4 + vh * 2;
-
-//     // Checking if the document is currently in export mode
-//     const isExportMode = window.state == "exports";
-
-//     // Checking if the active browser is Firefox
-//     const isFirefox = navigator.userAgent.includes("Firefox");
-
-//     const exportModeFontSize =
-//       preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc;
-//     const firefoxFontSize =
-//       preliminaryCalc - (firefoxReduceFont / 100) * preliminaryCalc;
-
-//     // Reducing the preliminaryCalc value by reduceVal in export mode and in Firefox preview mode
-//     const finalCalc = isExportMode
-//       ? exportModeFontSize
-//       : isFirefox
-//       ? firefoxFontSize
-//       : preliminaryCalc;
-
-//     document.documentElement.style.fontSize = `${finalCalc}px`;
-
-//     resolve();
-//   });
-// };
-
-export { imageCompression };
+export { imageCompression, ensureAllImagesLoaded };
