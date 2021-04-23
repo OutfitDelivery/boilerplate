@@ -139,7 +139,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
       // Reprocessing.
       innerSpan = textFittedSpan;
       // Remove vertical align if we're reprocessing.
-      if (innerSpan.classList.includes("textFitAlignVert")) {
+      if (innerSpan.classList.contains("textFitAlignVert")) {
         innerSpan.className = innerSpan.className.replace(
           "textFitAlignVert",
           ""
@@ -245,13 +245,13 @@ import { getWidth, getHeight, countLines } from './limiters.js'
       if (window.getComputedStyle(el)["position"] === "static") {
         el.style["position"] = "relative";
       }
-      if (!innerSpan.classList.includes("textFitAlignVert")) {
+      if (!innerSpan.classList.contains("textFitAlignVert")) {
         innerSpan.className = innerSpan.className + " textFitAlignVert";
       }
       innerSpan.style["height"] = height + "px";
       if (
         settings.alignVertWithFlexbox &&
-        !el.classList.includes("textFitAlignVertFlex")
+        !el.classList.contains("textFitAlignVertFlex")
       ) {
         el.className = el.className + " textFitAlignVertFlex";
       }
