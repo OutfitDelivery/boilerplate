@@ -393,27 +393,30 @@ export default class boilerplate {
     }
   }
   dynamicReplace () {
-    dynamicReplace.apply(null, arguments);
+    dynamicReplace.apply(null, arguments)
   }
   textFit () {
-    textFit.apply(null, arguments);
+    textFit.apply(null, arguments)
   }
   setupPlaceholder () {
-    setupPlaceholder.apply(null, arguments);
+    setupPlaceholder.apply(null, arguments)
   }
   maxLineCheck () {
-    maxLineCheck.apply(null, arguments);
+    maxLineCheck.apply(null, arguments)
   }
   maxHeightCheck () {
-    maxHeightCheck.apply(null, arguments);
+    maxHeightCheck.apply(null, arguments)
   }
   charLimit () {
-    charLimit.apply(null, arguments);
+    charLimit.apply(null, arguments)
   }
   dynamicAssign () {
-    dynamicAssign.apply(null, arguments);
+    dynamicAssign.apply(null, arguments)
   }
   highestZindex () {
-    return highestZ();
+    return highestZ()
+  }
+  ensureAllImagesLoaded() {
+    return ensureAllImagesLoaded()
   }
 }
