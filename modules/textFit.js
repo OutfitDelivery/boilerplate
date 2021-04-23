@@ -81,7 +81,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
       try {
         processItem(els[i], settings);
       } catch (e) {
-        throw new Error(e.message);
+        throw e;
       }
     }
   };
