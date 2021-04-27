@@ -1,6 +1,6 @@
 // Webpack uses this to work with directories
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // This is the main configuration object.
 // Here, you write different options and tell Webpack what to do
@@ -15,9 +15,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
     filename: 'boilerplate.js',
-    library: "boilerplate",
+    library: 'boilerplate',
     libraryTarget: 'umd',
-    libraryExport: 'default' 
+    libraryExport: 'default',
   },
   module: {
     rules: [
@@ -25,11 +25,11 @@ module.exports = {
         test: /\.js?$/,
         exclude: [/node_modules/],
         use: ['babel-loader'],
-      }
+      },
     ],
   },
   plugins: [
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
   ],
 
   mode: 'production',
