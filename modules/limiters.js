@@ -90,8 +90,9 @@ function maxHeightCheck(element = null) {
 
   const blocks = document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeightDynamic === "true") dynamicAssign(block);
-
+    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeightDynamic === "true") {
+      dynamicAssign(block);
+    }
     const blockHeight = getHeight(block);
     const maxHeight = block.dataset.maxHeight;
 

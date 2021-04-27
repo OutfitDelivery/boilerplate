@@ -3,6 +3,7 @@ import { imageCompression, ensureAllImagesLoaded } from './pageSetup.js'
 import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
+import { setupMTO } from './mto.js';
 import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck } from './limiters';
 
 const highestZ = () => {
@@ -418,5 +419,8 @@ export default class boilerplate {
   }
   ensureAllImagesLoaded() {
     return ensureAllImagesLoaded.apply(null, arguments)
+  }
+  setupMTO() {
+    return setupMTO.apply(null, arguments)
   }
 }
