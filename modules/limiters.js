@@ -124,15 +124,15 @@ function maxHeightCheck(element = null) {
 function dynamicAssign(element = null) {
   const container = element.parentNode;
   container.style.overflow = "hidden";
-  const containerComputed = {
-    height: parseFloat(window.getComputedStyle(container).height),
-    top: parseFloat(window.getComputedStyle(container).paddingTop),
-    bottom: parseFloat(window.getComputedStyle(container).paddingBottom),
-  };
-  const containerHeight = Math.floor(
-    containerComputed.height - containerComputed.top - containerComputed.bottom
-  );
-
+  // const containerComputed = {
+  //   height: parseFloat(window.getComputedStyle(container).height),
+  //   top: parseFloat(window.getComputedStyle(container).paddingTop),
+  //   bottom: parseFloat(window.getComputedStyle(container).paddingBottom),
+  // };
+  // const containerHeight = Math.floor(
+  //   containerComputed.height - containerComputed.top - containerComputed.bottom
+  // );
+  const containerHeight = getHeight(container)
   // TODO work out what subtrahend is 
   const subtrahends = [...container.querySelectorAll(".js-subtrahend")];
 
