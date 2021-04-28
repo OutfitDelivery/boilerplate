@@ -12,12 +12,12 @@
       input.querySelector(".field-variable-tag").innerText === inputValue
     }).style.display = 'none';
   }
-  // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
-  // var state = document.body.getAttribute("document-state");
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
     return new Promise((resolve, reject) => {
       try {
         // const sidebar = getSidebar();
+        // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
+        const state = document.body.getAttribute("document-state");
         const metadata = JSON.parse(teamMetadata);
         // if we are on any other page then we don't need to do anything to the sidebar and we can skip everything
         if (state === "document") {
