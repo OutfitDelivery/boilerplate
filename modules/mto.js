@@ -7,7 +7,11 @@
       return undefined;
     }
   }
-  
+  const hideInput = (inputValue) => {
+    sidebar.querySelectorAll(".sidebar-items").find((input) => {
+      input.querySelector(".field-variable-tag").innerText === inputValue
+    }).style.display = 'none';
+  }
   // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
   // var state = document.body.getAttribute("document-state");
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
@@ -20,10 +24,9 @@
             // turn teamsAllowed from string into array
             teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
             let hideTeamsThatAreNotAllowed = () => {
-              if (getSidebar().firstChild.firstChild.lastChild.innerText == inputName) {
-                console.log('mto sidebar loaded')
+              if (teamsAllowed.length > 0) {
                 // if we are only allowing the user to select some of the teams then we should remove the ones that the user hasn't got access to. 
-                if (teamsAllowed.length > 0) {
+                if (getSidebar().firstChild.firstChild.lastChild.innerText == inputName) {
                   getSidebar().querySelectorAll('.search-bar-wrapper').forEach(el => el.remove())
                   getSidebar().querySelectorAll('.action-buttons').forEach(el => el.remove())
                   getSidebar().querySelectorAll('.choice-variable .multichoice-edit-row').forEach((inputOption) => {
@@ -38,10 +41,11 @@
                     }
                   });
                } else {
-                getSidebar().querySelector('.choice-variable').innerHTML = `<p>${inputName} is not available for your team. Please click back to continue editing your document.</p>`;
-               }
-              } else {
                 // This means we are not on the MTO sidebar 
+              }
+            } else {
+                // getSidebar().querySelector('.choice-variable').innerHTML = `<p>${inputName} is not available for your team. Please click back to continue editing your document.</p>`;
+                hideInput(inputName)
               }
             }
             setInterval(() => hideTeamsThatAreNotAllowed(), 500)
