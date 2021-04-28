@@ -13,9 +13,9 @@ Then just upload this zip file under the `New Template` section in Outfit!
 ## Getting Started
 Before you start building the template there are few things that you need to do.
 1. Add a Template Name in the `<title>` Tag 
-2. Fill out the four metadata tags in the head `template-built-by`, `scope`, `build`, `updates`. In each of them just fill out the data in the `content` attribute.
-3. Import all of your required fonts as `<link>` tags. Then list out all of your fonts in the `fonts` array. By default this will occur on line 50.
-4. Choose your renderer. By default the renderer is set to `2` (this is for both Renderer 2 and 2.1). If you need to use Renderer 1 please change the following attribute on the body to `data-renderer="1"`. This sets the page height correctly to get around the renderer rounding error.
+2. Fill out the metadata tags in the head `template-built-by`, `scope`, `build`, `updates`. In each of them just fill out the data in the `content` attribute.
+3. Import all of your required fonts as `<link>` tags. Then list out all of your fonts in the `fonts` array of the boilerplate config.
+4. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary
 
 You are ready to get building. You will see a bunch of JS scripts calls. We are using JSDelivr for delivery and versioning. If you do notice that the version of the scripts does not match the Boilerplate version that you downloaded please chat with Matt.
 
@@ -23,9 +23,29 @@ By default there will be a bunch of scripts commented out. This is simply to sav
 
 ## Included Functionality
 
-## [Main.js](js/main.js)
-Note: the main.js file needs to be included in every template as it contains necessary utilities which are documented below:
-- setSize()
+## [Boilerplate.js](modules/boilerplate.js)
+Note: the boilerplate.js file needs to be included in every template as it contains necessary utilities which are documented below:
+Here is an example of boilerplate being used  
+```
+let template = new boilerplate({
+    fonts: ['IBM Plex Sans']
+});
+
+// Please put all fonts needed for the tempate into the array bellow
+template.start().then(() => {
+    // tempalte code
+    template.completeRender();
+}).catch(console.trace);
+
+// This function will run whenever there is a change to any text input
+window.onTextChange = () => {
+    template.maxLineCheck();
+    template.maxHeightCheck();
+    template.charLimit();
+    template.dynamicReplace();
+}
+```
+<!-- - setSize()
     Sets the font size based on the window width & height, and some other factors.
 - setupPlaceholder()
     If certain conditions are met, this function creates and inserts a div class="placeholderImage" at the beginning of the <page>.
@@ -38,49 +58,47 @@ Note: the main.js file needs to be included in every template as it contains nec
 - setupMutationObserver()
     creates a new MutationObserver from the provided parameters.
 - invalidFontList()
-    checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid)
+    checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid) -->
 
 
-## [Limiters.js](js/limiters.js)
-- maxLineCheck()
-- maxHeightCheck()
-- dynamicAssign()
-- charLimit()
+## [Limiters.js](modules/limiters.js)
+- template.maxLineCheck()
+- template.maxHeightCheck()
+- template.charLimit()
 `NOTE TO MATT - NEED TO ADD THE NEW wordLimit FUNCTION TO THIS FILE`
 
 ## formatters
-`dynamicReplaceSingle()`
-replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
 
-`dynamicReplaceMulti()`
-replaces more than one text element inside of a DOM selector.
 The 1st element is what the text will be replaced with.
 The 2nd element is what the fuction will look for to replace.
+```
+template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES]);
+template.dynamicReplace('.name', [
+    ['sam','firstname'],
+    ['henry','lastname']
+])
+```
+if no arguments are given the function will replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
 
-dynamicReplaceMulti({TARGET SELECTOR}, [ARRAY OF CHANGES]);
-
-dynamicReplace('.output.multi', [['!# dogs: /}', 'dogs'], ['dinosaurs', 'birds']]);
-
-`dynamicReplace()`
-This function calls either `dynamicReplaceMulti()` or `dynamicReplaceSingle()` depending on if there are arguments
-
-## custom-rich-text
+`<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
+```
+template.dynamicReplace()
+```
 
 ## qrcode
-
+This will need to be borught into v3. If you need to make a QR code please annoy Sam or use the 2.5 version of this function
 ## textfit
-
-## validate
+```
+template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
+```
 
 ## mto
-`setupMTO("{{{team.mto}}}", {{{account.snippets.mtoV3-params}}}{{^account.snippets.mtoV3-params}}{}{{/account.snippets.mtoV3-params}}, `{{{mto-v3}}}{{^mto-v3}}[]{{/mto-v3}}`);`
+`template.setupMTO({{{mto-v3}}}, "{{{team.mto}}}", 'Branch Selection').then(mtoData => {
 
-The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates.
+}).catch(console.error);`
 
-This function requires:
-- A input defined in the account as `{{{mto-v3}}}` configured to Team Metadata
-- Outfit Account snippet called `mtoV3-params` which contains the following `{'inputName': 'Bakery Selection', 'inputListClassList': '.sidebar-content .form-group .choice-variable .input-options .multichoice-edit-row.p-t-2', 'formGroupClassList': '.sidebar-content .form-group'}` (the inputName can be updated to be account specific)
-- A handleMTOData() function - a function that takes in the array of team metadata and outputs it to a certain template. It is recommended that this be located in Account Snippets)
-- [getOutfitState()](js/main.js#L188)
-- [setOutfitState()](js/main.js#L173)
-- [debounce()](js/main.js#L275)
+<!-- The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates. -->
+
+1. This function requires a team metadata input to be given as the first arugment. 
+2. The second arguments is the list of teams the user is allowed to access based on there team. This will come out of the teams metadata and will bew in the format of a comma separated string of team ID's 
+3. The last argument is the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access. 

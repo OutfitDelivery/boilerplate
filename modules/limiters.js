@@ -11,7 +11,7 @@ function countLines(target) {
   let oneLineHeight = getHeight(testBox);
   testBox.remove();
   let lines = getHeight(targetFix) / oneLineHeight;
-  target.dataset.lineCount = lines; // adds property for CSS targeting
+  target.dataset.calculatedLinesCount = lines; // adds property for CSS targeting
   return lines;
 }
 

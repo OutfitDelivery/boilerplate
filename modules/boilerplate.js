@@ -4,7 +4,7 @@ import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
 import { setupMTO } from './mto.js';
-import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck } from './limiters';
+import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getHeight, getWidth } from './limiters';
 
 const highestZ = () => {
   return Array.from(document.querySelectorAll('body *'))
@@ -57,7 +57,7 @@ const loadLESS = (variables = {}) => {
       styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/css/main.min.css');
       document.head.insertAdjacentElement('afterbegin', styleCode);
   
-      var less = {
+      window.less = {
         globalVars: variables
       };
 
@@ -163,7 +163,28 @@ export default class boilerplate {
           Promise.all(fontsListed.map((font) => {
               return new FontFaceObserver(font).load();
             }))
-            .then(resolve)
+            .then(el => {
+              // TODO detect fonts loaded that are not in the array list 
+              // let { fonts } = document;
+              // const it = fonts.entries();
+            
+              // let arr = [];
+              // let done = false;
+            
+              // while (!done) {
+              //   const font = it.next();
+              //   if (!font.done) {
+              //     arr.push(font.value[0].family);
+              //   } else {
+              //     done = font.done;
+              //   }
+              // }
+            
+              // let loadedFonts = [...new Set(arr)]
+              // console.log(loadedFonts)
+
+              resolve(el)
+            })
             .catch(reject);
       }
     });
@@ -422,5 +443,11 @@ export default class boilerplate {
   }
   setupMTO() {
     return setupMTO.apply(null, arguments)
+  }
+  getWidth() {
+    return getWidth.apply(null, arguments)
+  }
+  getHeight() {
+    return getHeight.apply(null, arguments)
   }
 }
