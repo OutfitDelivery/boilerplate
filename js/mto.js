@@ -18,7 +18,9 @@
         // const sidebar = getSidebar();
         // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
         const state = document.body.getAttribute("document-state");
-        const metadata = JSON.parse(teamMetadata);
+        if (!state) {
+          console.log('please set the state attribute')
+        }
         // if we are on any other page then we don't need to do anything to the sidebar and we can skip everything
         if (state === "document") {
             // turn teamsAllowed from string into array
@@ -54,10 +56,12 @@
           if (state === "template") {
             getSidebar().querySelectorAll('.choice-variable').innerHTML = `<p>${inputName} is only available on the edit page.</p>`;
           }
-          if (typeof window.handleMTOData === 'function') {
-            window.handleMTOData(metadata);
+          if (['document', 'export'].includes(state)) {
+            if (typeof window.handleMTOData === 'function') {
+              window.handleMTOData(teamMetadata);
+            }
+            resolve(teamMetadata);
           }
-          resolve(metadata);
       } catch (error) {
         console.error("An MTO error has occurred. Please try again later. If the issue still persists please contact Outfit Support");
         reject(error);
