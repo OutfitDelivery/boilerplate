@@ -17,8 +17,6 @@
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
     return new Promise((resolve, reject) => {
       try {
-        // const sidebar = getSidebar();
-        const metadata = JSON.parse(teamMetadata);
         // if we are on any other page then we don't need to do anything to the sidebar and we can skip everything
         if (state === "document") {
             // turn teamsAllowed from string into array
@@ -55,9 +53,9 @@
             getSidebar().querySelectorAll('.choice-variable').innerHTML = `<p>${inputName} is only available on the edit page.</p>`;
           }
           if (typeof window.handleMTOData === 'function') {
-            window.handleMTOData(metadata);
+            window.handleMTOData(teamMetadata);
           }
-          resolve(metadata);
+          resolve(teamMetadata);
       } catch (error) {
         console.error("An MTO error has occurred. Please try again later. If the issue still persists please contact Outfit Support");
         reject(error);
