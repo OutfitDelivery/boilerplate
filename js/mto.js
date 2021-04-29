@@ -19,13 +19,21 @@
         // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
         const state = document.body.getAttribute("document-state");
         if (!state) {
-          console.log('please set the state attribute')
+          reject('please set the state attribute')
         }
         // if we are on any other page then we don't need to do anything to the sidebar and we can skip everything
+        if (state === "template") {
+          let mtoNotSupported = () => {
+            if (getSidebar().firstChild.firstChild.lastChild.innerText == inputName) {
+                getSidebar().querySelector('.choice-variable').innerHTML = `<p>${inputName} functionality is not available on a template level.</p>`;
+            }
+          }
+          setInterval(() => mtoNotSupported(), 500)
+        }
         if (state === "document") {
-            // turn teamsAllowed from string into array
-            teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
-            let hideTeamsThatAreNotAllowed = () => {
+        // turn teamsAllowed from string into array
+        teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
+          let hideTeamsThatAreNotAllowed = () => {
               if (teamsAllowed.length > 0) {
                 // if we are only allowing the user to select some of the teams then we should remove the ones that the user hasn't got access to. 
                 if (getSidebar().firstChild.firstChild.lastChild.innerText == inputName) {
