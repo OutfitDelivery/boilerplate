@@ -61,14 +61,19 @@ const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') 
           setInterval(() => hideTeamsThatAreNotAllowed(), 500)
           hideTeamsThatAreNotAllowed();
         }
-        if (state === "template") {
-          getSidebar().querySelectorAll('.choice-variable').innerHTML = `<p>${inputName} is only available on the edit page.</p>`;
-        }
+        // if (state === "template") {
+        //   getSidebar().querySelectorAll('.choice-variable').innerHTML = `<p>${inputName} is only available on the edit page.</p>`;
+        // }
         if (['document', 'export'].includes(state)) {
           if (typeof window.handleMTOData === 'function') {
             window.handleMTOData(teamMetadata);
           }
           resolve(teamMetadata);
+        } else {
+          if (typeof window.handleMTOData === 'function') {
+            window.handleMTOData([]);
+          }
+          resolve([]);
         }
     } catch (error) {
       console.error("An MTO error has occurred. Please try again later. If the issue still persists please contact Outfit Support");
