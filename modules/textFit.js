@@ -36,8 +36,6 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     alignHoriz: false, // if true, textFit will set text-align: center
     multiLine: false, // if true, textFit will not set white-space: no-wrap
     stopOverflow: false, // if true, a error we be thrown if the content is overflowing
-    maxLine: false, // if true, textFit will throw and error if the text is over the supplied number of lines
-    detectMultiLine: true, // disable to turn off automatic multi-line sensing
     fontUnit: "rem", // what unit should the final font be. using rems or mm is sometimes useful
     fontChangeSize: 0.1, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
     minFontSize: 0.3,
@@ -153,21 +151,6 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     if (settings.alignHoriz) {
       el.style["text-align"] = "center";
       innerSpan.style["text-align"] = "center";
-    }
-
-    // Check if this string is multiple lines
-    // Not guaranteed to always work if you use wonky line-heights
-    var multiLine = settings.multiLine;
-    if (
-      settings.detectMultiLine &&
-      !multiLine &&
-      countLines(innerSpan) > 1
-    ) {
-      multiLine = true;
-    }
-    // If we're not treating this as a multiline string, don't var it wrap.
-    if (!multiLine) {
-      el.style["white-space"] = "nowrap";
     }
 
     var maxLine = parseInt(el.dataset.maxLine || settings.maxLine);
