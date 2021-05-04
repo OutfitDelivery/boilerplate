@@ -1,22 +1,28 @@
+// some elemnets don't have height values set correctly so we need to drill down 
+function findTextNode(target) {
+  let child = target.firstChild;
+  if (child && ['SPAN','TOKEN-VALUE','STRONG'].includes(child.tagName)) {
+    target = findTextNode(child);
+  }
+  return target
+}
 // count the number of lines inside of the current direct element
 function countLines(target) {
+  target.classList.add('countingLines')
   let testBox = document.createElement("div");
-  // let child = target.firstChild;
-  // let targetFix = target
-  // if (child && ['SPAN'].includes(child.tagName)) {
-  //   targetFix = child;
-  // }
+  let counterTarget = findTextNode(target)
   // console.log(targetFix)
-  let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
+  // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
   testBox.classList = "lineCounter";
   // testBox.style.fontFamily = "-webkit-pictograph";
   // testBox.style.display = "block";
   // testBox.style.fontSize = targetFix.style.fontSize;
   testBox.innerText = "​";
-  targetFix.insertAdjacentElement('afterbegin', testBox) 
+  counterTarget.insertAdjacentElement('afterbegin', testBox) 
   let oneLineHeight = getHeight(testBox);
   testBox.remove();
-  let lines = getHeight(targetFix) / oneLineHeight;
+  let lines = getHeight(counterTarget) / oneLineHeight;
+  target.classList.remove('countingLines')
   target.dataset.calculatedLinesCount = lines; // adds property for CSS targeting
   return lines;
 }

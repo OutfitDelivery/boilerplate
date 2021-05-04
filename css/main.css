@@ -210,8 +210,7 @@ a {
   position: static;
 }
 
-
 /* rich text inputs can have tags which break line counting so we set all those tags to block for consistent heights */
-strong, li, ul, em {
-  display: block;
+.token-value {
+  display: inherit;
 }
