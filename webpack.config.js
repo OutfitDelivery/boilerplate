@@ -1,5 +1,6 @@
 // Webpack uses this to work with directories
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // This is the main configuration object.
@@ -30,6 +31,12 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [{
+          from: 'css',
+          to: ''
+      }]
+    })
   ],
 
   mode: 'production',

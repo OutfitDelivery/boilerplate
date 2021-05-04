@@ -51,11 +51,11 @@ const winLoad = new Promise((resolve, reject) => {
 const loadLESS = (variables = {}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let styleCode = document.createElement('link');
-      styleCode.setAttribute('type', 'text/css');
-      styleCode.setAttribute('rel', 'stylesheet');
-      styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/css/main.min.css');
-      document.head.insertAdjacentElement('afterbegin', styleCode);
+      // let styleCode = document.createElement('link');
+      // styleCode.setAttribute('type', 'text/css');
+      // styleCode.setAttribute('rel', 'stylesheet');
+      // styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/css/main.min.css');
+      // document.head.insertAdjacentElement('afterbegin', styleCode);
   
       if (document.querySelector('[type="text/less"]') !== null) {
         window.less = {
