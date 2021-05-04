@@ -1,6 +1,12 @@
 // count the number of lines inside of the current direct element
 function countLines(target) {
   let testBox = document.createElement("div");
+  // let child = target.firstChild;
+  // let targetFix = target
+  // if (child && ['SPAN'].includes(child.tagName)) {
+  //   targetFix = child;
+  // }
+  // console.log(targetFix)
   let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
   testBox.classList = "lineCounter";
   // testBox.style.fontFamily = "-webkit-pictograph";

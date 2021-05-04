@@ -16,6 +16,7 @@ body {
   background: #ffffff;
 }
 
+
 @media screen {
   .crop .page:not(:last-child) {
     border-bottom: 1px dotted cyan;
@@ -209,3 +210,8 @@ a {
   position: static;
 }
 
+
+/* rich text inputs can have tags which break line counting so we set all those tags to block for consistent heights */
+strong, li, ul, em {
+  display: block;
+}

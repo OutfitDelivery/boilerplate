@@ -57,15 +57,16 @@ const loadLESS = (variables = {}) => {
       styleCode.setAttribute('href', 'https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/css/main.min.css');
       document.head.insertAdjacentElement('afterbegin', styleCode);
   
-      window.less = {
-        globalVars: variables
-      };
-
-      require('less');
-      require('prefixfree');
-
-      document.querySelectorAll('style[media=""][data-href$=".less"]:not([href])').forEach(e => e.remove());
-
+      if (document.querySelector('[type="text/less"]') !== null) {
+        window.less = {
+          globalVars: variables
+        };
+        
+        require('less');
+        require('prefixfree');
+        
+        document.querySelectorAll('style[media=""][data-href$=".less"]:not([href])').forEach(e => e.remove());
+      }
       resolve()
     } catch (e) { reject(e) }
   });
@@ -75,14 +76,18 @@ export default class boilerplate {
   constructor({ 
     fonts = [],
     ensureImagesLoad = true,
+    ensureNoOverflows = false,
     allowLegacyRendering = false,
     exportReduceFont = 0,
     firefoxReduceFont = 0,
+    waitForImages = false,
     trimMarks = false,
     variables = {}
    } = {}) {
     
      this.fonts = fonts || '';
+     this.ensureNoOverflows = ensureNoOverflows;
+     this.waitForImages = waitForImages;
      this.ensureImagesLoad = ensureImagesLoad;
      this.allowLegacyRendering = allowLegacyRendering;
      this.exportReduceFont = exportReduceFont;
@@ -109,6 +114,9 @@ export default class boilerplate {
         this.setSize(),
         this.addCrop()
       ];
+      if (this.waitForImages) {
+        checkList.push(ensureAllImagesLoaded())
+      }
       Promise.all(checkList)
         .then(() => {
           if (typeof window.onTextChange === "function") {
@@ -359,11 +367,24 @@ export default class boilerplate {
     });
   }
 
+  ensureNoOverflows() {
+    return new Promise((resolve, reject) => {
+      let overflows = document.querySelectorAll('.overflow, [overflow]');
+      if (overflows) {
+        reject(overflows);
+      }
+      resolve()
+    })
+  }
+
   // send a event to stop a render 
   completeRender() {
     let checkList = [winLoad]
     if (this.ensureImagesLoad) {
       checkList.push(ensureAllImagesLoaded)
+    }
+    if (this.ensureNoOverflows) {
+      checkList.push(ensureNoOverflows)
     }
     Promise.all(checkList).then((values) => {
       let loadTime = Date.now() - window.performance.timing.navigationStart
