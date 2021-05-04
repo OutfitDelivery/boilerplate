@@ -1,9 +1,9 @@
 name: Publish to S3
 
 on:
-  push:
+ push:
     tags:
-      - '*.*'
+      - '*'
 
 jobs:
   deploy:
