@@ -208,8 +208,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
         var lineCount = countLines(innerSpan);
         el.dataset.lineCount = lineCount;
         if (lineCount > maxLine) {
-          el.dataset.customOverflowMessage =
-            "Too much content has been added for the allowed space";
+          // el.dataset.customOverflowMessage = "Too much content has been added for the allowed space";
           el.classList.add("overflow");
         }
       }
