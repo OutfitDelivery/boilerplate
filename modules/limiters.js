@@ -2,8 +2,8 @@
 function findTextNode(target) {
   // let child = target.firstChild;
   // if (child && ['SPAN','TOKEN-VALUE','STRONG','P','EM',''].includes(child.tagName)) {
-  if (target.firstChild && target.firstChild.nodeType === 1) {
-    target = findTextNode(target.firstChild);
+  if (target.firstElementChild) {
+    target = findTextNode(target.firstElementChild);
   }
   return target
 }
