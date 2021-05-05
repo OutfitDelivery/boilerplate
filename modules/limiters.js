@@ -1,8 +1,7 @@
 // some elemnets don't have height values set correctly so we need to drill down 
 function findTextNode(target) {
-  // let child = target.firstChild;
   // if (child && ['SPAN','TOKEN-VALUE','STRONG','P','EM',''].includes(child.tagName)) {
-  if (target.firstElementChild) {
+  if (target.firstElementChild && !['BR'].includes(target.firstElementChild.tagName)) {
     target = findTextNode(target.firstElementChild);
   }
   return target
