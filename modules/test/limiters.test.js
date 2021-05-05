@@ -26,19 +26,25 @@ describe('getHeight', () => {
     document.body.innerHTML = `
       <style>
         .container {
-          height: 100%;
+          height: 100%
           width: 100%;
+          line-height: 1;
+          display: block;
         }
         .testBox {
+          width: 100%;
           height: 100px;
           padding-bottom: 10px;
           margin-bottom: 10px;
+          display: block;
         }
       </style>
       <div class="container">
-        <div class="testBox">
-          some text here
-        </div>
+        <p class="testBox">
+          <span>
+            some text here
+          </span>
+        </p>
       </div>
     ` 
     let testBox = document.querySelector('.testBox');
