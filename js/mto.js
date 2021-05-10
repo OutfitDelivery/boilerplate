@@ -8,7 +8,7 @@
     }
   }
   const hideInput = (inputValue) => {
-    sidebar.querySelectorAll(".sidebar-items").find((input) => {
+    getSidebar().querySelectorAll(".sidebar-items").find((input) => {
       input.querySelector(".field-variable-tag").innerText === inputValue
     }).style.display = 'none';
   }
