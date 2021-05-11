@@ -8,9 +8,12 @@
     }
   }
   const hideInput = (inputValue) => {
-    getSidebar().querySelectorAll(".sidebar-items").find((input) => {
-      input.querySelector(".field-variable-tag").innerText === inputValue
-    }).style.display = 'none';
+    getSidebar().querySelectorAll(".sidebar-items")
+    .forEach((input) => {
+      if (input.querySelector(".field-variable-tag").innerText === inputValue) {
+        input.style.display = 'none';
+      }
+    })
   }
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
     return new Promise((resolve, reject) => {
@@ -32,8 +35,8 @@
         }
         if (state === "document") {
         // turn teamsAllowed from string into array
-        teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
-          let hideTeamsThatAreNotAllowed = () => {
+          teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
+            let hideTeamsThatAreNotAllowed = () => {
               if (teamsAllowed.length > 0) {
                 // if we are only allowing the user to select some of the teams then we should remove the ones that the user hasn't got access to. 
                 if (getSidebar().firstChild.firstChild.lastChild.innerText == inputName) {
@@ -50,10 +53,10 @@
                       }
                     }
                   });
-               } else {
-                // This means we are not on the MTO sidebar 
-              }
-            } else {
+                } else {
+                  // This means we are not on the MTO sidebar 
+                }
+              } else {
                 // getSidebar().querySelector('.choice-variable').innerHTML = `<p>${inputName} is not available for your team. Please click back to continue editing your document.</p>`;
                 hideInput(inputName)
               }

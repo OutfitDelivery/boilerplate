@@ -24,8 +24,11 @@ describe('Login', () => {
         // cy.get('.button').contains('Templating').click()
         cy.get('[href="/templates"]').click()
         cy.get('[href="/templates/new"]').click()
+        // cy.get('[type="file"]').attachFile({
+        //     fileContent: fileContent.toString(),
+        //     fileName: 'testPicture.png',
+        //     mimeType: 'image/png'
+        // });
     })
-  
-
 })
 
