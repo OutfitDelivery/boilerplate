@@ -15,6 +15,7 @@
       }
     })
   }
+
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
     return new Promise((resolve, reject) => {
       try {

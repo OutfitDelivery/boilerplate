@@ -63,7 +63,7 @@ const loadLESS = (variables = {}) => {
         };
         
         require('less');
-        require('prefixfree');
+        // require('prefixfree');
         
         document.querySelectorAll('style[media=""][data-href$=".less"]:not([href])').forEach(e => e.remove());
       }

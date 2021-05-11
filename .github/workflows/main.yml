@@ -23,9 +23,12 @@ jobs:
       - name: Test build
         run: npm run test
         
-      # - name: Cypress run
-      #   uses: cypress-io/github-action@v2
-
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        env: 
+          TEST_ACCOUNT_EMAIL: ${{ secrets.TEST_ACCOUNT_EMAIL }}
+          TEST_ACCOUNT_PASSWORD: ${{ secrets.TEST_ACCOUNT_PASSWORD }}
+          
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete

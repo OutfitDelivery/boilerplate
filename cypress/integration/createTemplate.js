@@ -1,3 +1,4 @@
+
 beforeEach(function () {
     // before each test, we can automatically preserve the
     // 'session_id' and 'remember_token' cookies. this means they
@@ -19,11 +20,14 @@ describe('Login', () => {
         cy.get('[type="submit"]').click()
         cy.url().should('eq', 'https://bootstrap-old.staging.outfit.io/')
     })
-    it('create template', () => {
+    it('create template', async () => {
         cy.get('.hamburger').click()
         // cy.get('.button').contains('Templating').click()
         cy.get('[href="/templates"]').click()
         cy.get('[href="/templates/new"]').click()
+        // await zipDirectory('/dist','/cypress/fixtures/boilerplate.zip');
+        // cy.get('[type="file"]').attachFile('boilerplate.zip');
+
         // cy.get('[type="file"]').attachFile({
         //     fileContent: fileContent.toString(),
         //     fileName: 'testPicture.png',
