@@ -8,9 +8,12 @@
     }
   }
   const hideInput = (inputValue) => {
-    getSidebar().querySelectorAll(".sidebar-items").find((input) => {
-      input.querySelector(".field-variable-tag").innerText === inputValue
-    }).style.display = 'none';
+    getSidebar().querySelectorAll(".sidebar-items")
+    .forEach((input) => {
+      if (input.querySelector(".field-variable-tag").innerText === inputValue) {
+        input.style.display = 'none';
+      }
+    })
   }
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
     return new Promise((resolve, reject) => {
