@@ -11,6 +11,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+require('dotenv').config()
 
 /**
  * @type {Cypress.PluginConfig}
@@ -19,4 +20,10 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  // copy any needed variables from process.env to config.env
+  config.env.username = process.env.TEST_ACCOUNT_EMAIL
+  config.env.password = process.env.TEST_ACCOUNT_PASSWORD
+
+  // do not forget to return the changed config object!
+  return config
 }
