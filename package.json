@@ -8,6 +8,7 @@
     "watch": "webpack --watch --progress --config webpack.config.dev.js",
     "test": "jest",
     "cypress:run": "cypress run --headed --no-exit",
+    "cypress:ci": "cypress run",
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "checkbuild": "node ./pre-commit-build.js",
