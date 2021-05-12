@@ -4,7 +4,7 @@ import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
 import { setupMTO } from './mto.js';
-import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getHeight, getWidth } from './limiters';
+import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getHeight, getWidth, countLines } from './limiters';
 
 const highestZ = () => {
   return Array.from(document.querySelectorAll('body *'))
@@ -82,6 +82,7 @@ export default class boilerplate {
     firefoxReduceFont = 0,
     waitForImages = false,
     trimMarks = false,
+    allowNoMetaData = false,
     variables = {}
    } = {}) {
     
@@ -93,6 +94,7 @@ export default class boilerplate {
      this.exportReduceFont = exportReduceFont;
      this.firefoxReduceFont = firefoxReduceFont;
      this.trimMarks = trimMarks;
+     this.allowNoMetaData = allowNoMetaData;
      this.variables = variables;
   
     if (!this.keepConsole) {
@@ -143,8 +145,10 @@ export default class boilerplate {
           if (state === "document") {
             imageCompression();
             // set timeout is used here to push this to the end of the heap which means it will load after everything else 
-            setTimeout(() => {
-              this.defaultsRemoved();
+            setTimeout(() => { 
+              if (!this.allowNoMetaData) {
+                this.defaultsRemoved();
+              }
             },0);
           }
           console.log("Content checks ran 😎");
@@ -470,5 +474,8 @@ export default class boilerplate {
   }
   getHeight() {
     return getHeight.apply(null, arguments)
+  }
+  countLines() {
+    return countLines.apply(null, arguments)
   }
 }

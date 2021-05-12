@@ -5,7 +5,9 @@
         1. Fill Out Title Meta-Data
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data
-        4. Remove this comment
+        4. Include fonts in the boilerplate config
+        5. Have a lovely day 👉👈
+        6. Remove this comment
   -->
     <title>PUT_TEMPLATE_NAME_HERE</title>
     <meta charset="utf-8" />
@@ -14,6 +16,7 @@
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
+    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
     <style type="text/less">
       /* ADD_ONLY_ROOT_STYLES_HERE
       All styles should be put in css/styles.less file for consistency */
@@ -33,7 +36,7 @@
       </div>
     </div>
 
-   <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@v3.0/dist/boilerplate.js"></script>
+   <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.0/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
         fonts: ['PUT_ALL_FONT_NAMES_HERE'],

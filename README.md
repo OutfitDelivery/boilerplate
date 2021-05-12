@@ -84,9 +84,6 @@ if no arguments are given the function will replaces text inside of `data-replac
 ```
 template.dynamicReplace()
 ```
-
-## qrcode
-This will need to be borught into v3. If you need to make a QR code please annoy Sam or use the 2.5 version of this function
 ## textfit
 ```
 template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
@@ -97,6 +94,11 @@ template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSiz
 template.setupMTO({{{mto-v3}}}, "{{{team.mto}}}", 'Branch Selection').then(mtoData => {
     // add metadata to the template
 }).catch(console.error);
+
+or 
+
+template.setupMTO({{{mto-v3}}}, "{{{team.mto}}}", 'Branch Selection')
+handleMTOData(mtoData, settings)
 ```
 
 <!-- The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates. -->
