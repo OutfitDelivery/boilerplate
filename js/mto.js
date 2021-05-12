@@ -67,7 +67,7 @@
           if (state === "template") {
             getSidebar().querySelectorAll('.choice-variable').innerHTML = `<p>${inputName} is only available on the edit page.</p>`;
           }
-          if (['document', 'export'].includes(state)) {
+          if (['document', 'export', 'preview'].includes(state)) {
             if (typeof window.handleMTOData === 'function') {
               window.handleMTOData(teamMetadata);
             }
