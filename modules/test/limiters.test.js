@@ -52,8 +52,8 @@ describe('getHeight', () => {
     let lines = countLines(testBox)
     expect(height).toBe(100);
     expect(testBox.dataset.calculatedHeight).toBe("100");
-    expect(lines).toBe(NaN);
-    expect(testBox.dataset.calculatedLinesCount).toBe("NaN");
+    expect(lines).toBe(0);
+    expect(testBox.dataset.calculatedLinesCount).toBe("0");
 
   });
   // TODO test line counting and line counting with textfix 

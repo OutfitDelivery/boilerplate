@@ -1,3 +1,24 @@
+import LineClamp from "./lineClamp.js"
+
+function inlineBlock(el) {
+  if (!['inline','inline-block'].includes(window.getComputedStyle(el).display) || el.classList.contains('textFitted')) {
+    return el
+  }
+  return false
+}
+// find all text nodes under a given element
+function textNodesUnder(el){
+  var n, a=[], walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+  while(n = walk.nextNode()) {
+    if (n.textContent.trim()) {
+      if (inlineBlock(n.parentElement) && !a.includes(n.parentElement)) {
+        a.push(n.parentElement);
+      }
+    }
+  }
+  return a;
+}
+
 // some elemnets don't have height values set correctly so we need to drill down 
 function findTextNode(target) {
   // if (child && ['SPAN','TOKEN-VALUE','STRONG','P','EM',''].includes(child.tagName)) {
@@ -6,25 +27,130 @@ function findTextNode(target) {
   }
   return target
 }
+// not so simple rounding for line counting purposes
+function simpleRounding(num) {
+  if (num > 10) {
+    return Math.round(num);
+    // return num.toFixed(0).replace(/(\.0+|0+)$/, '');
+  }
+  return Math.round(num)//.replace(/(\.0+|0+)$/, '');
+}
 // count the number of lines inside of the current direct element
-function countLines(target) {
-  target.classList.add('countingLines')
-  let testBox = document.createElement("div");
-  let counterTarget = findTextNode(target)
-  // console.log(targetFix)
-  // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
-  testBox.classList = "lineCounter";
-  // testBox.style.fontFamily = "-webkit-pictograph";
-  // testBox.style.display = "block";
-  // testBox.style.fontSize = targetFix.style.fontSize;
-  testBox.innerText = "​";
-  counterTarget.insertAdjacentElement('afterbegin', testBox) 
-  let oneLineHeight = getHeight(testBox);
-  testBox.remove();
-  let lines = getHeight(counterTarget) / oneLineHeight;
-  target.classList.remove('countingLines')
-  target.dataset.calculatedLinesCount = lines; // adds property for CSS targeting
-  return lines;
+function countLines(elements) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  let result = [...elements].map(target => {
+    // if (1 == 2) {
+    //   target.classList.add('countingLines');
+    //   let testBox = document.createElement("div");
+    //   let counterTarget = findTextNode(target)
+    //   console.log(counterTarget)
+    //   // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
+    //   testBox.classList = "lineCounter";
+    //   // testBox.style.fontFamily = "-webkit-pictograph";
+    //   // testBox.style.display = "block";
+    //   // testBox.style.fontSize = targetFix.style.fontSize;
+    //   testBox.innerText = "​";
+    //   counterTarget.insertAdjacentElement('afterbegin', testBox) 
+    //   let oneLineHeight = getHeight(testBox);
+    //   testBox.remove();
+    //   let lineCount = getHeight(target) / oneLineHeight;
+    //   target.classList.remove('countingLines')
+    //   let lineCountRounded = simpleRounding(lineCount)
+    //   target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
+    //   target.dataset.rawLinesCount = lineCount; // adds property for CSS targeting
+    //   return lineCountRounded;
+    // } else {
+      let muiltCount = 0;
+      let textNodes = textNodesUnder(target);
+
+      // let test = textNodes.forEach((s) => {
+      //   console.log(s)
+      // })
+      console.log(textNodes,'textNodes')
+
+      textNodes.forEach(el => {
+        // let inlineElement = 
+        // if (el.nodeName ==)
+        // let displayType = window.getComputedStyle(el).display;
+        // if (displayType == "inline" || displayType == "inline-block") {
+        //   el = el.parentElement
+        // }
+        
+        // if (inlineBlock(el)) {
+          let metrics = calculateTextMetrics(el);
+          let line = simpleRounding(metrics.lineCount)
+          console.log(el, line)
+          if (line) {
+            el.dataset.rawLinesCount = line;
+            muiltCount += line;
+          }
+        // }
+
+      })
+      // console.log(target.innerText.substring(0, 10), muiltCount)
+      let lineCountRounded = simpleRounding(muiltCount)
+      target.dataset.calculatedLinesCount = lineCountRounded // adds property for CSS targeting
+      return lineCountRounded
+      // let metrics = calculateTextMetrics(target);
+      // if (metrics.lineCount) {
+      //   let lineCountRounded = simpleRounding(metrics.lineCount)
+      //   target.dataset.calculatedLinesCount = lineCountRounded // adds property for CSS targeting
+      //   target.dataset.rawLinesCount = metrics.lineCount; // adds property for CSS targeting
+      //   return lineCountRounded
+      // }
+      // return null
+    // }
+  });
+  if (result.length == 1) {
+    return result[0];
+  }
+  return result;
+}
+
+let clampDefaults = { maxLines: 1, minFontSize: 18, useSoftClamp: true, ellipsis: '...' }
+function lineClamp(elements, config)  {
+  config = { ...clampDefaults, ...config }
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  return [...elements].map(element => {
+    const clamp = new LineClamp(element, config)
+    clamp.apply()
+    clamp.watch()
+   
+    return clamp;
+  });
+}
+
+// returns lineCount and line hieght info from this libaray https://github.com/tvanc/lineclamp
+function calculateTextMetrics(elements, config) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  let result = [...elements].map(element => {
+    return new LineClamp(element, config).calculateTextMetrics();
+  });
+  if (result.length == 1) {
+    return result[0];
+  }
+  return result;
 }
 
 // Calculate height without padding.
@@ -201,4 +327,4 @@ function charLimit(element = null) {
   });
 }
 
-export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines }
+export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp }

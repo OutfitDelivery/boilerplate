@@ -40,6 +40,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     fontChangeSize: 0.1, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
     minFontSize: 0.3,
     maxFontSize: 1,
+    maxLine: false,
     reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
     widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
     alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
@@ -154,6 +155,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     }
 
     var maxLine = parseInt(el.dataset.maxLine || settings.maxLine);
+    console.log(maxLine, 'maxline')
     var startingSize = innerSpan.style.fontSize;
 
     low = settings.minFontSize;

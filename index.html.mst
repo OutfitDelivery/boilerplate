@@ -18,8 +18,7 @@
     <meta name="updates" content=""/>
     <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
     <style type="text/less">
-      /* ADD_ONLY_ROOT_STYLES_HERE
-      All styles should be put in css/styles.less file for consistency */
+      /* ADD_ONLY_ROOT_STYLES_HERE All styles should be put extenral files for consistency */
       :root {
         --black: #000;
         --white: #fff;
@@ -40,7 +39,7 @@
    <script>
       let template = new boilerplate({
         fonts: ['PUT_ALL_FONT_NAMES_HERE'],
-        trimMarks: '{{trim-marks}}'
+        // trimMarks: '{{trim-marks}}'
       });
 
       // Please put all fonts needed for the tempate into the array bellow
@@ -53,6 +52,7 @@
 
       // This function will run whenever there is a change to any text input, resize and on inital load
       onTextChange = (element) => {
+        console.log('onTextChange', element);
         // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
         // template.maxLineCheck();
         // template.maxHeightCheck();

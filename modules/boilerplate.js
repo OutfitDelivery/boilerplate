@@ -4,7 +4,7 @@ import { dynamicReplace } from './replace.js';
 import setupPlaceholder from './placeholder.js';
 import textFit from './textFit.js';
 import { setupMTO } from './mto.js';
-import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getHeight, getWidth, countLines } from './limiters';
+import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getHeight, getWidth, countLines, lineClamp, calculateTextMetrics } from './limiters';
 
 const highestZ = () => {
   return Array.from(document.querySelectorAll('body *'))
@@ -85,7 +85,6 @@ export default class boilerplate {
     allowNoMetaData = false,
     variables = {}
    } = {}) {
-    
      this.fonts = fonts || '';
      this.ensureNoOverflows = ensureNoOverflows;
      this.waitForImages = waitForImages;
@@ -96,7 +95,6 @@ export default class boilerplate {
      this.trimMarks = trimMarks;
      this.allowNoMetaData = allowNoMetaData;
      this.variables = variables;
-  
     if (!this.keepConsole) {
       console.clear();
     }
@@ -440,42 +438,48 @@ export default class boilerplate {
     }
   }
   dynamicReplace () {
-    return dynamicReplace.apply(null, arguments)
+    return dynamicReplace.apply(this, arguments)
   }
   textFit () {
-   return textFit.apply(null, arguments)
+   return textFit.apply(this, arguments)
   }
   setupPlaceholder () {
-    return setupPlaceholder.apply(null, arguments)
+    return setupPlaceholder.apply(this, arguments)
   }
   maxLineCheck () {
-    return maxLineCheck.apply(null, arguments)
+    return maxLineCheck.apply(this, arguments)
   }
   maxHeightCheck () {
-    return maxHeightCheck.apply(null, arguments)
+    return maxHeightCheck.apply(this, arguments)
   }
   charLimit () {
-    return charLimit.apply(null, arguments)
+    return charLimit.apply(this, arguments)
   }
   dynamicAssign () {
-    return dynamicAssign.apply(null, arguments)
+    return dynamicAssign.apply(this, arguments)
   }
   highestZindex () {
     return highestZ()
   }
   ensureAllImagesLoaded() {
-    return ensureAllImagesLoaded.apply(null, arguments)
+    return ensureAllImagesLoaded.apply(this, arguments)
   }
   setupMTO() {
-    return setupMTO.apply(null, arguments)
+    return setupMTO.apply(this, arguments)
   }
   getWidth() {
-    return getWidth.apply(null, arguments)
+    return getWidth.apply(this, arguments)
   }
   getHeight() {
-    return getHeight.apply(null, arguments)
+    return getHeight.apply(this, arguments)
   }
   countLines() {
-    return countLines.apply(null, arguments)
+    return countLines.apply(this, arguments)
+  }
+  calculateTextMetrics() {
+    return calculateTextMetrics.apply(this, arguments)
+  }
+  lineClamp() {
+    return lineClamp.apply(this, arguments)
   }
 }
