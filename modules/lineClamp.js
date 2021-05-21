@@ -112,7 +112,7 @@ export default class LineClamp {
     style.cssText += ";min-height:0!important;max-height:none!important"
     element.replaceWith(clone)
 
-    const naturalHeight = clone.offsetHeight
+    const naturalHeight = getHeight(clone) // clone.offsetHeight
 
     // Clear to measure empty height. textContent faster than innerHTML
     clone.textContent = ""

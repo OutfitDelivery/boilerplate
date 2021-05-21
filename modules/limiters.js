@@ -2,17 +2,23 @@ import LineClamp from "./lineClamp.js"
 
 function inlineBlock(el) {
   if (!['inline','inline-block'].includes(window.getComputedStyle(el).display) || el.classList.contains('textFitted')) {
+    console.log('yes',el)
+    
     return el
   }
-  return false
+  // console.log('no',el)
+  inlineBlock(el.parentElement)
+  // return false
 }
 // find all text nodes under a given element
-function textNodesUnder(el){
-  var n, a=[], walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+function textNodesUnder(el) {
+  var n = null, a=[], walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
   while(n = walk.nextNode()) {
     if (n.textContent.trim()) {
-      if (inlineBlock(n.parentElement) && !a.includes(n.parentElement)) {
-        a.push(n.parentElement);
+      let e = inlineBlock(n.parentElement)
+      // console.log(e, !a.includes(e))
+      if (!a.includes(e) && e) {
+        a.push(e);
       }
     }
   }
@@ -86,7 +92,7 @@ function countLines(elements) {
         // if (inlineBlock(el)) {
           let metrics = calculateTextMetrics(el);
           let line = simpleRounding(metrics.lineCount)
-          console.log(el, line)
+          console.log(el, metrics)
           if (line) {
             el.dataset.rawLinesCount = line;
             muiltCount += line;
@@ -211,6 +217,30 @@ function maxLineCheck(element = null) {
   return true;
 }
 
+function minLineCheck(element = null) {
+  const isExportMode = window.location.href.indexOf("exports") > -1;
+  const isLocalDev = window.location.href.indexOf("localhost") > -1;
+  const preventExportOverflow =
+    document.body.dataset.preventExportOverflow === "true";
+  const isProjectKit = isLocalDev
+    ? undefined
+    : window.parent.document.querySelector(".preview-frame");
+
+  if ((isExportMode && preventExportOverflow) || isProjectKit) return;
+
+  const blocks = document.querySelectorAll("[data-min-line]");
+  blocks.forEach((block) => {
+    const lineCount = countLines(block);
+    // Getting the data-max-line attribute value (max number of lines allowed) 
+    const minLine = block.dataset.minLineAlt || block.dataset.maxLine;
+
+    lineCount <= minLine
+      ? block.classList.add("overflow")
+      : block.classList.remove("overflow");
+  });
+  return true;
+}
+
 /**
 *Detailed instruction can be found here:
  https://github.com/aleks-frontend/max-height-check
@@ -228,7 +258,7 @@ function maxHeightCheck(element = null) {
 
   const blocks = document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeightDynamic === "true") {
+    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightDynamic === "true") {
       dynamicAssign(block);
     }
     const blockHeight = getHeight(block);
@@ -327,4 +357,4 @@ function charLimit(element = null) {
   });
 }
 
-export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp }
+export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck }

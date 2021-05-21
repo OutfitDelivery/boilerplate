@@ -6,16 +6,13 @@ html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,ifr
 }
 
 html {
+  --trimOffset: 0;
   font-size: 16px;
   color: #000000;
   word-break: break-word;
-  line-height: 1; /* This fixes countLines rounding. You need a value for this but it can be anything */
-}
-
-body {
   background: #ffffff;
+  line-height: 1; 
 }
-
 
 @media screen {
   .crop .page:not(:last-child) {
@@ -50,13 +47,11 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
-
 .contain {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
 }
-
 .blend {
   background-blend-mode: overlay;
 }
@@ -69,7 +64,6 @@ sub {
   top: -0.4em;        
   line-height: 1em;
 }
-
 sub {
   top: 0.4em;
 }   
@@ -82,7 +76,6 @@ sub {
 
 /* Dynamic Inject container style */
 .js-dynamicInjectMaster { display: none; }
-
 .js-dynamicInjectMasterReposition {
   position: absolute;
   opacity: 0;
@@ -92,6 +85,9 @@ sub {
   z-index: -1;
 }
 
+/* Helper classes */
+.u-hide { display: none; }
+
 .backgroundImage {
   position: absolute;
   top: 0;
@@ -100,17 +96,12 @@ sub {
   right: 0;
   overflow: hidden;
 }
-
 .backgroundImage div {
   width: auto !important;
   height: auto !important;
   right: 0;
   bottom: 0;
 }
-
-/* Helper classes */
-.u-hide { display: none; }
-
 /* Helper class for fixing Reposition tool bug */
 .reposition-fix {
   position: absolute;
@@ -120,7 +111,6 @@ sub {
   bottom: 0;
   right: 0;        
 }
-
 .reposition-fix div {
   top: 0 !important;
   bottom: 0 !important;
@@ -150,24 +140,20 @@ sub {
   height: 28.81px;
   width: 28.81px;
 }
-
 .crop-marks .crop-mark.top-left {
   top: 0;
   left: 0;
 }
-
 .crop-marks .crop-mark.top-right { 
   top: 0;
   right: 0;
   transform: rotate(90deg);
 }
-
 .crop-marks .crop-mark.bottom-left {
   bottom: 0;
   left: 0;
   transform: rotate(270deg);
 }
-
 .crop-marks .crop-mark.bottom-right {
   bottom: 0;
   right: 0;
@@ -177,11 +163,9 @@ sub {
 [data-trim="true"] .bleed {
   --trimOffset: 4.41mm;
 }
-
-[data-trim="false"] .bleed {
+[data-trim="false"] .bleed, .bleed {
   --trimOffset: -3mm;
 }
-
 .bleed {
   position: absolute;
   top: var(--trimOffset);

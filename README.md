@@ -10,6 +10,8 @@ It's pretty simple. Navigate to `Releases` on the right sidebar. Select the Late
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
+This version of the boilerplate is recommended with extenral stylesheets and scripts. Please provde a reason why you can't place styles extenraly if you are going to do that.
+
 ## Getting Started
 Before you start building the template there are few things that you need to do.
 1. Add a Template Name in the `<title>` Tag 
@@ -37,14 +39,33 @@ template.start().then(() => {
     template.completeRender();
 }).catch(console.trace);
 
-// This function will run whenever there is a change to any text input
-window.onTextChange = () => {
-    template.maxLineCheck();
-    template.maxHeightCheck();
-    template.charLimit();
-    template.dynamicReplace();
+// This event will happen when there is a resize or first load of document
+template.addEventListener("textValidation", () => {
+  
 }
 ```
+
+### Overflow fucntions
+```
+// max line check add an overflow if the number of lines is greater than data-max-line 
+template.maxLineCheck();
+
+// min line check add an overflow if the number of lines is lower than data-min-line 
+template.minLineCheck();
+
+// max height check will add overflows based on data-max-height if the height is larger than the given value
+// it also supports data-max-height="css" and data-max-height="parent" if you want the hight to be set via the css value or the height of the parent  
+template.maxHeightCheck();
+
+// max height check will throw errors if the number of characters is larger than data-char-limit
+template.charLimit();
+```
+### Utilites
+```
+// this function can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
+template.addStyle('body { background: red; }')
+```
+
 <!-- - setSize()
     Sets the font size based on the window width & height, and some other factors.
 - setupPlaceholder()
@@ -60,15 +81,7 @@ window.onTextChange = () => {
 - invalidFontList()
     checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid) -->
 
-
-## [Limiters.js](modules/limiters.js)
-- template.maxLineCheck()
-- template.maxHeightCheck()
-- template.charLimit()
-`NOTE TO MATT - NEED TO ADD THE NEW wordLimit FUNCTION TO THIS FILE`
-
-## formatters
-
+### formatters
 The 1st element is what the text will be replaced with.
 The 2nd element is what the fuction will look for to replace.
 ```
