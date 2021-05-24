@@ -23,7 +23,6 @@ export default class boilerplate {
     ensureImagesLoad = true,
     allowLegacyRendering = false,
     exportReduceFont = 0,
-    firefoxReduceFont = 0,
     waitForImages = false,
     trimMarks = false,
     allowNoMetaData = false,
@@ -35,7 +34,6 @@ export default class boilerplate {
     this.ensureImagesLoad = ensureImagesLoad;
     this.allowLegacyRendering = allowLegacyRendering;
     this.exportReduceFont = exportReduceFont;
-    this.firefoxReduceFont = firefoxReduceFont;
     this.trimMarks = trimMarks;
     this.allowNoMetaData = allowNoMetaData;
     this.overflows = false;
@@ -45,7 +43,7 @@ export default class boilerplate {
     if (runAddCrop) {
       addCrop(trimMarks, allowLegacyRendering);
     }
-    setSize(trimMarks, exportReduceFont, firefoxReduceFont);
+    setSize(trimMarks, exportReduceFont);
     console.clear();
   }
   start() {
@@ -65,12 +63,10 @@ export default class boilerplate {
           if (typeof window.onTextChange === "function") {
             window.onTextChange();
           }
-          this.getOverflowsList();
           window.addEventListener("resize", async (e) => {
             await setSize(
               this.trimMarks,
-              this.exportReduceFont,
-              this.firefoxReduceFont
+              this.exportReduceFont
             );
             if (state !== "preview") {
               emit(this, "textValidation");
@@ -78,9 +74,11 @@ export default class boilerplate {
                 window.onTextChange("resize");
               }
             }
-            this.getOverflowsList();
           });
-
+          setInterval(() => {
+            this.getOverflows();
+          }, 1000)
+          
           if (state === "document") {
             // OutfitIframeShared.eventEmitter.addListener(
             //   'token-value:change', (e) => {
@@ -96,15 +94,9 @@ export default class boilerplate {
 
           if (state === "document") {
             imageCompression();
-            // set timeout is used here to push this to the end of the heap which means it will load after everything else
-            setTimeout(() => {
-              if (!this.allowNoMetaData) {
-                defaultsRemoved();
-              }
-            }, 5000);
           }
-          console.log("Content checks ran 😎");
-          resolve();
+          // console.log("Content checks ran 😎");
+          resolve(this);
         })
         .catch(reject);
     });
@@ -126,14 +118,26 @@ export default class boilerplate {
     if (this.ensureImagesLoad) {
       checkList.push(ensureAllImagesLoaded);
     }
-    // if (this.ensureNoOverflows) {
-    //   checkList.push(ensureNoOverflows)
-    // }
     Promise.all(checkList)
       .then(() => {
+        if (this.getOverflows()) {
+          console.log(this.overflows)
+          console.log(
+           `%c This will export with overflow errors`, 'background: #1F2A44; color: white'
+          );
+        }
         let loadTime = Date.now() - window.performance.timing.navigationStart;
         console.info(`Document has finished rendering in ${loadTime}ms`);
         document.dispatchEvent(new Event("printready"));
+
+        if (state === "document" || state === "template") {
+          // set timeout is used here to push this to the end of the heap which means it will load after everything else
+          setTimeout(() => {
+            if (!this.allowNoMetaData) {
+              defaultsRemoved();
+            }
+          }, 2000)
+        };
       })
       .catch((err) => {
         console.error(err);
@@ -153,15 +157,17 @@ export default class boilerplate {
     }
   }
 
-  getOverflowsList() {
+  getOverflows() {
     let overflows = document.querySelectorAll(".overflow, [data-overflow]");
     if (overflows) {
       this.overflows = overflows;
+      emit(this, "overflows", overflows);
     } else {
       this.overflows = false;
     }
     return this.overflows;
   }
+  
   dynamicReplace() {
     return dynamicReplace.apply(this, arguments);
   }

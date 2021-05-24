@@ -72,6 +72,22 @@ const setOutfitState = (trimMarks) => {
   return mode;
 };
 
+
+// display a message to block rendering for major issues
+const blockRender = (v) => {
+  document.querySelector("body").innerHTML = `
+    <style>.ujmju { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: ${highestZ()}; height: 100%; width: 100%;}  .rsdie { margin: 1rem; width: 80%!important; } .rsdie p { font-size: 0.4rem; } </style>
+    <div class="ujmju">
+      <div class="rsdie">
+        <h2>⚠️ Rendering error detected</h2>
+        <h4>⚠Please enable <code>{ allowLegacyRendering: true }</code>
+        in the boilerplate or update this template to version 1.1 or 2.1</h4>
+        <p>This template is using renderer ${v}</p>
+        <p>Please contact support if you see this message.</p>
+      </div>
+    </div>`;
+};
+
 // There is an error on render 2 where an extra pixel is added to the end of a template
 // this casues a new page to be made. This fuction removes that extra pixel
 const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
@@ -171,7 +187,7 @@ const fontsLoaded = (fontsListed) => {
   });
 };
 
-const setSize = (trimMarks, exportReduceFont, firefoxReduceFont) => {
+const setSize = (trimMarks, exportReduceFont) => {
   const vw = (trimMarks ? window.innerWidth : window.innerWidth + 57.62) / 100;
   const vh =
     (trimMarks ? window.innerHeight : window.innerHeight + 57.62) / 100;
@@ -181,22 +197,9 @@ const setSize = (trimMarks, exportReduceFont, firefoxReduceFont) => {
   // Saving the preliminary font size calculation
   const preliminaryCalc = vmin * 2 + vmax * 1.4 + vh * 2;
 
-  // Checking if the document is currently in export mode
-  const isExportMode = window.state === "exports";
-
-  // Checking if the active browser is Firefox
-  const isFirefox = navigator.userAgent.includes("Firefox");
-
-  const exportModeFontSize =
-    preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc;
-  const firefoxFontSize =
-    preliminaryCalc - (firefoxReduceFont / 100) * preliminaryCalc;
-
   // Reducing the preliminaryCalc value by reduceVal in export mode and in Firefox preview mode
-  const finalCalc = isExportMode
-    ? exportModeFontSize
-    : isFirefox
-    ? firefoxFontSize
+  const finalCalc = (window.state === "exports")
+    ? preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc
     : preliminaryCalc;
 
   document.documentElement.style.fontSize = `${finalCalc}px`;
@@ -236,13 +239,12 @@ const setBrowserType = () => {
   // Blink engine detection
   browser["isBlink"] = (browser.isChrome || browser.isOpera) && !!window.CSS;
 
-  document.body.classList +=
-    " " +
-    Object.keys(browser)
-      .filter((key) => {
-        return browser[key];
-      })
-      .join(" ");
+  Object.keys(browser)
+  .filter((key) => {
+    return browser[key];
+  }).forEach(el =>  document.body.classList.add(el))
+
+  window.browser = browser
   return browser;
 };
 
@@ -254,21 +256,6 @@ const highestZ = () => {
       .sort()
       .pop() + 1
   );
-};
-
-// display a message to block rendering for major issues
-const blockRender = (v) => {
-  document.querySelector("body").innerHTML = `
-    <style>.ujmju { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: ${highestZ()}; height: 100%; width: 100%;}  .rsdie { margin: 1rem; width: 80%!important; } .rsdie p { font-size: 0.4rem; } </style>
-    <div class="ujmju">
-      <div class="rsdie">
-        <h2>⚠️ Rendering error detected</h2>
-        <h4>⚠Please enable <code>{ allowLegacyRendering: true }</code>
-        in the boilerplate or update this template to version 1.1 or 2.1</h4>
-        <p>This template is using renderer ${v}</p>
-        <p>Please contact support if you see this message.</p>
-      </div>
-    </div>`;
 };
 
 // wait for the dom to laod or continue if it has already loaded
@@ -311,8 +298,8 @@ const loadLESS = (variables = {}) => {
   });
 };
 
-function emit(instance, type) {
-  instance.element.dispatchEvent(new CustomEvent(type));
+function emit(instance, type, data = {}) {
+  instance.element.dispatchEvent(new CustomEvent(type, {detail: data}));
 }
 
 export {

@@ -23,7 +23,6 @@ describe('import tests', () => {
     expect(template.ensureImagesLoad).toStrictEqual(true);
     expect(template.allowLegacyRendering).toStrictEqual(false);
     expect(template.exportReduceFont).toStrictEqual(0);
-    expect(template.firefoxReduceFont).toStrictEqual(0);
     // expect(template.variables).toStrictEqual({});
   });
   test('check values can be changed', () => {
@@ -32,14 +31,12 @@ describe('import tests', () => {
       ensureImagesLoad : false,
       allowLegacyRendering : true,
       exportReduceFont : 0.4,
-      firefoxReduceFont : 555,
       cssVariables: '--plum: red;'
     });
     expect(template.fonts).toStrictEqual(['Test']);
     expect(template.ensureImagesLoad).toStrictEqual(false);
     expect(template.allowLegacyRendering).toStrictEqual(true);
     expect(template.exportReduceFont).toStrictEqual(0.4);
-    expect(template.firefoxReduceFont).toStrictEqual(555);
     // expect(template.cssVariables).toStrictEqual('--plum: red;');
   });
   test('check start() error get thrown if no html is found', async () => {
