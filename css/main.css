@@ -198,3 +198,82 @@ a {
 .token-value {
   display: inherit;
 }
+
+/*
+Overflow styles from the platform that are only here as the platfrom isn't adding them
+https://outfithq.atlassian.net/browse/OP-4123
+*/
+.overflow, [data-overflow] {
+  position: relative !important;
+  color: red !important;
+  border: none;
+  box-shadow: 0 0 0 0.0362rem red;
+  background: red;
+  background: rgba(255,0,0,0.4);
+  z-index: 999;
+}
+.overflow *, [data-overflow] * {
+  color: red !important;
+}
+.overflow::before, [data-overflow]::before {
+  content: '+';
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  height: 1em;
+  width: 1em;
+  max-height: 100%;
+  color: red;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 1em;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overflow:hover:before, [data-overflow]:hover:before {
+  background-color: red;
+  color: white;
+}
+.overflow:hover:after, [data-overflow]:hover:after {
+  display: block;
+  content: 'More content has been added than space allows';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: black;
+  color: white;
+  border-radius: 0;
+  padding: 0.3em 1.5em 0.3em .5em;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-align: right;
+  line-height: 1em;
+  z-index: 2;
+}
+.overflow:after, [data-overflow]:after {
+  display: none;
+}
+.overflow .token-value.token-empty, [data-overflow] .token-value.token-empty {
+  display: none;
+}
+[data-overflow]:hover:after {
+  content: attr(data-overflow);
+}
+.overflow[data-max-line]:hover:after {
+  content: "There cannot be more than " attr(data-max-line) " lines of content here";
+}
+.overflow[data-max-line="1"]:hover:after {
+  content: "There can only be a single line of content here";
+}
+.overflow[data-char-limit]:hover:after {
+  content: "There can't be more than " attr(data-char-limit) " characters here";
+}
+.overflow[data-custom-overflow-message]:hover:after {
+  content: attr(data-custom-overflow-message);
+}
