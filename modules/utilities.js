@@ -8,7 +8,7 @@ const defaultsRemoved = () => {
         "%c Please include main.css in order to ensure that export is correct", 'background: #E41E46; color: white'
       );
     }
-    if (document.querySelector("style:not(data-href):not(.injectedStyle):not(#mceDefaultStyles)")) {
+    if (document.querySelector("style:not(data-href):not(.injectedStyle):not(#mceDefaultStyles):not([id^=less])")) {
       console.log(
         "%c It is best practice not use styles in the html document. Please move all the styles to an extenal styles.css or styles.less file for constancy", 'background: #E41E46; color: white'
       );

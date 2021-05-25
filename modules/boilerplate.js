@@ -76,9 +76,9 @@ export default class boilerplate {
               }
             }
           });
-          setInterval(() => {
-            this.getOverflows();
-          }, 1000)
+          // setInterval(() => {
+          //   this.getOverflows();
+          // }, 1000)
           
           if (state === "document") {
             imageCompression();
@@ -138,7 +138,6 @@ export default class boilerplate {
     Promise.all(checkList)
       .then(() => {
         if (this.getOverflows()) {
-          console.log(this.overflows)
           console.log(
            `%c This will export with overflow errors`, 'background: #1F2A44; color: white'
           );
