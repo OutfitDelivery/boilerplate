@@ -132,8 +132,8 @@
                     focused on tomorrow.</p>
                 </div>
                 <div class="cta-container remove-url" data-mto-branch-name-cb-update="">
-                  <div class="cta" data-max-line="1" data-calculated-lines-count="1">
-                    <p><strong data-calculated-height="19">Talk to a farm finance expert today.</strong>
+                  <div class="cta" ">
+                    <p><strong>Talk to a farm finance expert today.</strong>
                     <strong>Search Rural Bank.</strong></p>
                   </div>
                   <div class="locator-block">
@@ -145,10 +145,10 @@
                           fill-rule="nonzero"></path>
                       </svg>
                     </div>
-                    <div class="locator-branch" data-max-line="2" data-calculated-lines-count="1">
+                    <div class="locator-branch" data-max-line="2">
                       <div class="branchName">
                         <div class="branchName__inner">
-                          Community Bank • <span style="display: inline-block;" data-calculated-height="19">Agnes
+                          Community Bank • <span style="display: inline-block;">Agnes
                             Water-1770 4974 7080</span> • <span style="display: inline-block;">Tumut 6947 6777</span> •
                           <span style="display: inline-block;">Gundagai 6944 1136</span> • <span
                             style="display: inline-block;">Eltham 9439 0188</span>
@@ -184,8 +184,7 @@
     }).catch(console.trace);
 
     // This function will run whenever there is a change to any text input
-    window.onTextChange = (element) => {
-     
+    template.on('textValidation', () => {
       // let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });
       let count = template.countLines(document.querySelectorAll('.simple p'))
       console.table({ count })
@@ -198,7 +197,7 @@
       console.table({ count2 })
       
       console.table(template.countLines(document.querySelectorAll('.column')))
-      console.table('cta', template.countLines(document.querySelectorAll('.cta')))
+      // console.table('cta', template.countLines(document.querySelectorAll('.cta')))
 
       // console.log(textNodesUnder(document.querySelector('.column1')))
 
@@ -207,7 +206,7 @@
       // template.maxHeightCheck();
       // template.charLimit();
       // template.dynamicReplace();
-    }
+    })
   </script>
 </body>
 

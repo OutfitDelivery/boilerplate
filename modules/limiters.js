@@ -1,22 +1,26 @@
 import LineClamp from "./lineClamp.js"
 
-function inlineBlock(el) {
-  if (!['inline','inline-block'].includes(window.getComputedStyle(el).display) || el.classList.contains('textFitted')) {
-    console.log('yes',el)
-    
+function hasHeightValue(el) {
+  if (el.classList.contains('textFitted')) {
+    return el;
+  }
+  if (['inline','inline-block'].includes(window.getComputedStyle(el).display) || isNaN(getHeight(el))) {
+    return hasHeightValue(el.parentElement)
+  } else {
     return el
   }
-  // console.log('no',el)
-  inlineBlock(el.parentElement)
-  // return false
 }
 // find all text nodes under a given element
 function textNodesUnder(el) {
   var n = null, a=[], walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
   while(n = walk.nextNode()) {
     if (n.textContent.trim()) {
-      let e = inlineBlock(n.parentElement)
-      // console.log(e, !a.includes(e))
+      let { parentElement } = n
+      // if (parentElement.isSameNode(el)) {
+      //   return [el];
+      // }
+      let e = hasHeightValue(parentElement)
+      console.log(e)
       if (!a.includes(e) && e) {
         a.push(e);
       }
@@ -89,7 +93,7 @@ function countLines(elements) {
         //   el = el.parentElement
         // }
         
-        // if (inlineBlock(el)) {
+        // if (hasHeightValue(el)) {
           let metrics = calculateTextMetrics(el);
           let line = simpleRounding(metrics.lineCount)
           console.log(el, metrics)
@@ -287,6 +291,7 @@ function maxHeightCheck(element = null) {
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
+  return true;
 }
 
 function dynamicAssign(element = null) {
@@ -322,6 +327,7 @@ function dynamicAssign(element = null) {
   element.dataset.maxHeightDynamic = "true";
   element.dataset.maxHeight = dynamicHeight;
   container.style.overflow = "visible";
+  return dynamicHeight;
 }
 
 // Adding limit for the word length
@@ -355,6 +361,7 @@ function charLimit(element = null) {
       }
     }
   });
+  return true;
 }
 
 export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck }

@@ -45,7 +45,7 @@
       }).catch(console.trace);
 
       // This function will run whenever there is a change to any text input
-      template.addEventListener("textValidation", () => {
+      template.on("textValidation", () => {
         console.log('textValidation');
         // template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
         template.maxLineCheck();
