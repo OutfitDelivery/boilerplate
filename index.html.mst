@@ -16,15 +16,17 @@
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
-    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
-    <style type="text/less">
-      /* ADD_ONLY_ROOT_STYLES_HERE All styles should be put extenral files for consistency */
-      :root {
-        --black: #000;
-        --white: #fff;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/beta1/main.css">
     <link rel="stylesheet" type="text/less" href="css/style.less">
+    <script>
+      const inputs = {
+        "trim-marks": `{{{trim-marks}}}`
+      }
+      const cssVariables = `
+        --black: #000; 
+        --white: #fff
+      `
+    </script>
   </head>
   <body>
     <div class="page">
@@ -35,12 +37,12 @@
       </div>
     </div>
 
-   <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.0/boilerplate.js"></script>
+   <script src="https://outfit-assets-production.s3.amazonaws.com/template/beta1/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
         fonts: ['PUT_ALL_FONT_NAMES_HERE'],
-        // trimMarks: '{{trim-marks}}'
-      });
+        cssVariables
+      })
 
       // Please put all fonts needed for the tempate into the array bellow
       template.start().then(() => {
@@ -52,13 +54,17 @@
 
       // This function will run whenever there is a change to any text input, resize and on inital load
       template.on('textValidation', () => {
-        console.log('textValidation');
+        console.log('textValidation')
         // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
         // template.maxLineCheck();
         // template.maxHeightCheck();
         // template.charLimit();
         // template.dynamicReplace();
-      }
+      })
+
+      template.on('overflow', () => {
+        console.log(template.overflows)
+      })
     </script>
   </body>
 </html>

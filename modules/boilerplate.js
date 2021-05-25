@@ -177,7 +177,7 @@ export default class boilerplate {
     let overflows = document.querySelectorAll(".overflow, [data-overflow]");
     if (overflows.length > 0) {
       this.overflows = overflows
-      this.emit("overflows", overflows);
+      this.emit("overflow", overflows);
     } else {
       this.overflows = false;
     }
