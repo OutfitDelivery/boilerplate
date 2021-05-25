@@ -50,7 +50,7 @@ template.addEventListener("textValidation", () => {
 ### Vital Functions in [Boilerplate.js](modules/boilerplate.js)
 #### template.start()
 - runs all checks (e.g. if DOM content is loaded, if fonts are loaded) 
-- after all checks, emits a `textValidation` event, which `index.html.mst` listens fo (and this is where we run limiter functions like `maxHeightCheck` in `index.html.mst` - see code block above)
+- after all checks, emits a `textValidation` event, which `index.html.mst` listens for (and this is where we run limiter functions like `maxHeightCheck` in `index.html.mst` - see code block above)
 - runs image compression (after everything else) if state is "document"
 
 
