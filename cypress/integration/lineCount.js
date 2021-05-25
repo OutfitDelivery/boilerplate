@@ -10,6 +10,6 @@ describe('Counting lines', () => {
         cy.get('#example3').invoke('attr', 'data-calculated-lines-count').should('equal', '4')
         cy.get('#example4').invoke('attr', 'data-calculated-lines-count').should('equal', '9')
         cy.get('#example5 .column:first-of-type').invoke('attr', 'data-calculated-lines-count').should('equal', "7")
-        // cy.get('#example5 .column:last-of-type').invoke('attr', 'data-calculated-lines-count').should('equal', "7")
+        cy.get('#example5 .column:last-of-type').invoke('attr', 'data-calculated-lines-count').should('equal', "5")
     });
 })

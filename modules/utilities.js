@@ -158,6 +158,7 @@ const addCrop = (trimMarks, allowLegacyRendering) => {
       el.parentNode.style.height = "100%";
     });
   }
+  return pageHeight;
 };
 
 const fontsLoaded = (fontsListed) => {
@@ -203,6 +204,7 @@ const setSize = (trimMarks, exportReduceFont) => {
     : preliminaryCalc;
 
   document.documentElement.style.fontSize = `${finalCalc}px`;
+  return finalCalc;
 };
 
 const setBrowserType = () => {
@@ -298,13 +300,9 @@ const loadLESS = (variables = {}) => {
   });
 };
 
-function emit(instance, type, data = {}) {
-  instance.element.dispatchEvent(new CustomEvent(type, {detail: data}));
-}
 
 export {
   defaultsRemoved,
-  emit,
   loadLESS,
   winLoad,
   domReady,
@@ -313,5 +311,5 @@ export {
   setSize,
   fontsLoaded,
   addCrop,
-  setOutfitState,
+  setOutfitState
 };
