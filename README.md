@@ -97,8 +97,10 @@ template.addStyle('body { background: red; }')
 
 ## [Replace.js](modules/replace.js) (formatters)
 - Replaces something in the template with something else
-- The 1st element is the new content to be inserted
-- The 2nd element is the content to be replaced/removed
+- The first parameter is the element the replace function will run on
+- The second paramter is an array of changes
+    - The 1st element is the new content to be inserted
+    - The 2nd element is the content to be replaced/removed
 ```
 template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES]);
 template.dynamicReplace('.name', [
