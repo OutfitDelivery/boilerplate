@@ -50,12 +50,12 @@ template.addEventListener("textValidation", () => {
 ### Vital Functions in [Boilerplate.js](modules/boilerplate.js)
 #### template.start()
 - runs all checks (e.g. if DOM content is loaded, if fonts are loaded) 
-- after all checks, emits a "textValidation" event, which index.html.mst listens fo (and this is where we run limiter functions like maxHeightCheck in index.html.mst - see code block above)
+- after all checks, emits a `textValidation` event, which `index.html.mst` listens fo (and this is where we run limiter functions like `maxHeightCheck` in `index.html.mst` - see code block above)
 - runs image compression (after everything else) if state is "document"
 
 
 #### completeRender()
-- after document.readyState is "complete", dispatches "printready" event
+- after `document.readyState` is "complete", dispatches "printready" event
 
 
 ### Other Functions/Utilities in [Boilerplate.js](modules/boilerplate.js)
@@ -98,7 +98,7 @@ template.addStyle('body { background: red; }')
 ## [Replace.js](modules/replace.js) (formatters)
 - Replaces something in the template with something else
 - The first parameter is the element the replace function will run on
-- The second paramter is an array of changes
+- The second parameter is an array of changes
     - The 1st element is the new content to be inserted
     - The 2nd element is the content to be replaced/removed
 ```
@@ -108,7 +108,7 @@ template.dynamicReplace('.name', [
     ['henry','lastname']
 ])
 ```
-if no arguments are given the function will replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
+If no arguments are given the function will replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
 
 `<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
 ```
