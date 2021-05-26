@@ -4,7 +4,8 @@
           "@babel/preset-env",
           {
             "targets": {
-              "node": "current",
+              "chrome": "58",
+              "safari": "11.1"
             },
           },
         ],

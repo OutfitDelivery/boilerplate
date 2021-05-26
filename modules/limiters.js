@@ -83,7 +83,7 @@ function countLines(elements) {
       // let test = textNodes.forEach((s) => {
       //   console.log(s)
       // })
-      console.log(textNodes,'textNodes')
+      console.log(textNodes, 'textNodes that have height')
 
       textNodes.forEach(el => {
         // let inlineElement = 
@@ -345,6 +345,7 @@ function charLimit(element = null) {
       element = tokenValue.item(0);
     }
     var code = element.innerText;
+    element.dataset.calculatedCharCount = code.length;
     if (code.length > limit) {
       // Check Token Again
       if (tokenValue.length != 0) {
