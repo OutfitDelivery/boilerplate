@@ -19,7 +19,7 @@
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
     <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
-    <link rel="stylesheet" type="text/less" href="css/style.less">
+    <link rel="stylesheet" type="text/less" href="css/styles.less">
 
     <script id="inputInjection">
       const templateProps = {
