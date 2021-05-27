@@ -68,8 +68,8 @@ export default class boilerplate {
       Promise.all(checkList)
         .then(() => {
           this.emit("inputs-change", this.templateProps);
-          if (typeof window.onTextChange === "function") {
-            window.onTextChange();
+          if (typeof window.inputsChange === "function") {
+            window.inputsChange(this.templateProps);
           }
           window.addEventListener("resize", async (e) => {
             await setSize(
@@ -78,8 +78,8 @@ export default class boilerplate {
             );
             if (state !== "preview") {
               this.emit("inputs-change", this.templateProps);
-              if (typeof window.onTextChange === "function") {
-                window.onTextChange("resize", this.templateProps);
+              if (typeof window.inputsChange === "function") {
+                window.inputsChange(this.templateProps);
               }
             }
           });
