@@ -71,18 +71,18 @@ export default class boilerplate {
           if (typeof window.inputsChange === "function") {
             window.inputsChange(this.templateProps);
           }
-          window.addEventListener("resize", async (e) => {
-            await setSize(
-              this.trimMarks,
-              this.exportReduceFont
-            );
-            if (state !== "preview") {
+          if (state !== "preview") {
+            window.addEventListener("resize", (e) => {
+              setSize(
+                this.trimMarks,
+                this.exportReduceFont
+              );
               this.emit("inputs-change", this.templateProps);
               if (typeof window.inputsChange === "function") {
                 window.inputsChange(this.templateProps);
               }
-            }
-          });
+            });
+          }
           // setInterval(() => {
           //   this.getOverflows();
           // }, 1000)

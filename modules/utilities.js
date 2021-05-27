@@ -13,6 +13,11 @@ const defaultsRemoved = () => {
         "%c It is best practice not use styles in the html document. Please move all the styles to an extenal styles.css or styles.less file for constancy", 'background: #E41E46; color: white'
       );
     }
+    if (document.querySelector("script:not(#inputInjection):not([src])")) {
+      console.log(
+        "%c It looks like there is javascript that has been placed inline. Please move all javascript to a extenal js file for constancy", 'background: #E41E46; color: white'
+      );
+    }
     let title = document.title;
     if (title === "" || title === "PUT_TEMPLATE_NAME_HERE") {
       reject(

@@ -49,6 +49,7 @@
     "@tvanc/lineclamp": "^0.1.24",
     "eslint-config-airbnb-base": "^14.2.1",
     "less": "^4.1.1",
-    "prefixfree": "^1.0.0"
+    "prefixfree": "^1.0.0",
+    "zip-webpack-plugin": "^4.0.1"
   }
 }
