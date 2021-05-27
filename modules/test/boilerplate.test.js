@@ -1,4 +1,5 @@
 const boilerplate = require('../boilerplate').default;
+const utilities = require('../utilities');
 
 test('1 + 2 to equal 3', () => {
     expect(1 + 2).toBe(3);
@@ -22,8 +23,7 @@ describe('import tests', () => {
     expect(template.ensureImagesLoad).toStrictEqual(true);
     expect(template.allowLegacyRendering).toStrictEqual(false);
     expect(template.exportReduceFont).toStrictEqual(0);
-    expect(template.firefoxReduceFont).toStrictEqual(0);
-    expect(template.variables).toStrictEqual({});
+    // expect(template.variables).toStrictEqual({});
   });
   test('check values can be changed', () => {
     var template = new boilerplate({
@@ -31,17 +31,13 @@ describe('import tests', () => {
       ensureImagesLoad : false,
       allowLegacyRendering : true,
       exportReduceFont : 0.4,
-      firefoxReduceFont : 555,
-      variables: { var1: 'test' }
+      cssVariables: '--plum: red;'
     });
     expect(template.fonts).toStrictEqual(['Test']);
     expect(template.ensureImagesLoad).toStrictEqual(false);
     expect(template.allowLegacyRendering).toStrictEqual(true);
     expect(template.exportReduceFont).toStrictEqual(0.4);
-    expect(template.firefoxReduceFont).toStrictEqual(555);
-    expect(template.variables).toStrictEqual({
-      var1: 'test'
-    });
+    // expect(template.cssVariables).toStrictEqual('--plum: red;');
   });
   test('check start() error get thrown if no html is found', async () => {
     var template = new boilerplate({variables: { test: 'hey'}});
@@ -62,7 +58,7 @@ describe('defaultsRemoved', function () {
     let template = new boilerplate();
     document.head.innerHTML = `
       <title>PUT_TEMPLATE_NAME_HERE</title>`;
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please put the name of the template in the title of the document');
@@ -71,7 +67,7 @@ describe('defaultsRemoved', function () {
   test('check start() throws expected errors if title is missing 2', () => {
     let template = new boilerplate();
     document.head.innerHTML = `<title></title>`;
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please put the name of the template in the title of the document');
@@ -82,7 +78,7 @@ describe('defaultsRemoved', function () {
     document.head.innerHTML = `
       <title>Title</title>
       <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>`
-      return template.defaultsRemoved().then(() => {
+      return utilities.defaultsRemoved().then(() => {
         expect(true).toBe(false);
         }).catch(e => {
         expect(e).toBe('Please add your name in the document meta tags');
@@ -93,7 +89,7 @@ describe('defaultsRemoved', function () {
     document.head.innerHTML = `
     <title>Title</title>
     <meta name="template-built-by" content=""/>`
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add your name in the document meta tags');
@@ -105,7 +101,7 @@ describe('defaultsRemoved', function () {
     <title>Title</title>
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>`
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the scope card ID in the document meta tags');
@@ -117,7 +113,7 @@ describe('defaultsRemoved', function () {
     <title>Title</title>
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content=""/>`
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the scope card ID in the document meta tags');
@@ -130,7 +126,7 @@ describe('defaultsRemoved', function () {
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-123"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>`
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the build card ID in the document meta tags');
@@ -143,7 +139,7 @@ describe('defaultsRemoved', function () {
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-123"/>
     <meta name="build" content=""/>`
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please add the build card ID in the document meta tags');
@@ -161,7 +157,7 @@ describe('defaultsRemoved', function () {
     <meta name="template-built-by" content="Sam"/>
     <meta name="scope" content="DTB-123"/>
     <meta name="build" content="DTB-456"/>`
-    return template.defaultsRemoved().then(() => {
+    return utilities.defaultsRemoved().then(() => {
       expect(true).toBe(false);
     }).catch(e => {
       expect(e).toBe('Please remove the "Template Admin Build Instructions" comment from the top of the document');

@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html async>
 <head>
-  <!--  Template Admin Build Instructions 
-        1. Fill Out Title Meta-Data
-        2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
-        3. Fill Out Build Card Meta-Data
-        4. Remove this comment
-  -->
-    <title>PUT_TEMPLATE_NAME_HERE</title>
+    <title>name</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>
-    <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
-    <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
+    <meta name="template-built-by" content="testte"/>
+    <meta name="scope" content="DTB-123"/>
+    <meta name="build" content="DTB-456"/>
     <meta name="updates" content=""/>
+    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
     <style type="text/less">
       /* ADD_ONLY_ROOT_STYLES_HERE
       All styles should be put in css/styles.less file for consistency */
@@ -22,32 +17,24 @@
       }
       h1 {
         letter-spacing: 0.2rem;
-        color: green;
-      }
+      } 
     </style>
+    <link rel="stylesheet" type="text/less" href="css/styles.less"
   </head>
-  <body data-trim="{{trim-marks}}">
+  <body>
     <div class="page">
       <div class="bleed">
         <div class="container">
-          <h1>Hello world <span>:)</span></h1>
+          <h1 data-max-line='1'>you are </h1>
         </div>
       </div>
     </div>
 
-    <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
    <script src="/dist/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
-        fonts: ['PUT_ALL_FONT_NAMES_HERE'],
-        ensureImagesLoad: true,
-        allowLegacyRendering: true,
-        reduceExportFontSizeByPercent: 0,
-        reduceFirefoxFontSizeByPercent: 0,
-        variables: {
-          var1: 'red',
-          var2: 'black'
-        }
+        fonts: ['IBM Plex Sans'],
+        //sdsds 
       });
 
       // Please put all fonts needed for the tempate into the array bellow
@@ -58,14 +45,20 @@
       }).catch(console.trace);
 
       // This function will run whenever there is a change to any text input
-      window.onTextChange = (element) => {
-        console.log('onTextChange', element);
-        template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
+      template.on("textValidation", () => {
+        console.log('textValidation');
+        // template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
         template.maxLineCheck();
+        let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });
+        console.log('t', t)
+        let count = template.countLines(document.querySelectorAll('h1'))
+        console.table({count})
+        let calculateTextMetrics = template.calculateTextMetrics(document.querySelectorAll('h1'))
+        console.table(calculateTextMetrics)
         // template.maxHeightCheck();
         // template.charLimit();
         // template.dynamicReplace();
-      }
+      });
     </script>
   </body>
 </html>

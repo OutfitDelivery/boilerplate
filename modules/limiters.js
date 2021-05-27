@@ -1,4 +1,47 @@
-// some elemnets don't have height values set correctly so we need to drill down 
+import LineClamp from "./lineClamp.js"
+
+function hasHeightValue(el, target) {
+  if (el.isSameNode(target)) {
+    return el;
+  }
+  if (el.classList.contains('textFitted')) {
+    return el;
+  }
+  if (['inline','inline-block'].includes(window.getComputedStyle(el).display) || isNaN(getHeight(el))) {
+    return hasHeightValue(el.parentElement, target)
+  } else {
+    return el
+  }
+}
+// find all text nodes under a given element
+function textNodesUnder(el) {
+  var n = null, a=[], walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+  while(n = walk.nextNode()) {
+    if (n.textContent.trim()) {
+      let { parentElement } = n
+      // if (parentElement.isSameNode(el)) {
+      //   return [el];
+      // }
+      let e = hasHeightValue(parentElement, el)
+      // console.log(e)
+
+      // if (e) exits and ins't already returned then add it to the list of elements to line check
+      if (e && !a.includes(e))  {
+        // if (e) has got a child in (a) then we need to remove that child to prevent double up of counting
+        console.log('before', a)
+        a = a.filter(i => {
+          console.log(e.contains(i));
+          return !e.contains(i)
+        })
+        console.log('after', a);
+        a.push(e);
+      }
+    }
+  }
+  return a;
+}
+
+// some elements don't have height values set correctly so we need to drill down 
 function findTextNode(target) {
   // if (child && ['SPAN','TOKEN-VALUE','STRONG','P','EM',''].includes(child.tagName)) {
   if (target.firstElementChild && !['BR'].includes(target.firstElementChild.tagName)) {
@@ -6,25 +49,131 @@ function findTextNode(target) {
   }
   return target
 }
+// not so simple rounding for line counting purposes
+function simpleRounding(num) {
+  if (num > 10) {
+    return Math.round(num);
+    // return num.toFixed(0).replace(/(\.0+|0+)$/, '');
+  }
+  return Math.round(num)//.replace(/(\.0+|0+)$/, '');
+}
 // count the number of lines inside of the current direct element
-function countLines(target) {
-  target.classList.add('countingLines')
-  let testBox = document.createElement("div");
-  let counterTarget = findTextNode(target)
-  // console.log(targetFix)
-  // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
-  testBox.classList = "lineCounter";
-  // testBox.style.fontFamily = "-webkit-pictograph";
-  // testBox.style.display = "block";
-  // testBox.style.fontSize = targetFix.style.fontSize;
-  testBox.innerText = "​";
-  counterTarget.insertAdjacentElement('afterbegin', testBox) 
-  let oneLineHeight = getHeight(testBox);
-  testBox.remove();
-  let lines = getHeight(counterTarget) / oneLineHeight;
-  target.classList.remove('countingLines')
-  target.dataset.calculatedLinesCount = lines; // adds property for CSS targeting
-  return lines;
+function countLines(elements, advanced) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  let result = [...elements].map(target => {
+    if (true) {
+      let muiltCount = 0;
+      let textNodes = textNodesUnder(target);
+      // console.log(textNodes, 'textNodes that have height')
+      textNodes.forEach(el => {
+        let metrics = calculateTextMetrics(el);
+        let line = simpleRounding(metrics.lineCount)
+        // console.log(el, metrics)
+        if (line) {
+          el.dataset.rawLinesCount = line;
+          muiltCount += line;
+        }
+      })
+      muiltCount = simpleRounding(muiltCount)
+      target.dataset.calculatedLinesCount = muiltCount // adds property for CSS targeting
+      return muiltCount
+    } else {
+      if (false) {
+          target.classList.add('countingLines');
+          let testBox = document.createElement("div");
+          let counterTarget = findTextNode(target)
+          // console.log(counterTarget)
+          // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
+          testBox.classList = "lineCounter";
+          // testBox.style.fontFamily = "-webkit-pictograph";
+          // testBox.style.display = "block";
+          // testBox.style.fontSize = targetFix.style.fontSize;
+          testBox.innerText = "​";
+          counterTarget.insertAdjacentElement('afterbegin', testBox) 
+          let oneLineHeight = getHeight(testBox);
+          testBox.remove();
+          let lineCount = getHeight(target) / oneLineHeight;
+          target.classList.remove('countingLines');
+          if (lineCount) {
+            let lineCountRounded = simpleRounding(lineCount);
+            target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
+            return lineCountRounded;
+          }
+          return false;
+        } else {
+        let metrics = calculateTextMetrics(target);
+        let { lineCount } = metrics;
+        target.dataset.rawLinesCount = lineCount; // adds property for CSS targeting
+        if (lineCount) {
+          let lineCountRounded = simpleRounding(lineCount);
+          target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
+          return lineCountRounded;
+        }
+        return false;
+      }
+    }
+    // } else {
+ 
+      // let metrics = calculateTextMetrics(target);
+      // if (metrics.lineCount) {
+      //   let lineCountRounded = simpleRounding(metrics.lineCount)
+      //   target.dataset.calculatedLinesCount = lineCountRounded // adds property for CSS targeting
+      //   target.dataset.rawLinesCount = metrics.lineCount; // adds property for CSS targeting
+      //   return lineCountRounded
+      // }
+      // return null
+    // }
+  });
+  if (result.length == 1) {
+    return result[0];
+  }
+  return result;
+}
+
+let clampDefaults = { maxLines: 1, minFontSize: 18, useSoftClamp: true, ellipsis: '...' }
+function lineClamp(elements, config)  {
+  config = { ...clampDefaults, ...config }
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  return [...elements].map(element => {
+    const clamp = new LineClamp(element, config)
+    clamp.apply()
+    clamp.watch()
+   
+    return clamp;
+  });
+}
+
+// returns lineCount and line hieght info from this libaray https://github.com/tvanc/lineclamp
+function calculateTextMetrics(elements, config) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  let result = [...elements].map(element => {
+    return new LineClamp(element, config).calculateTextMetrics();
+  });
+  if (result.length == 1) {
+    return result[0];
+  }
+  return result;
 }
 
 // Calculate height without padding.
@@ -85,6 +234,30 @@ function maxLineCheck(element = null) {
   return true;
 }
 
+function minLineCheck(element = null) {
+  const isExportMode = window.location.href.indexOf("exports") > -1;
+  const isLocalDev = window.location.href.indexOf("localhost") > -1;
+  const preventExportOverflow =
+    document.body.dataset.preventExportOverflow === "true";
+  const isProjectKit = isLocalDev
+    ? undefined
+    : window.parent.document.querySelector(".preview-frame");
+
+  if ((isExportMode && preventExportOverflow) || isProjectKit) return;
+
+  const blocks = document.querySelectorAll("[data-min-line]");
+  blocks.forEach((block) => {
+    const lineCount = countLines(block);
+    // Getting the data-max-line attribute value (max number of lines allowed) 
+    const minLine = block.dataset.minLineAlt || block.dataset.maxLine;
+
+    lineCount <= minLine
+      ? block.classList.add("overflow")
+      : block.classList.remove("overflow");
+  });
+  return true;
+}
+
 /**
 *Detailed instruction can be found here:
  https://github.com/aleks-frontend/max-height-check
@@ -102,7 +275,7 @@ function maxHeightCheck(element = null) {
 
   const blocks = document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeightDynamic === "true") {
+    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightDynamic === "true") {
       dynamicAssign(block);
     }
     const blockHeight = getHeight(block);
@@ -131,6 +304,7 @@ function maxHeightCheck(element = null) {
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
+  return true;
 }
 
 function dynamicAssign(element = null) {
@@ -166,6 +340,7 @@ function dynamicAssign(element = null) {
   element.dataset.maxHeightDynamic = "true";
   element.dataset.maxHeight = dynamicHeight;
   container.style.overflow = "visible";
+  return dynamicHeight;
 }
 
 // Adding limit for the word length
@@ -183,6 +358,7 @@ function charLimit(element = null) {
       element = tokenValue.item(0);
     }
     var code = element.innerText;
+    element.dataset.calculatedCharCount = code.length;
     if (code.length > limit) {
       // Check Token Again
       if (tokenValue.length != 0) {
@@ -199,6 +375,7 @@ function charLimit(element = null) {
       }
     }
   });
+  return true;
 }
 
-export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines }
+export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck }

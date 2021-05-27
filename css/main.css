@@ -6,16 +6,13 @@ html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,ifr
 }
 
 html {
+  --trimOffset: 0;
   font-size: 16px;
   color: #000000;
   word-break: break-word;
-  line-height: 1; /* This fixes countLines rounding. You need a value for this but it can be anything */
-}
-
-body {
   background: #ffffff;
+  line-height: 1; 
 }
-
 
 @media screen {
   .crop .page:not(:last-child) {
@@ -50,13 +47,11 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
-
 .contain {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
 }
-
 .blend {
   background-blend-mode: overlay;
 }
@@ -69,7 +64,6 @@ sub {
   top: -0.4em;        
   line-height: 1em;
 }
-
 sub {
   top: 0.4em;
 }   
@@ -82,7 +76,6 @@ sub {
 
 /* Dynamic Inject container style */
 .js-dynamicInjectMaster { display: none; }
-
 .js-dynamicInjectMasterReposition {
   position: absolute;
   opacity: 0;
@@ -92,6 +85,9 @@ sub {
   z-index: -1;
 }
 
+/* Helper classes */
+.u-hide { display: none; }
+
 .backgroundImage {
   position: absolute;
   top: 0;
@@ -100,17 +96,12 @@ sub {
   right: 0;
   overflow: hidden;
 }
-
 .backgroundImage div {
   width: auto !important;
   height: auto !important;
   right: 0;
   bottom: 0;
 }
-
-/* Helper classes */
-.u-hide { display: none; }
-
 /* Helper class for fixing Reposition tool bug */
 .reposition-fix {
   position: absolute;
@@ -120,7 +111,6 @@ sub {
   bottom: 0;
   right: 0;        
 }
-
 .reposition-fix div {
   top: 0 !important;
   bottom: 0 !important;
@@ -150,24 +140,20 @@ sub {
   height: 28.81px;
   width: 28.81px;
 }
-
 .crop-marks .crop-mark.top-left {
   top: 0;
   left: 0;
 }
-
 .crop-marks .crop-mark.top-right { 
   top: 0;
   right: 0;
   transform: rotate(90deg);
 }
-
 .crop-marks .crop-mark.bottom-left {
   bottom: 0;
   left: 0;
   transform: rotate(270deg);
 }
-
 .crop-marks .crop-mark.bottom-right {
   bottom: 0;
   right: 0;
@@ -177,11 +163,9 @@ sub {
 [data-trim="true"] .bleed {
   --trimOffset: 4.41mm;
 }
-
-[data-trim="false"] .bleed {
+[data-trim="false"] .bleed, .bleed {
   --trimOffset: -3mm;
 }
-
 .bleed {
   position: absolute;
   top: var(--trimOffset);
@@ -213,4 +197,83 @@ a {
 /* rich text inputs can have tags which break line counting so we set all those tags to block for consistent heights */
 .token-value {
   display: inherit;
+}
+
+/*
+Overflow styles from the platform that are only here as the platfrom isn't adding them
+https://outfithq.atlassian.net/browse/OP-4123
+*/
+.overflow, [data-overflow] {
+  position: relative !important;
+  color: red !important;
+  border: none;
+  box-shadow: 0 0 0 0.0362rem red;
+  background: red;
+  background: rgba(255,0,0,0.4);
+  z-index: 999;
+}
+.overflow *, [data-overflow] * {
+  color: red !important;
+}
+.overflow::before, [data-overflow]::before {
+  content: '+';
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  height: 1em;
+  width: 1em;
+  max-height: 100%;
+  color: red;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 1em;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overflow:hover:before, [data-overflow]:hover:before {
+  background-color: red;
+  color: white;
+}
+.overflow:hover:after, [data-overflow]:hover:after {
+  display: block;
+  content: 'More content has been added than space allows';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: black;
+  color: white;
+  border-radius: 0;
+  padding: 0.3em 1.5em 0.3em .5em;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-align: right;
+  line-height: 1em;
+  z-index: 2;
+}
+.overflow:after, [data-overflow]:after {
+  display: none;
+}
+.overflow .token-value.token-empty, [data-overflow] .token-value.token-empty {
+  display: none;
+}
+[data-overflow]:hover:after {
+  content: attr(data-overflow);
+}
+.overflow[data-max-line]:hover:after {
+  content: "There cannot be more than " attr(data-max-line) " lines of content here";
+}
+.overflow[data-max-line="1"]:hover:after {
+  content: "There can only be a single line of content here";
+}
+.overflow[data-char-limit]:hover:after {
+  content: "There can't be more than " attr(data-char-limit) " characters here";
+}
+.overflow[data-custom-overflow-message]:hover:after {
+  content: attr(data-custom-overflow-message);
 }

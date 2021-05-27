@@ -1,11 +1,5 @@
 
 beforeEach(function () {
-    // before each test, we can automatically preserve the
-    // 'session_id' and 'remember_token' cookies. this means they
-    // will not be cleared before the NEXT test starts.
-    //
-    // the name of your cookies will likely be different
-    // this is just a simple example
     Cypress.Cookies.preserveOnce('_outfit_session_staging', '_outfit_session_production')
   })
 
@@ -33,6 +27,11 @@ describe('Login', () => {
         //     fileName: 'testPicture.png',
         //     mimeType: 'image/png'
         // });
+    })
+    it('Load existing templates', async () => {
+        cy.visit("https://bootstrap-old.staging.outfit.io/previews/2ee81110-be94-11eb-8564-97465a3f844e/configurations/63712/p/");
+        cy.get('.container').should('have.css', 'background-color', 'rgb(228, 30, 70)')
+
     })
 })
 

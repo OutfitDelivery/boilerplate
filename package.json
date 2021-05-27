@@ -7,11 +7,10 @@
     "build": "webpack --config webpack.config.js --progress --color",
     "watch": "webpack --watch --progress --config webpack.config.dev.js",
     "test": "jest",
-    "cypress:run": "cypress run --headed --no-exit",
-    "cypress:ci": "cypress run",
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "checkbuild": "node ./pre-commit-build.js",
+    "cypress:ci": "cypress run",
     "cypress:open": "cypress open"
   },
   "repository": {
@@ -47,6 +46,7 @@
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
+    "@tvanc/lineclamp": "^0.1.24",
     "eslint-config-airbnb-base": "^14.2.1",
     "less": "^4.1.1",
     "prefixfree": "^1.0.0"
