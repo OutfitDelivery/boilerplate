@@ -1,11 +1,14 @@
 import LineClamp from "./lineClamp.js"
 
-function hasHeightValue(el) {
+function hasHeightValue(el, target) {
+  if (el.isSameNode(target)) {
+    return el;
+  }
   if (el.classList.contains('textFitted')) {
     return el;
   }
   if (['inline','inline-block'].includes(window.getComputedStyle(el).display) || isNaN(getHeight(el))) {
-    return hasHeightValue(el.parentElement)
+    return hasHeightValue(el.parentElement, target)
   } else {
     return el
   }
@@ -19,9 +22,18 @@ function textNodesUnder(el) {
       // if (parentElement.isSameNode(el)) {
       //   return [el];
       // }
-      let e = hasHeightValue(parentElement)
-      console.log(e)
-      if (!a.includes(e) && e) {
+      let e = hasHeightValue(parentElement, el)
+      // console.log(e)
+
+      // if (e) exits and ins't already returned then add it to the list of elements to line check
+      if (e && !a.includes(e))  {
+        // if (e) has got a child in (a) then we need to remove that child to prevent double up of counting
+        console.log('before', a)
+        a = a.filter(i => {
+          console.log(e.contains(i));
+          return !e.contains(i)
+        })
+        console.log('after', a);
         a.push(e);
       }
     }
@@ -29,7 +41,7 @@ function textNodesUnder(el) {
   return a;
 }
 
-// some elemnets don't have height values set correctly so we need to drill down 
+// some elements don't have height values set correctly so we need to drill down 
 function findTextNode(target) {
   // if (child && ['SPAN','TOKEN-VALUE','STRONG','P','EM',''].includes(child.tagName)) {
   if (target.firstElementChild && !['BR'].includes(target.firstElementChild.tagName)) {
@@ -46,7 +58,7 @@ function simpleRounding(num) {
   return Math.round(num)//.replace(/(\.0+|0+)$/, '');
 }
 // count the number of lines inside of the current direct element
-function countLines(elements) {
+function countLines(elements, advanced) {
   var elType = Object.prototype.toString.call(elements);
   if (
     elType !== "[object Array]" &&
@@ -56,58 +68,59 @@ function countLines(elements) {
     elements = [elements];
   }
   let result = [...elements].map(target => {
-    // if (1 == 2) {
-    //   target.classList.add('countingLines');
-    //   let testBox = document.createElement("div");
-    //   let counterTarget = findTextNode(target)
-    //   console.log(counterTarget)
-    //   // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
-    //   testBox.classList = "lineCounter";
-    //   // testBox.style.fontFamily = "-webkit-pictograph";
-    //   // testBox.style.display = "block";
-    //   // testBox.style.fontSize = targetFix.style.fontSize;
-    //   testBox.innerText = "​";
-    //   counterTarget.insertAdjacentElement('afterbegin', testBox) 
-    //   let oneLineHeight = getHeight(testBox);
-    //   testBox.remove();
-    //   let lineCount = getHeight(target) / oneLineHeight;
-    //   target.classList.remove('countingLines')
-    //   let lineCountRounded = simpleRounding(lineCount)
-    //   target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
-    //   target.dataset.rawLinesCount = lineCount; // adds property for CSS targeting
-    //   return lineCountRounded;
-    // } else {
+    if (true) {
       let muiltCount = 0;
       let textNodes = textNodesUnder(target);
-
-      // let test = textNodes.forEach((s) => {
-      //   console.log(s)
-      // })
-      console.log(textNodes, 'textNodes that have height')
-
+      // console.log(textNodes, 'textNodes that have height')
       textNodes.forEach(el => {
-        // let inlineElement = 
-        // if (el.nodeName ==)
-        // let displayType = window.getComputedStyle(el).display;
-        // if (displayType == "inline" || displayType == "inline-block") {
-        //   el = el.parentElement
-        // }
-        
-        // if (hasHeightValue(el)) {
-          let metrics = calculateTextMetrics(el);
-          let line = simpleRounding(metrics.lineCount)
-          console.log(el, metrics)
-          if (line) {
-            el.dataset.rawLinesCount = line;
-            muiltCount += line;
-          }
-        // }
-
+        let metrics = calculateTextMetrics(el);
+        let line = simpleRounding(metrics.lineCount)
+        // console.log(el, metrics)
+        if (line) {
+          el.dataset.rawLinesCount = line;
+          muiltCount += line;
+        }
       })
-      // console.log(target.innerText.substring(0, 10), muiltCount)
-      let lineCountRounded = simpleRounding(muiltCount)
-      target.dataset.calculatedLinesCount = lineCountRounded // adds property for CSS targeting
-      return lineCountRounded
+      muiltCount = simpleRounding(muiltCount)
+      target.dataset.calculatedLinesCount = muiltCount // adds property for CSS targeting
+      return muiltCount
+    } else {
+      if (false) {
+          target.classList.add('countingLines');
+          let testBox = document.createElement("div");
+          let counterTarget = findTextNode(target)
+          // console.log(counterTarget)
+          // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
+          testBox.classList = "lineCounter";
+          // testBox.style.fontFamily = "-webkit-pictograph";
+          // testBox.style.display = "block";
+          // testBox.style.fontSize = targetFix.style.fontSize;
+          testBox.innerText = "​";
+          counterTarget.insertAdjacentElement('afterbegin', testBox) 
+          let oneLineHeight = getHeight(testBox);
+          testBox.remove();
+          let lineCount = getHeight(target) / oneLineHeight;
+          target.classList.remove('countingLines');
+          if (lineCount) {
+            let lineCountRounded = simpleRounding(lineCount);
+            target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
+            return lineCountRounded;
+          }
+          return false;
+        } else {
+        let metrics = calculateTextMetrics(target);
+        let { lineCount } = metrics;
+        target.dataset.rawLinesCount = lineCount; // adds property for CSS targeting
+        if (lineCount) {
+          let lineCountRounded = simpleRounding(lineCount);
+          target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
+          return lineCountRounded;
+        }
+        return false;
+      }
+    }
+    // } else {
+ 
       // let metrics = calculateTextMetrics(target);
       // if (metrics.lineCount) {
       //   let lineCountRounded = simpleRounding(metrics.lineCount)

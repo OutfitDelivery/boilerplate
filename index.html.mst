@@ -5,10 +5,11 @@
         1. Fill Out Title Meta-Data
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data
-        4. Include fonts in the boilerplate config
-        5. Add your inputs to the script tag bellow
-        6. Have a lovely day 👉👈
-        7. Remove this comment
+        4. Ensure you are using external css and js files 
+        5. Include fonts in the boilerplate config
+        6. Add your inputs to the script tag bellow
+        7. Have a lovely day 👉👈
+        8. Remove this comment
   -->
     <title>PUT_TEMPLATE_NAME_HERE</title>
     <meta charset="utf-8" />

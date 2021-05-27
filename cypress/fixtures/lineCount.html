@@ -31,6 +31,7 @@
     .test-row {
       background-color: white;
     }
+
     h2 {
       font-size: 2rem;
     }
@@ -114,7 +115,8 @@
             </style>
             <div class="row">
               <div class="column column1 ">
-                <div class="paragraph first" style="display: block;"><p>When it comes to change, farmers are quick to adapt. But changing conditions, environments, and
+                <div class="paragraph first" style="display: block;">
+                  <p>When it comes to change, farmers are quick to adapt. But changing conditions, environments, and
                     technology can challenge even the most experienced food and fibre producers.</p>
                 </div>
                 <div class="paragraph second" style="display: block;">
@@ -136,7 +138,7 @@
                     <p><strong>Talk to a farm finance expert today.</strong>
                     <strong>Search Rural Bank.</strong></p>
                   </div>
-                  <div class="locator-block">
+                  <div class=" locator-block">
                     <div class="locator">
                       <svg viewBox="0 0 19 29" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
                         clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
@@ -163,11 +165,14 @@
             </div>
           </div>
         </div>
-        <!-- <div class="test-row rich">
+        <div class="test-row rich">
           <div id="example6">
-
+            <div class="cta" data-max-line="1">
+              <p><strong>Talk to a farm finance expert today.</strong></p>
+              <strong>Search Rural Bank.</strong>
+            </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -176,7 +181,8 @@
   <script src="/dist/boilerplate.js"></script>
   <script>
     let template = new boilerplate({
-      fonts: ['IBM Plex Sans']
+      fonts: ['IBM Plex Sans'],
+      inputProps: {}
     });
     // Please put all fonts needed for the tempate into the array bellow
     template.start().then(() => {
@@ -184,19 +190,21 @@
     }).catch(console.trace);
 
     // This function will run whenever there is a change to any text input
-    template.on('textValidation', () => {
+    template.on('inputsChange', () => {
       // let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });
       let count = template.countLines(document.querySelectorAll('.simple p'))
       console.table({ count })
-      
-      template.textFit(document.querySelector('#example4 h2'), {minFontSize: 1.5, maxFontSize: 1000, widthOnly: true , maxLine: 3 })
+
+      template.textFit(document.querySelector('#example4 h2'), { minFontSize: 1.5, maxFontSize: 1000, widthOnly: true, maxLine: 3 })
       // template.countLines(document.querySelector('#example4 h2'))
 
       let count2 = template.countLines(document.querySelector('#example4'))
 
       console.table({ count2 })
-      
+
       console.table(template.countLines(document.querySelectorAll('.column')))
+      
+      console.table(template.countLines(document.querySelectorAll('#example6 .cta')))
       // console.table('cta', template.countLines(document.querySelectorAll('.cta')))
 
       // console.log(textNodesUnder(document.querySelector('.column1')))

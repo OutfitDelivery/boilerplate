@@ -28,7 +28,7 @@ export default class boilerplate {
     allowNoMetaData = false,
     cssVariables = "",
     runAddCrop = true,
-    templateProps = {},
+    templateProps = '{}',
   } = {}) {
     this.fonts = fonts || "";
     this.waitForImages = waitForImages;
@@ -46,13 +46,13 @@ export default class boilerplate {
     }
     setSize(trimMarks, exportReduceFont);
     this._events = {};
+    console.clear();
     try {
       this.templateProps = JSON.parse(templateProps);
     } catch (e) {
       this.templateProps = {};
-      console.log(`Inputs is not a valid JSON object`);
+      console.log(`templateProps is not a valid JSON object`);
     }
-    console.clear();
   }
   start() {
     return new Promise((resolve, reject) => {
