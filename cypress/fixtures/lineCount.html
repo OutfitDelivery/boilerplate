@@ -190,7 +190,7 @@
     }).catch(console.trace);
 
     // This function will run whenever there is a change to any text input
-    template.on('inputsChange', () => {
+    template.on('inputs-change', () => {
       // let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });
       let count = template.countLines(document.querySelectorAll('.simple p'))
       console.table({ count })

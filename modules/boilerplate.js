@@ -48,7 +48,7 @@ export default class boilerplate {
     this._events = {};
     console.clear();
     try {
-      this.templateProps = JSON.parse(templateProps);
+      this.templateProps = JSON.parse(JSON.stringify(templateProps));
     } catch (e) {
       this.templateProps = {};
       console.log(`templateProps is not a valid JSON object`);
@@ -67,7 +67,7 @@ export default class boilerplate {
       }
       Promise.all(checkList)
         .then(() => {
-          this.emit("inputsChange", this.templateProps);
+          this.emit("inputs-change", this.templateProps);
           if (typeof window.onTextChange === "function") {
             window.onTextChange();
           }
@@ -77,7 +77,7 @@ export default class boilerplate {
               this.exportReduceFont
             );
             if (state !== "preview") {
-              this.emit("inputsChange");
+              this.emit("inputs-change", this.templateProps);
               if (typeof window.onTextChange === "function") {
                 window.onTextChange("resize", this.templateProps);
               }
