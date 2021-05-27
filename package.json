@@ -10,7 +10,7 @@
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "checkbuild": "node ./pre-commit-build.js",
-    "cypress:ci": "cypress run --config video=false",
+    "cypress:ci": "cypress run",
     "cypress:open": "cypress open"
   },
   "repository": {
