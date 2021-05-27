@@ -28,6 +28,7 @@ export default class boilerplate {
     allowNoMetaData = false,
     cssVariables = "",
     runAddCrop = true,
+    templateProps = {},
   } = {}) {
     this.fonts = fonts || "";
     this.waitForImages = waitForImages;
@@ -45,6 +46,12 @@ export default class boilerplate {
     }
     setSize(trimMarks, exportReduceFont);
     this._events = {};
+    try {
+      this.templateProps = JSON.parse(templateProps);
+    } catch (e) {
+      this.templateProps = {};
+      console.log(`Inputs is not a valid JSON object`);
+    }
     console.clear();
   }
   start() {
@@ -60,7 +67,7 @@ export default class boilerplate {
       }
       Promise.all(checkList)
         .then(() => {
-          this.emit("textValidation");
+          this.emit("inputsChange", this.templateProps);
           if (typeof window.onTextChange === "function") {
             window.onTextChange();
           }
@@ -70,9 +77,9 @@ export default class boilerplate {
               this.exportReduceFont
             );
             if (state !== "preview") {
-              this.emit("textValidation");
+              this.emit("inputsChange");
               if (typeof window.onTextChange === "function") {
-                window.onTextChange("resize");
+                window.onTextChange("resize", this.templateProps);
               }
             }
           });

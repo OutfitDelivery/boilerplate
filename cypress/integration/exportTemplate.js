@@ -28,5 +28,10 @@ describe('Login', () => {
         //     mimeType: 'image/png'
         // });
     })
+    it('Load existing templates', async () => {
+        cy.visit("https://bootstrap-old.staging.outfit.io/previews/2ee81110-be94-11eb-8564-97465a3f844e/configurations/63712/p/");
+        cy.get('.container').should('have.css', 'background-color', 'rgb(228, 30, 70)')
+
+    })
 })
 

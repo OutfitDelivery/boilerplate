@@ -6,8 +6,9 @@
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data
         4. Include fonts in the boilerplate config
-        5. Have a lovely day 👉👈
-        6. Remove this comment
+        5. Add your inputs to the script tag bellow
+        6. Have a lovely day 👉👈
+        7. Remove this comment
   -->
     <title>PUT_TEMPLATE_NAME_HERE</title>
     <meta charset="utf-8" />
@@ -16,15 +17,22 @@
     <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
     <meta name="updates" content=""/>
-    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/beta1/main.css">
+    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
     <link rel="stylesheet" type="text/less" href="css/style.less">
-    <script>
-      const inputs = {
+
+    <script id="inputInjection">
+      const templateProps = {
         "trim-marks": `{{{trim-marks}}}`
       }
       const cssVariables = `
-        --black: #000; 
-        --white: #fff
+        --red: #E41E46;
+        --navy: #1F2A44;
+        --black: #111820; 
+        --orange: #FF8674;
+        --gray: #D1D3D4;
+        --slate: #BEC6C4;
+        --brown: #453536;
+        --teal: #94B7BB;
       `
     </script>
   </head>
@@ -37,11 +45,12 @@
       </div>
     </div>
 
-   <script src="https://outfit-assets-production.s3.amazonaws.com/template/beta1/boilerplate.js"></script>
+   <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.0/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
         fonts: ['PUT_ALL_FONT_NAMES_HERE'],
-        cssVariables
+        cssVariables,
+        templateProps
       })
 
       // Please put all fonts needed for the tempate into the array bellow
@@ -53,8 +62,8 @@
       }).catch(console.trace)
 
       // This function will run whenever there is a change to any text input, resize and on inital load
-      template.on('textValidation', () => {
-        console.log('textValidation')
+      template.on('inputsChange', (inputs) => {
+        console.table(inputs)
         // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
         // template.maxLineCheck();
         // template.maxHeightCheck();
@@ -62,9 +71,9 @@
         // template.dynamicReplace();
       })
 
-      template.on('overflow', () => {
-        console.log(template.overflows)
-      })
+      // template.on('overflow', () => {
+      //   console.log(template.overflows)
+      // })
     </script>
   </body>
 </html>
