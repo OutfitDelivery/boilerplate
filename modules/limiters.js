@@ -28,12 +28,9 @@ function textNodesUnder(el) {
       // if (e) exits and ins't already returned then add it to the list of elements to line check
       if (e && !a.includes(e))  {
         // if (e) has got a child in (a) then we need to remove that child to prevent double up of counting
-        console.log('before', a)
         a = a.filter(i => {
-          console.log(e.contains(i));
           return !e.contains(i)
         })
-        console.log('after', a);
         a.push(e);
       }
     }
