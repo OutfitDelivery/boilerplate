@@ -126,7 +126,7 @@ const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
 };
 
 // Fix for the resizable background images - fullscreen and digital vairaitons only
-const addCrop = (trimMarks, allowLegacyRendering) => {
+const addCropMarks = (trimMarks, allowLegacyRendering) => {
   // crop and bleed
   var cropSVG = `<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>`;
 
@@ -315,6 +315,6 @@ export {
   setBrowserType,
   setSize,
   fontsLoaded,
-  addCrop,
+  addCropMarks,
   setOutfitState
 };

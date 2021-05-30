@@ -21,7 +21,6 @@ describe('import tests', () => {
     var template = new boilerplate({});
     expect(template.fonts).toStrictEqual([]);
     expect(template.ensureImagesLoad).toStrictEqual(true);
-    expect(template.allowLegacyRendering).toStrictEqual(false);
     expect(template.exportReduceFont).toStrictEqual(0);
     // expect(template.variables).toStrictEqual({});
   });
@@ -29,15 +28,15 @@ describe('import tests', () => {
     var template = new boilerplate({
       fonts : ['Test'],
       ensureImagesLoad : false,
+      addCrop : false,
       allowLegacyRendering : true,
       exportReduceFont : 0.4,
-      cssVariables: '--plum: red;'
+      cssVariables: '--plum: red;', 
+      random: 'this will not be saved as it\'s not something I know what to do with'
     });
     expect(template.fonts).toStrictEqual(['Test']);
     expect(template.ensureImagesLoad).toStrictEqual(false);
-    expect(template.allowLegacyRendering).toStrictEqual(true);
     expect(template.exportReduceFont).toStrictEqual(0.4);
-    // expect(template.cssVariables).toStrictEqual('--plum: red;');
   });
   test('check start() error get thrown if no html is found', async () => {
     var template = new boilerplate({variables: { test: 'hey'}});

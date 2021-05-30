@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --progress --color",
+    "postbuild": "node zip.js",
     "watch": "webpack --watch --progress --config webpack.config.dev.js",
     "test": "jest",
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
@@ -48,8 +49,6 @@
   "dependencies": {
     "@tvanc/lineclamp": "^0.1.24",
     "eslint-config-airbnb-base": "^14.2.1",
-    "less": "^4.1.1",
-    "prefixfree": "^1.0.0",
-    "zip-webpack-plugin": "^4.0.1"
+    "less": "^4.1.1"
   }
 }

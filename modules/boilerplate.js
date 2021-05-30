@@ -3,7 +3,7 @@ import { dynamicReplace } from "./replace.js";
 import setupPlaceholder from "./placeholder.js";
 import textFit from "./textFit.js";
 import { setupMTO } from "./mto.js";
-import { defaultsRemoved, emit, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCrop, setOutfitState } from "./utilities.js";
+import { defaultsRemoved, emit, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState } from "./utilities.js";
 import {
   charLimit,
   dynamicAssign,
@@ -18,39 +18,42 @@ import {
 } from "./limiters";
 
 export default class boilerplate {
-  constructor({
-    fonts = [],
-    ensureImagesLoad = true,
-    allowLegacyRendering = false,
-    exportReduceFont = 0,
-    waitForImages = false,
-    trimMarks = false,
-    allowNoMetaData = false,
-    cssVariables = "",
-    runAddCrop = true,
-    templateProps = '{}',
-  } = {}) {
-    this.fonts = fonts || "";
-    this.waitForImages = waitForImages;
-    this.ensureImagesLoad = ensureImagesLoad;
-    this.allowLegacyRendering = allowLegacyRendering;
-    this.exportReduceFont = exportReduceFont;
-    this.trimMarks = trimMarks;
-    this.allowNoMetaData = allowNoMetaData;
-    this.overflows = false;
-    this.state = setOutfitState(trimMarks);
-    this.browser = setBrowserType();
-    this.addStyle(`:root{${cssVariables}}`);
-    if (runAddCrop) {
-      addCrop(trimMarks, allowLegacyRendering);
+  constructor(config = {}) {
+    this.fonts = config.fonts || [];
+    this.waitForImages = config.waitForImages || false;
+    this.ensureImagesLoad = false;
+    if (!(typeof config.ensureImagesLoad === 'boolean' && config.ensureImagesLoad === false)) {
+      this.ensureImagesLoad = true;
     }
-    setSize(trimMarks, exportReduceFont);
+    this.exportReduceFont = config.exportReduceFont || 0; 
+    this.trimMarks = config.trimMarks || false;
+    this.allowNoMetaData = config.allowNoMetaData || false;
+    this.overflows = false;
+    this.state = setOutfitState(config.trimMarks || false);
+    this.browser = setBrowserType();
     this._events = {};
+    if (config.cssVariables) {
+      this.addStyle(`:root{${config.cssVariables}}`);
+    }
+    if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
+      addCropMarks(config.trimMarks || false, config.allowLegacyRendering || false);
+    }
+    setSize(config.trimMarks || false,  config.exportReduceFont || 0);
+    if (config.hotReloadOnChange) {
+      this.hotReloadOnChange();
+    }
+    if (config.showPlaceholder) {
+      setupPlaceholder(config.showPlaceholder, config.setupPlaceholder);
+    }
     console.clear();
     try {
-      this.templateProps = JSON.parse(JSON.stringify(templateProps));
+      if (config.templateProps) {
+        this.templateProps = JSON.parse(JSON.stringify(config.templateProps));
+      } else {
+        this.templateProps = JSON.parse("{}");
+      }
     } catch (e) {
-      this.templateProps = {};
+      this.templateProps = JSON.parse("{}");
       console.log(`templateProps is not a valid JSON object`);
     }
   }
@@ -83,6 +86,16 @@ export default class boilerplate {
               }
             });
           }
+          
+          // OutfitIframeShared.eventEmitter.addListener(
+          //   'token-value:change',
+          //   (e) => {
+          //     console.log(e)
+          //     // this.templateProps = JSON.parse(JSON.stringify(e.details));
+          //     // this.emit("inputs-change", this.templateProps);
+          //   }
+          // );
+
           // setInterval(() => {
           //   this.getOverflows();
           // }, 1000)
@@ -137,8 +150,8 @@ export default class boilerplate {
     document.getElementsByTagName("head")[0].appendChild(css);
   }
   // send a event to stop a render
-  completeRender() {
-    let checkList = [winLoad];
+  completeRender(checkList = []) {
+    checkList.push(winLoad);
     if (this.ensureImagesLoad) {
       checkList.push(ensureAllImagesLoaded);
     }
@@ -192,9 +205,7 @@ export default class boilerplate {
   dynamicReplace() {
     return dynamicReplace.apply(this, arguments);
   }
-  setupPlaceholder() {
-    return setupPlaceholder.apply(this, arguments);
-  }
+ 
   textFit() {
     textFit.apply(this, arguments);
     this.getOverflows();
