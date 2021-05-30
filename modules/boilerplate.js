@@ -17,9 +17,10 @@ import {
   calculateTextMetrics,
 } from "./limiters";
 
-
 export default class boilerplate {
   constructor(config = {}) {
+    console.clear();
+
     this.state = setOutfitState(config.trimMarks || false);
     if (config.hotReloadOnChange) {
       hotReloadOnChange();
@@ -49,7 +50,6 @@ export default class boilerplate {
     if (config.showPlaceholder) {
       setupPlaceholder(config.showPlaceholder, config.setupPlaceholder);
     }
-    console.clear();
     try {
       if (config.templateProps) {
         this.templateProps = JSON.parse(JSON.stringify(config.templateProps));
@@ -63,10 +63,11 @@ export default class boilerplate {
 
     // all these checks need to be done before the tempalte code can be run
     let checkList = [
-      domReady,
+      domReady, 
       loadLESS(),
       fontsLoaded(this.fonts),
     ];
+    console.log(domReady)
     if (config.waitForImages) {
       checkList.push(ensureAllImagesLoaded());
     }
@@ -109,7 +110,10 @@ export default class boilerplate {
     })
   }
   start() {
-    console.log('there is no need to call start. just create a template.on("inputs-change", (e) => {}) event')
+    return new Promise((resolve, reject) => {
+      console.log('there is no need to call start. just create a template.on("inputs-change", (e) => {}) event')
+      resolve()
+    })
   }
   // on creates a callback event
   on(name, listener) {
@@ -140,7 +144,6 @@ export default class boilerplate {
       this._events[name].forEach(fireCallbacks);
     }
   }
-
 
   // textValidation(callback)
   addStyle(styles = "") {

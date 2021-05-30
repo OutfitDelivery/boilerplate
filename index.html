@@ -37,13 +37,6 @@
         //sdsds 
       });
 
-      // Please put all fonts needed for the tempate into the array bellow
-      template.start().then(() => {
-        // template.setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-
-        template.completeRender();
-      }).catch(console.trace);
-
       // This function will run whenever there is a change to any text input
       template.on("inputs-change", () => {
         console.log('inputs-change');
@@ -58,6 +51,7 @@
         // template.maxHeightCheck();
         // template.charLimit();
         // template.dynamicReplace();
+        template.completeRender();
       });
     </script>
   </body>

@@ -295,6 +295,7 @@ const domReady = new Promise((resolve, reject) => {
     window.addEventListener("error", reject);
   }
 });
+
 // wait for the window to laod or continue if it has already loaded
 const winLoad = new Promise((resolve, reject) => {
   if (document.readyState === "complete") {
