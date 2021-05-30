@@ -1,9 +1,9 @@
 import { imageCompression, ensureAllImagesLoaded } from "./pageSetup.js";
+import { defaultsRemoved, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState, hotReloadOnChange } from "./utilities.js";
 import { dynamicReplace } from "./replace.js";
 import setupPlaceholder from "./placeholder.js";
 import textFit from "./textFit.js";
 import { setupMTO } from "./mto.js";
-import { defaultsRemoved, emit, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState } from "./utilities.js";
 import {
   charLimit,
   dynamicAssign,
@@ -17,8 +17,12 @@ import {
   calculateTextMetrics,
 } from "./limiters";
 
+
 export default class boilerplate {
   constructor(config = {}) {
+    if (config.hotReloadOnChange) {
+      hotReloadOnChange();
+    }
     this.fonts = config.fonts || [];
     this.waitForImages = config.waitForImages || false;
     this.ensureImagesLoad = false;
@@ -39,9 +43,7 @@ export default class boilerplate {
       addCropMarks(config.trimMarks || false, config.allowLegacyRendering || false);
     }
     setSize(config.trimMarks || false,  config.exportReduceFont || 0);
-    if (config.hotReloadOnChange) {
-      this.hotReloadOnChange();
-    }
+   
     if (config.showPlaceholder) {
       setupPlaceholder(config.showPlaceholder, config.setupPlaceholder);
     }
@@ -181,17 +183,7 @@ export default class boilerplate {
       });
   }
 
-  hotReloadOnChange() {
-    if ((this.state === "document" || state === "template") && typeof BroadcastChannel === "function") {
-      let bc = new BroadcastChannel("fs-sync");
-      bc.onmessage = (ev) => {
-        if (!window.top.reloading) {
-          window.top.reloading = true;
-          window.top.location.reload();
-        }
-      };
-    }
-  }
+ 
   getOverflows () {
     let overflows = document.querySelectorAll(".overflow, [data-overflow]");
     if (overflows.length > 0) {

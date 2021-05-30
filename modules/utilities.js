@@ -3,56 +3,74 @@ import FontFaceObserver from "./fontfaceobserver.js";
 const defaultsRemoved = () => {
   // ensure that the user has changed important tempalte metadata
   return new Promise((resolve, reject) => {
-    if (!document.querySelector('link[href$="main.css"]')) {
-      console.log(
-        "%c Please include main.css in order to ensure that export is correct", 'background: #E41E46; color: white'
-      );
-    }
-    if (document.querySelector("style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])")) {
-      console.log(
-        "%c It is best practice not use styles in the html document. Please move all the styles to an extenal styles.css or styles.less file for constancy", 'background: #E41E46; color: white'
-      );
-    }
-    if (document.querySelector("script:not(#inputInjection):not([src])")) {
-      console.log(
-        "%c It looks like there is javascript that has been placed inline. Please move all javascript to a extenal js file for constancy", 'background: #E41E46; color: white'
-      );
-    }
-    let title = document.title;
-    if (title === "" || title === "PUT_TEMPLATE_NAME_HERE") {
-      reject(
-        "Please put the name of the template in the title of the document"
-      );
-    }
-    let builtBy = document
-      .querySelector('meta[name="template-built-by"]')
-      .getAttribute("content");
-    if (builtBy === "" || builtBy === "PUT_YOUR_NAME_HERE") {
-      reject("Please add your name in the document meta tags");
-    }
-    let scopeCard = document
-      .querySelector('meta[name="scope"]')
-      .getAttribute("content");
-    if (scopeCard === "" || scopeCard === "DTB-PUT_JIRA_NUMBER_HERE") {
-      reject("Please add the scope card ID in the document meta tags");
-    }
-    let builtCard = document
-      .querySelector('meta[name="build"]')
-      .getAttribute("content");
-    if (builtCard === "" || builtCard === "DTB-PUT_JIRA_NUMBER_HERE") {
-      reject("Please add the build card ID in the document meta tags");
-    }
+    if (!window.top.defaultsRemovedChecked) {
+      window.top.defaultsRemovedChecked = true;
 
-    if (
-      [...document.head.childNodes].some((node) => {
-        if (node && node.data && node.nodeType === 8) {
-          return node.data.includes("Template Admin Build Instructions");
-        }
-      })
-    ) {
-      reject(
-        'Please remove the "Template Admin Build Instructions" comment from the top of the document'
-      );
+      if (!document.querySelector('link[href$="main.css"]')) {
+        console.log(
+          "%c Please include main.css in order to ensure that export is correct", 'background: #E41E46; color: white'
+        );
+      }
+
+      let styles = Array.from(document.querySelectorAll("style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])"))
+      styles = styles.filter(e => !e.innerHTML.startsWith("\n    .mce-ico ")) // allowed injected style until the ID is added to target this
+      if (styles.length > 0) {
+        console.log(
+          "%c It is best practice not use styles in the html document. Please move all the styles to an extenal styles.css or styles.less file for constancy", 'background: #E41E46; color: white'
+        );
+      }
+
+      let scripts =  Array.from(document.querySelectorAll("script:not(#inputInjection):not([src])"))
+      scripts = scripts.filter(e => !e.innerHTML.startsWith("var OutfitIframeShared")) // allowed injected script
+      if (scripts.length > 0) {
+        console.log(
+          "%c It looks like there is javascript that has been placed inline. Please move all javascript to a extenal js file for constancy", 'background: #E41E46; color: white'
+        );
+      }
+
+      let title = document.title;
+      if (title === "" || title === "PUT_TEMPLATE_NAME_HERE") {
+        console.log(
+          "%c Please put the name of the template in the title of the document", 'background: #94B7BB; color: #111820'
+        );
+      }
+
+      let builtBy = document
+        .querySelector('meta[name="template-built-by"]')
+      if (builtBy && (builtBy.getAttribute("content") === "" || builtBy.getAttribute("content") === "PUT_YOUR_NAME_HERE")) {
+        console.log(
+          "%c Please add your name in the document meta tags", 'background: #94B7BB; color: #111820'
+        );
+      }
+
+      let scopeCard = document
+        .querySelector('meta[name="scope"]');
+      if (scopeCard && (scopeCard.getAttribute("content") === "" || scopeCard .getAttribute("content") === "DTB-PUT_JIRA_NUMBER_HERE")) {
+        console.log(
+          "%c Please add the scope card ID in the document meta tags", 'background: #94B7BB; color: #111820'
+        );
+      }
+
+      let builtCard = document
+        .querySelector('meta[name="build"]')
+      if (builtCard && (builtCard.getAttribute("content") === "" || builtCard.getAttribute("content") === "DTB-PUT_JIRA_NUMBER_HERE")) {
+        console.log(
+          "%c Please add the build card ID in the document meta tags", 'background: #94B7BB; color: #111820'
+        );
+      }
+
+      // check if comment has been removed from body 
+      if (
+        [...document.head.childNodes].some((node) => {
+          if (node && node.data && node.nodeType === 8) {
+            return node.data.includes("Template Admin Build Instructions");
+          }
+        })
+      ) {
+        console.log(
+          "%c Please remove the 'Template Admin Build Instructions' comment from the top of the document", 'background: #94B7BB; color: #111820'
+        );
+      }
     }
     resolve();
   });
@@ -305,9 +323,21 @@ const loadLESS = (variables = {}) => {
   });
 };
 
+const hotReloadOnChange = () => {
+  if ((this.state === "document" || state === "template") && typeof BroadcastChannel === "function") {
+    let bc = new BroadcastChannel("fs-sync");
+    bc.onmessage = (ev) => {
+      if (!window.top.reloading) {
+        window.top.reloading = true;
+        window.top.location.reload();
+      }
+    };
+  }
+}
 
 export {
   defaultsRemoved,
+  hotReloadOnChange,
   loadLESS,
   winLoad,
   domReady,
