@@ -38,14 +38,12 @@ describe('import tests', () => {
     expect(template.ensureImagesLoad).toStrictEqual(false);
     expect(template.exportReduceFont).toStrictEqual(0.4);
   });
-  test('check start() error get thrown if no html is found', async () => {
-    var template = new boilerplate({variables: { test: 'hey'}});
-    return template.start().then(d => {
-      // there should always be an error meaning this line is used to detect when an error isn't thrown
-      expect(true).toBe(false); 
-    }).catch(e => {
+  test('check error get thrown if no html is found', async () => {
+    try {
+      var template = new boilerplate({variables: { test: 'hey' }});
+    } catch (e) {
       expect(e).toBe("No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }");
-    });
+    }
   });
 });
 // I want to test this but I hvaven't worked out how to check console logs TODO

@@ -20,22 +20,24 @@ import {
 
 export default class boilerplate {
   constructor(config = {}) {
+    this.state = setOutfitState(config.trimMarks || false);
     if (config.hotReloadOnChange) {
       hotReloadOnChange();
     }
-    this.fonts = config.fonts || [];
-    this.waitForImages = config.waitForImages || false;
-    this.ensureImagesLoad = false;
-    if (!(typeof config.ensureImagesLoad === 'boolean' && config.ensureImagesLoad === false)) {
-      this.ensureImagesLoad = true;
-    }
-    this.exportReduceFont = config.exportReduceFont || 0; 
-    this.trimMarks = config.trimMarks || false;
-    this.allowNoMetaData = config.allowNoMetaData || false;
-    this.overflows = false;
-    this.state = setOutfitState(config.trimMarks || false);
-    this.browser = setBrowserType();
     this._events = {};
+    this.fonts = config.fonts || [];
+    this.overflows = false;
+    this.browser = setBrowserType();
+    this.trimMarks = config.trimMarks || false;
+    this.exportReduceFont = config.exportReduceFont || 0; 
+    this.allowNoMetaData = config.allowNoMetaData || false;
+    this.ensureImagesLoad = true;
+    if (typeof config.ensureImagesLoad === 'boolean' && config.ensureImagesLoad === false) {
+      this.ensureImagesLoad = false;
+    }
+    if (config.trimMarks) {
+      document.body.setAttribute("data-trim", config.trimMarks);
+    }
     if (config.cssVariables) {
       this.addStyle(`:root{${config.cssVariables}}`);
     }
@@ -58,57 +60,56 @@ export default class boilerplate {
       this.templateProps = JSON.parse("{}");
       console.log(`templateProps is not a valid JSON object`);
     }
+
+    // all these checks need to be done before the tempalte code can be run
+    let checkList = [
+      domReady,
+      loadLESS(),
+      fontsLoaded(this.fonts),
+    ];
+    if (config.waitForImages) {
+      checkList.push(ensureAllImagesLoaded());
+    }
+    Promise.all(checkList)
+      .then(() => {
+        this.emit("run", this.templateProps);
+        this.emit("inputs-change", this.templateProps);
+        if (typeof window.inputsChange === "function") {
+          window.inputsChange(this.templateProps);
+        }
+        if (state !== "preview") {
+          window.addEventListener("resize", (e) => {
+            setSize(
+              this.trimMarks,
+              this.exportReduceFont
+            );
+            this.emit("inputs-change", this.templateProps);
+            if (typeof window.inputsChange === "function") {
+              window.inputsChange(this.templateProps);
+            }
+          });
+        }
+        
+      // OutfitIframeShared.eventEmitter.addListener(
+      //   'token-value:change',
+      //   (e) => {
+      //     console.log(e)
+      //     // this.templateProps = JSON.parse(JSON.stringify(e.details));
+      //     // this.emit("inputs-change", this.templateProps);
+      //   }
+      // );
+
+      // setInterval(() => {
+      //   this.getOverflows();
+      // }, 1000)
+              
+      if (state === "document") {
+        imageCompression();
+      }
+    })
   }
   start() {
-    return new Promise((resolve, reject) => {
-      // all these checks need to be done before the tempalte code can be run
-      let checkList = [
-        domReady,
-        loadLESS(),
-        fontsLoaded(this.fonts),
-      ];
-      if (this.waitForImages) {
-        checkList.push(ensureAllImagesLoaded());
-      }
-      Promise.all(checkList)
-        .then(() => {
-          this.emit("inputs-change", this.templateProps);
-          if (typeof window.inputsChange === "function") {
-            window.inputsChange(this.templateProps);
-          }
-          if (state !== "preview") {
-            window.addEventListener("resize", (e) => {
-              setSize(
-                this.trimMarks,
-                this.exportReduceFont
-              );
-              this.emit("inputs-change", this.templateProps);
-              if (typeof window.inputsChange === "function") {
-                window.inputsChange(this.templateProps);
-              }
-            });
-          }
-          
-          // OutfitIframeShared.eventEmitter.addListener(
-          //   'token-value:change',
-          //   (e) => {
-          //     console.log(e)
-          //     // this.templateProps = JSON.parse(JSON.stringify(e.details));
-          //     // this.emit("inputs-change", this.templateProps);
-          //   }
-          // );
-
-          // setInterval(() => {
-          //   this.getOverflows();
-          // }, 1000)
-          
-          if (state === "document") {
-            imageCompression();
-          }
-          resolve(this);
-        })
-        .catch(reject);
-    });
+    console.log('there is no need to call start. just create a template.on("inputs-change", (e) => {}) event')
   }
   // on creates a callback event
   on(name, listener) {
@@ -139,6 +140,7 @@ export default class boilerplate {
       this._events[name].forEach(fireCallbacks);
     }
   }
+
 
   // textValidation(callback)
   addStyle(styles = "") {

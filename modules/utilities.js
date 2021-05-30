@@ -76,7 +76,7 @@ const defaultsRemoved = () => {
   });
 };
 
-const setOutfitState = (trimMarks) => {
+const setOutfitState = () => {
   var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
   mode =
     !mode && window.location.href.indexOf("templates") > -1 ? "template" : mode;
@@ -90,7 +90,6 @@ const setOutfitState = (trimMarks) => {
     mode = "error";
   }
   document.body.setAttribute("document-state", mode);
-  document.body.setAttribute("data-trim", trimMarks);
   window.state = mode;
   return mode;
 };
@@ -324,7 +323,7 @@ const loadLESS = (variables = {}) => {
 };
 
 const hotReloadOnChange = () => {
-  if ((this.state === "document" || state === "template") && typeof BroadcastChannel === "function") {
+  if ((state === "document" || state === "template") && typeof BroadcastChannel === "function") {
     let bc = new BroadcastChannel("fs-sync");
     bc.onmessage = (ev) => {
       if (!window.top.reloading) {
