@@ -64,7 +64,7 @@ function countLines(elements, advanced) {
   ) {
     elements = [elements];
   }
-  let result = [...elements].map(target => {
+  let result = [].slice.call(elements).map(target => {
     if (true) {
       let muiltCount = 0;
       let textNodes = textNodesUnder(target);
@@ -136,7 +136,8 @@ function countLines(elements, advanced) {
 
 let clampDefaults = { maxLines: 1, minFontSize: 18, useSoftClamp: true, ellipsis: '...' }
 function lineClamp(elements, config)  {
-  config = { ...clampDefaults, ...config }
+  config = Object.assign(clampDefaults, config)
+  // config = { ...clampDefaults, ...config }
   var elType = Object.prototype.toString.call(elements);
   if (
     elType !== "[object Array]" &&
@@ -145,7 +146,7 @@ function lineClamp(elements, config)  {
   ) {
     elements = [elements];
   }
-  return [...elements].map(element => {
+  return [].slice.call(elements).map(element => {
     const clamp = new LineClamp(element, config)
     clamp.apply()
     clamp.watch()
@@ -164,7 +165,7 @@ function calculateTextMetrics(elements, config) {
   ) {
     elements = [elements];
   }
-  let result = [...elements].map(element => {
+  let result = [].slice.call(elements).map(element => {
     return new LineClamp(element, config).calculateTextMetrics();
   });
   if (result.length == 1) {
@@ -317,7 +318,7 @@ function dynamicAssign(element = null) {
   // );
   const containerHeight = getHeight(container)
   // TODO work out what subtrahend is 
-  const subtrahends = [...container.querySelectorAll(".js-subtrahend")];
+  const subtrahends = [].slice.call(container.querySelectorAll(".js-subtrahend"));
 
   const subtrahendsHeight = subtrahends.reduce((totalHeight, subtrahend) => {
     const subtrahendMargins = {

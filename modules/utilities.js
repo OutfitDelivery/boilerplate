@@ -111,8 +111,8 @@ const blockRender = () => {
     <div class="ujmju">
       <div class="rsdie">
         <h2>⚠️ Rendering error detected</h2>
-        <h4>Please prodive a reason for needing to use a legacy renderer and enable: <br><code>{ allowLegacyRendering: true }</code><br>
-        in the boilerplate or update this template to use a newer renderer</h4>
+        <h4>Please provide a reason for needing to use a legacy renderer and enable: <br><code>{ allowLegacyRendering: true }</code><br>
+        in the boilerplate or update this template to use a supported renderer</h4>
         <p>This template is rendered with ${detectRender()}</p>
         <p>Please contact support if you see this message.</p>
       </div>
@@ -158,7 +158,6 @@ const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
     }
     return "100vh";
   } else {
-    // console.error("Renderer Not Set");
     return "100vh";
   }
 };

@@ -2,7 +2,7 @@
   const getSidebar = () => {
     let sidebar = window.top.document.querySelectorAll(".sidebar .current-list");
     if (sidebar.length > 0) {
-      return [...sidebar].pop();
+      return [].slice.call(sidebar).pop();
     } else {
       return undefined;
     }
