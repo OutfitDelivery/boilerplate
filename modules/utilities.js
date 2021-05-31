@@ -106,10 +106,10 @@ const highestZ = () => {
 
 // display a message to block rendering for major issues
 const blockRender = () => {
-  document.querySelector("body").innerHTML = `
-    <style>.ujmju { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: ${highestZ()}; height: 100%; width: 100%;} .rsdie { margin: 1rem; width: 80%!important; } .rsdie p { font-size: 0.4rem; } </style>
-    <div class="ujmju">
-      <div class="rsdie">
+  document.querySelector("body").innerHTML += `
+    <style>body{ background: #111820!important; color: white!important; } #ujmju { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 1rem; z-index: ${highestZ()}; height: 100%; width: 100%;} #rsdie { margin: 1rem; width: 80%!important; } #rsdie p { font-size: 0.4rem; } </style>
+    <div id="ujmju">
+      <div id="rsdie">
         <h2>⚠️ Rendering error detected</h2>
         <h4>Please provide a reason for needing to use a legacy renderer and enable: <br><code>{ allowLegacyRendering: true }</code><br>
         in the boilerplate or update this template to use a supported renderer</h4>
