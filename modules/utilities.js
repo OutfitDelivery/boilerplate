@@ -144,7 +144,7 @@ const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
     return "100vh";
   } else if (render === '1.1') {
     return "100vh";
-  } else if (render === '2.0') {
+  } else if (render === '1.0') {
     if (!allowLegacyRendering) {
       blockRender();
     }
