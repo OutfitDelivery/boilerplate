@@ -32,18 +32,14 @@ let template = new boilerplate({
     fonts: ['IBM Plex Sans']
 });
 
-template.start().then(() => {
-    // tempalte code
-    template.completeRender();
-}).catch(console.trace);
-
 // This event will happen when there is a resize or first load of document
-template.addEventListener("textValidation", () => {
+template.on("inputs-change", () => {
     // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
     // template.maxLineCheck();
     // template.maxHeightCheck();
     // template.charLimit();
     // template.dynamicReplace();
+    template.completeRender();
 }
 ```
 
@@ -122,10 +118,12 @@ template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSiz
 
 ## [MTO.js](modules/mto.js) 
 ```
-template.setupMTO({{{mto-v3}}}, "{{{team.mto}}}", 'Branch Selection').then(mtoData => {
-    // add metadata to the template
-}).catch(console.error);
+template.setupMTO({}, "{{{team.mto}}}", 'Branch Selection')
+runMTO({{{mto-v3}}});
 
+let runMTO = (data) => {
+    console.log(data)
+}
 or 
 
 template.setupMTO({{{mto-v3}}}, "{{{team.mto}}}", 'Branch Selection')
