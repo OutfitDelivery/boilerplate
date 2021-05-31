@@ -94,43 +94,64 @@ const setOutfitState = () => {
   return mode;
 };
 
+const highestZ = () => {
+  return (
+    Array.from(document.querySelectorAll("body *"))
+      .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
+      .filter((a) => !isNaN(a))
+      .sort()
+      .pop() + 1
+  );
+};
 
 // display a message to block rendering for major issues
-const blockRender = (v) => {
+const blockRender = () => {
   document.querySelector("body").innerHTML = `
-    <style>.ujmju { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: ${highestZ()}; height: 100%; width: 100%;}  .rsdie { margin: 1rem; width: 80%!important; } .rsdie p { font-size: 0.4rem; } </style>
+    <style>.ujmju { position: absolute; background: #111820; color: white; font-family: sans-serif; font-size: 0.5rem; z-index: ${highestZ()}; height: 100%; width: 100%;} .rsdie { margin: 1rem; width: 80%!important; } .rsdie p { font-size: 0.4rem; } </style>
     <div class="ujmju">
       <div class="rsdie">
         <h2>⚠️ Rendering error detected</h2>
-        <h4>⚠Please enable <code>{ allowLegacyRendering: true }</code>
-        in the boilerplate or update this template to version 1.1 or 2.1</h4>
-        <p>This template is using renderer ${v}</p>
+        <h4>Please prodive a reason for needing to use a legacy renderer and enable: <br><code>{ allowLegacyRendering: true }</code><br>
+        in the boilerplate or update this template to use a newer renderer</h4>
+        <p>This template is rendered with ${detectRender()}</p>
         <p>Please contact support if you see this message.</p>
       </div>
     </div>`;
 };
 
+const detectRender = () => {
+  let agent = navigator.userAgent;
+  if (agent.includes("OPTION 2.1")) {
+    return "2.1"
+  } else if (agent.includes("OPTION 1.1")) {
+    return "1.1"
+  } else if (agent.includes("OPTION 1.0")) {
+    return "1.0"
+  } else if (agent.includes("OPTION 2.0")) {
+    return "2.0"
+  } else {
+    return 'unknown'
+  }
+}
 // There is an error on render 2 where an extra pixel is added to the end of a template
 // this casues a new page to be made. This fuction removes that extra pixel
 const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
-  let agent = navigator.userAgent;
-  if (agent.includes("OPTION 2.1")) {
-    console.info("Renderer 2.1 Set");
+  let render = detectRender();
+  if (render === '2.1') {
     if (!trimMarks) {
       return "calc(100vh - 1px)";
     }
     return "100vh";
-  } else if (agent.includes("OPTION 1.1")) {
-    console.info("Renderer 1.1 Set");
+  } else if (render === '1.1') {
     return "100vh";
-  } else if (agent.includes("OPTION 1.0")) {
+  } else if (render === '2.0') {
     if (!allowLegacyRendering) {
-      blockRender("1.0");
+      blockRender();
     }
     return "100vh";
-  } else if (agent.includes("OPTION 2.0")) {
+  } else if (render === '2.0') {
     if (!allowLegacyRendering) {
-      blockRender("2.0");
+      blockRender();
     }
     if (!trimMarks) {
       return "calc(100vh - 1px)";
@@ -272,15 +293,6 @@ const setBrowserType = () => {
   return browser;
 };
 
-const highestZ = () => {
-  return (
-    Array.from(document.querySelectorAll("body *"))
-      .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
-      .filter((a) => !isNaN(a))
-      .sort()
-      .pop() + 1
-  );
-};
 
 // wait for the dom to laod or continue if it has already loaded
 const domReady = new Promise((resolve, reject) => {

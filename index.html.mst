@@ -23,7 +23,7 @@
 
     <script id="inputInjection">
       const templateProps = {
-        "trim-marks": `{{{trim-marks}}}`,
+        "trim-marks": {{{trim-marks}}},
         "placeholder-visibility": `{{{placeholder-visibility}}}`,
         "placeholder-1": `{{{placeholder1}}}`
       }

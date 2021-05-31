@@ -32,6 +32,7 @@ export default class boilerplate {
     this.trimMarks = config.trimMarks || false;
     this.exportReduceFont = config.exportReduceFont || 0; 
     this.allowNoMetaData = config.allowNoMetaData || false;
+    this.allowLegacyRendering = config.allowLegacyRendering || false;
     this.ensureImagesLoad = true;
     if (typeof config.ensureImagesLoad === 'boolean' && config.ensureImagesLoad === false) {
       this.ensureImagesLoad = false;
@@ -43,7 +44,7 @@ export default class boilerplate {
       this.addStyle(`:root{${config.cssVariables}}`);
     }
     if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
-      addCropMarks(config.trimMarks || false, config.allowLegacyRendering || false);
+      addCropMarks(this.trimMarks, this.allowLegacyRendering);
     }
     setSize(config.trimMarks || false,  config.exportReduceFont || 0);
    
@@ -67,7 +68,6 @@ export default class boilerplate {
       loadLESS(),
       fontsLoaded(this.fonts),
     ];
-    console.log(domReady)
     if (config.waitForImages) {
       checkList.push(ensureAllImagesLoaded());
     }
