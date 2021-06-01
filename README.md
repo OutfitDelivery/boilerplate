@@ -19,7 +19,7 @@ Before you start building the template there are few things that you need to do.
 3. Import all of your required fonts as `<link>` tags.
 4. List out all of your fonts in the `fonts` array of the boilerplate config in `main.js`.
 5. Ensure you are using external css and js files. 
-6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. `"trim-marks": `{{{trim-marks}}}``.
+6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. `"trim-marks": '{{{trim-marks}}}'`.
 7. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
 8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary.
 
