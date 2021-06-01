@@ -16,7 +16,7 @@ This version of the boilerplate is recommended with external stylesheets and scr
 Before you start building the template there are few things that you need to do.
 1. Add a Template Name in the `<title>` Tag.
 2. Fill out the metadata tags in the head `template-built-by`, `scope`, `build`, `updates`. In each of them just fill out the data in the `content` attribute.
-3. Import all of your required fonts as `<link>` tags.
+3. Import all of your required fonts as `<link>` tags or account snippets.
 4. List out all of your fonts in the `fonts` array of the boilerplate config in `main.js`.
 5. Ensure you are using external css and js files. 
 6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
