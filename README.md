@@ -39,14 +39,17 @@ There are two key scripts imported into index.html.mst:
 ### [Main.js](js/main.js)
 `Main.js` runs all the vital functions for any template to function. Anything being called by default shouldn't be removed. In addition, there are various functions commented out. This is simply to save resources, not running functions that are not required by all templates. Uncomment functions as required.
 
+The boilerplate object has various properties. There are a few key ones for builders. At the end of a build you would need to change some of these in order to remove them from production:
+- `hotReloadOnChange`: at the end of your build, remove this property entirely.
+- `placeholderVisibility`: at the end of your build, remove this property entirely.
+- `placeholderImages`: takes a single image as a string **or** an array of images. At the end of your build, remove this property entirely.
+
 ### [Boilerplate.js](modules/boilerplate.js)
 `Boilerplate.js` contains the boilerplate class, vital functionality and utilities used in `main.js`. 
-
 
 #### Vital Functions in [Boilerplate.js](modules/boilerplate.js)
 ##### completeRender()
 - after `document.readyState` is "complete", dispatches "printready" event
-
 
 #### Other Functions/Utilities in [Boilerplate.js](modules/boilerplate.js)
 ##### Overflow functions
