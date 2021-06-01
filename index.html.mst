@@ -23,9 +23,9 @@
 
     <script id="inputInjection">
       const templateProps = {
-        "trim-marks": {{{trim-marks}}},
+        "trim-marks": `{{{trim-marks}}}`,
         "placeholder-visibility": `{{{placeholder-visibility}}}`,
-        "placeholder-1": `{{{placeholder1}}}`
+        "placeholder-1": `{{{placeholder-1}}}`
       }
       const cssVariables = `
         --red: #E41E46;
@@ -43,7 +43,7 @@
     <div class="page">
       <div class="bleed">
         <div class="container">
-          <h1>I think you are </h1>
+          <h1>I appreciate you </h1>
         </div>
       </div>
     </div>

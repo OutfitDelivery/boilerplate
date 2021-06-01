@@ -26,6 +26,7 @@
   },
   "pre-commit": [
     "precommit-msg",
+    "build",
     "test"
   ],
   "homepage": "https://github.com/OutfitDelivery/boilerplate#readme",

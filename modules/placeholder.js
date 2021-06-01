@@ -1,11 +1,12 @@
 export default function setupPlaceholder(placeholderVisibility, placeholderImages) {
+    if (placeholderImages && typeof placeholderImages === 'string') {
+      placeholderImages = [placeholderImages]
+    }
     // If array length < 1 or the first item is "" or null or undefined
     if (
       placeholderImages.length < 1 ||
-      placeholderImages[0] == "" ||
-      placeholderImages[0] == null ||
-      placeholderImages[0] == undefined ||
-      placeholderVisibility == "hide"
+      !placeholderImages[0] || 
+      placeholderVisibility === "hide"
     )
       return;
   

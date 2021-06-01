@@ -8,58 +8,82 @@ const defaultsRemoved = () => {
 
       if (!document.querySelector('link[href$="main.css"]')) {
         console.log(
-          "%c Please include main.css in order to ensure that export is correct", 'background: #E41E46; color: white'
+          "%cPlease include main.css in order to ensure that export is correct",
+          "background: #E41E46; color: white"
         );
       }
 
-      let styles = Array.from(document.querySelectorAll("style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])"))
-      styles = styles.filter(e => !e.innerHTML.startsWith("\n    .mce-ico ")) // allowed injected style until the ID is added to target this
+      let styles = Array.from(
+        document.querySelectorAll(
+          "style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])"
+        )
+      );
+      styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico ")); // allowed injected style until the ID is added to target this
       if (styles.length > 0) {
         console.log(
-          "%c It is best practice not use styles in the html document. Please move all the styles to an extenal styles.css or styles.less file for constancy", 'background: #E41E46; color: white'
+          "%cIt is best practice not use styles in the html document. Please move all the styles to an external styles.css or styles.less file for constancy",
+          "background: #E41E46; color: white"
         );
       }
 
-      let scripts =  Array.from(document.querySelectorAll("script:not(#inputInjection):not([src])"))
-      scripts = scripts.filter(e => !e.innerHTML.startsWith("var OutfitIframeShared")) // allowed injected script
+      let scripts = Array.from(
+        document.querySelectorAll("script:not(#inputInjection):not([src])")
+      );
+      scripts = scripts.filter(
+        (e) => !e.innerHTML.startsWith("var OutfitIframeShared")
+      ); // allowed injected script
       if (scripts.length > 0) {
         console.log(
-          "%c It looks like there is javascript that has been placed inline. Please move all javascript to a extenal js file for constancy", 'background: #E41E46; color: white'
+          "%cIt looks like there is javascript that has been placed in the html document. Please move all javascript to a external js files for constancy",
+          "background: #E41E46; color: white"
         );
       }
 
       let title = document.title;
       if (title === "" || title === "PUT_TEMPLATE_NAME_HERE") {
         console.log(
-          "%c Please put the name of the template in the title of the document", 'background: #94B7BB; color: #111820'
+          "%cPlease put the name of the template in the title of the document",
+          "background: #94B7BB; color: #111820"
         );
       }
 
-      let builtBy = document
-        .querySelector('meta[name="template-built-by"]')
-      if (builtBy && (builtBy.getAttribute("content") === "" || builtBy.getAttribute("content") === "PUT_YOUR_NAME_HERE")) {
+      let builtBy = document.querySelector('meta[name="template-built-by"]');
+      if (
+        builtBy &&
+        (builtBy.getAttribute("content") === "" ||
+          builtBy.getAttribute("content") === "PUT_YOUR_NAME_HERE")
+      ) {
         console.log(
-          "%c Please add your name in the document meta tags", 'background: #94B7BB; color: #111820'
+          "%cPlease add your name in the document meta tags",
+          "background: #94B7BB; color: #111820"
         );
       }
 
-      let scopeCard = document
-        .querySelector('meta[name="scope"]');
-      if (scopeCard && (scopeCard.getAttribute("content") === "" || scopeCard .getAttribute("content") === "DTB-PUT_JIRA_NUMBER_HERE")) {
+      let scopeCard = document.querySelector('meta[name="scope"]');
+      if (
+        scopeCard &&
+        (scopeCard.getAttribute("content") === "" ||
+          scopeCard.getAttribute("content") === "DTB-PUT_JIRA_NUMBER_HERE")
+      ) {
         console.log(
-          "%c Please add the scope card ID in the document meta tags", 'background: #94B7BB; color: #111820'
+          "%cPlease add the scope card ID in the document meta tags",
+          "background: #94B7BB; color: #111820"
         );
       }
 
-      let builtCard = document
-        .querySelector('meta[name="build"]')
-      if (builtCard && (builtCard.getAttribute("content") === "" || builtCard.getAttribute("content") === "DTB-PUT_JIRA_NUMBER_HERE")) {
+      let builtCard = document.querySelector('meta[name="build"]');
+      if (
+        builtCard &&
+        (builtCard.getAttribute("content") === "" ||
+          builtCard.getAttribute("content") === "DTB-PUT_JIRA_NUMBER_HERE")
+      ) {
         console.log(
-          "%c Please add the build card ID in the document meta tags", 'background: #94B7BB; color: #111820'
+          "%cPlease add the build card ID in the document meta tags",
+          "background: #94B7BB; color: #111820"
         );
       }
 
-      // check if comment has been removed from body 
+      // check if comment has been removed from body
       if (
         [...document.head.childNodes].some((node) => {
           if (node && node.data && node.nodeType === 8) {
@@ -68,7 +92,8 @@ const defaultsRemoved = () => {
         })
       ) {
         console.log(
-          "%c Please remove the 'Template Admin Build Instructions' comment from the top of the document", 'background: #94B7BB; color: #111820'
+          "%cPlease remove the 'Template Admin Build Instructions' comment from the top of the document",
+          "background: #94B7BB; color: #111820"
         );
       }
     }
@@ -111,8 +136,8 @@ const blockRender = () => {
     <div id="ujmjuBlock">
       <div id="sdsgfdgsBlock">
         <h2>⚠️ Rendering error detected</h2>
-        <h4>Please provide a reason for needing to use a legacy renderer and enable: <br><code>{ allowLegacyRendering: true }</code><br>
-        in the boilerplate or update this template to use a supported renderer</h4>
+        <h4>Please update to use a supported renderer or provide a reason for needing to use a legacy renderer and add the following change to the boilerplate config to allow rendering: <br><code>{ allowLegacyRendering: true }</code><br>
+        <br>
         <p>This template is rendered with ${detectRender()}</p>
         <p>Please contact support if you see this message.</p>
       </div>
@@ -122,34 +147,34 @@ const blockRender = () => {
 const detectRender = () => {
   let agent = navigator.userAgent;
   if (agent.includes("OPTION 2.1")) {
-    return "2.1"
+    return "2.1";
   } else if (agent.includes("OPTION 1.1")) {
-    return "1.1"
+    return "1.1";
   } else if (agent.includes("OPTION 1.0")) {
-    return "1.0"
+    return "1.0";
   } else if (agent.includes("OPTION 2.0")) {
-    return "2.0"
+    return "2.0";
   } else {
-    return 'unknown'
+    return "unknown";
   }
-}
+};
 // There is an error on render 2 where an extra pixel is added to the end of a template
 // this casues a new page to be made. This fuction removes that extra pixel
 const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
   let render = detectRender();
-  if (render === '2.1') {
+  if (render === "2.1") {
     if (!trimMarks) {
       return "calc(100vh - 1px)";
     }
     return "100vh";
-  } else if (render === '1.1') {
+  } else if (render === "1.1") {
     return "100vh";
-  } else if (render === '1.0') {
+  } else if (render === "1.0") {
     if (!allowLegacyRendering) {
       blockRender();
     }
     return "100vh";
-  } else if (render === '2.0') {
+  } else if (render === "2.0") {
     if (!allowLegacyRendering) {
       blockRender();
     }
@@ -168,7 +193,8 @@ const addCropMarks = (trimMarks, allowLegacyRendering) => {
   var cropSVG = `<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>`;
 
   let pageHeight = pageHeightSetup(trimMarks, allowLegacyRendering);
-  document.querySelectorAll(".page").forEach((page) => {
+  let pages = document.querySelectorAll(".page");
+  pages.forEach((page) => {
     page.style.height = pageHeight;
     if (trimMarks) {
       page.insertAdjacentHTML(
@@ -241,9 +267,10 @@ const setSize = (trimMarks, exportReduceFont) => {
   const preliminaryCalc = vmin * 2 + vmax * 1.4 + vh * 2;
 
   // Reducing the preliminaryCalc value by reduceVal in export mode and in Firefox preview mode
-  const finalCalc = (window.state === "exports")
-    ? preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc
-    : preliminaryCalc;
+  const finalCalc =
+    window.state === "exports"
+      ? preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc
+      : preliminaryCalc;
 
   document.documentElement.style.fontSize = `${finalCalc}px`;
   return finalCalc;
@@ -284,14 +311,14 @@ const setBrowserType = () => {
   browser["isBlink"] = (browser.isChrome || browser.isOpera) && !!window.CSS;
 
   Object.keys(browser)
-  .filter((key) => {
-    return browser[key];
-  }).forEach(el =>  document.body.classList.add(el))
+    .filter((key) => {
+      return browser[key];
+    })
+    .forEach((el) => document.body.classList.add(el));
 
-  window.browser = browser
+  window.browser = browser;
   return browser;
 };
-
 
 // wait for the dom to laod or continue if it has already loaded
 const domReady = new Promise((resolve, reject) => {
@@ -335,7 +362,10 @@ const loadLESS = (variables = {}) => {
 };
 
 const hotReloadOnChange = () => {
-  if ((state === "document" || state === "template") && typeof BroadcastChannel === "function") {
+  if (
+    (state === "document" || state === "template") &&
+    typeof BroadcastChannel === "function"
+  ) {
     let bc = new BroadcastChannel("fs-sync");
     bc.onmessage = (ev) => {
       if (!window.top.reloading) {
@@ -344,7 +374,7 @@ const hotReloadOnChange = () => {
       }
     };
   }
-}
+};
 
 export {
   defaultsRemoved,
@@ -357,5 +387,5 @@ export {
   setSize,
   fontsLoaded,
   addCropMarks,
-  setOutfitState
+  setOutfitState,
 };

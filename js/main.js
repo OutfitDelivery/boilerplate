@@ -1,12 +1,12 @@
 // Please put all config needed for the tempate into the array bellow
 let template = new boilerplate({
   fonts: ["PUT_ALL_FONT_NAMES_HERE"],
-  trimMarks: templateProps['trim-marks'],
+  trimMarks: templateProps['trim-marks'] === 'true',
   cssVariables,
   templateProps,
   hotReloadOnChange: true,
-  showPlaceholder: templateProps['placeholder-visibility'],
-  imagesPlaceholder: [templateProps['placeholder-1']]
+  placeholderVisibility: templateProps['placeholder-visibility'],
+  placeholderImages: templateProps['placeholder-1'],
 });
 
 // This function will run whenever there is a change to any text input, resize and on inital load

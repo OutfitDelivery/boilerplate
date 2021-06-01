@@ -48,8 +48,8 @@ export default class boilerplate {
     }
     setSize(config.trimMarks || false,  config.exportReduceFont || 0);
    
-    if (config.showPlaceholder) {
-      setupPlaceholder(config.showPlaceholder, config.setupPlaceholder);
+    if (config.placeholderVisibility) {
+      setupPlaceholder(config.placeholderVisibility, config.placeholderImages);
     }
     try {
       if (config.templateProps) {
@@ -166,7 +166,7 @@ export default class boilerplate {
       .then(() => {
         if (this.getOverflows()) {
           console.log(
-           `%c This will export with overflow errors`, 'background: #1F2A44; color: white'
+           `%cThis will export with overflow errors`, 'background: #1F2A44; color: white;font-size:16px;'
           );
         }
         let loadTime = Date.now() - window.performance.timing.navigationStart;
@@ -179,15 +179,14 @@ export default class boilerplate {
             if (!this.allowNoMetaData) {
               defaultsRemoved();
             }
-          }, 2000)
+          }, 5000)
         };
       })
       .catch((err) => {
         console.error(err);
-        throw "⚠️ Render failed for logged reason ⤴️";
+        throw "Render failed for logged reason";
       });
   }
-
  
   getOverflows () {
     let overflows = document.querySelectorAll(".overflow, [data-overflow]");
