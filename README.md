@@ -6,7 +6,7 @@ The standard template build boilerplate used by Outfit's Delivery Team.
 If this is your first template maybe have a look at Delivery Academy for a great tutorial and tips/tricks
 
 ## Usage in Outfit
-It's pretty simple. Navigate to `Releases` on the right sidebar. Select the Latest Release. Under the `Assets` Accordion and download the `vX.X.X Boilerplate.zip` (not the Source Code).
+Download [boilerplate.zip](https://github.com/OutfitDelivery/boilerplate/blob/3.0/boilerplate.zip?raw=true) from the boilerplate repo. 
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
@@ -19,7 +19,7 @@ Before you start building the template there are few things that you need to do.
 3. Import all of your required fonts as `<link>` tags.
 4. List out all of your fonts in the `fonts` array of the boilerplate config in `main.js`.
 5. Ensure you are using external css and js files. 
-6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. `"trim-marks": '{{{trim-marks}}}'`.
+6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
 7. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
 8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary.
 
@@ -28,6 +28,8 @@ We are using AWS S3 for delivery and versioning. If you do notice that the versi
 The boilerplate is set up for use with *Less*. For *Less* to compile, you will need to be using *VS Portal* (please contact Sam about this if you haven't got *VS Portal* set up).
 
 If you prefer plain CSS, you can create your own styles.css file and link to that from index.html.mst.
+
+Final note: if using *Less*, when you finish your build, for performance reasons, it's preferable to change your stylesheet link over to the compiled CSS file instead of maintaining the link to the .less file. 
 
 ## Scripts
 There are two key scripts imported into index.html.mst:
