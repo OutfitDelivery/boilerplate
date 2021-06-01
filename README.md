@@ -10,53 +10,44 @@ It's pretty simple. Navigate to `Releases` on the right sidebar. Select the Late
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
-This version of the boilerplate is recommended with extenral stylesheets and scripts. Please provde a reason why you can't place styles extenraly if you are going to do that.
+This version of the boilerplate is recommended with external stylesheets and scripts. Please provide a comment at the top of your index.html.mst explaining why you can't place styles externaly if you are going to do that (Note: if you create style tags inside index.html.mst, you'll receive error messages in your console about this.) 
 
 ## Getting Started
 Before you start building the template there are few things that you need to do.
-1. Add a Template Name in the `<title>` Tag 
+1. Add a Template Name in the `<title>` Tag.
 2. Fill out the metadata tags in the head `template-built-by`, `scope`, `build`, `updates`. In each of them just fill out the data in the `content` attribute.
-3. Import all of your required fonts as `<link>` tags. Then list out all of your fonts in the `fonts` array of the boilerplate config.
-4. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary
+3. Import all of your required fonts as `<link>` tags.
+4. List out all of your fonts in the `fonts` array of the boilerplate config in `main.js`.
+5. Ensure you are using external css and js files. 
+6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. `"trim-marks": `{{{trim-marks}}}``.
+7. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
+8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary.
 
 We are using AWS S3 for delivery and versioning. If you do notice that the version of the scripts does not match the Boilerplate version that you downloaded please chat with Sam.
 
-You are ready to get building. You will see a few JS script calls. Anything being called by default in the boilerplate is vital for the template to run correctly and shouldn't be removed. In addition, there will be a bunch of functions commented out. This is simply to save resources, not running functions that are not required by all templates. Feel free to uncomment as required.
+The boilerplate is set up for use with *Less*. For *Less* to compile, you will need to be using *VS Portal* (please contact Sam about this if you haven't got *VS Portal* set up).
+
+If you prefer plain CSS, you can create your own styles.css file and link to that from index.html.mst.
+
+## Scripts
+There are two key scripts imported into index.html.mst:
+- boilerplate.js
+- main.js
+
+### [Main.js](js/main.js)
+`Main.js` runs all the vital functions for any template to function. Anything being called by default shouldn't be removed. In addition, there are various functions commented out. This is simply to save resources, not running functions that are not required by all templates. Uncomment functions as required.
+
+### [Boilerplate.js](modules/boilerplate.js)
+`Boilerplate.js` contains the boilerplate class, vital functionality and utilities used in `main.js`. 
 
 
-## [Boilerplate.js](modules/boilerplate.js)
-Note: the boilerplate.js file needs to be included in every template as it contains the boilerplate class and vital functions (i.e. template.start() and template.completeRender()) plus utilities (documented further below). Here is an example of boilerplate being used in index.html.mst
-```
-// Please put all fonts needed for the tempate into the array below
-let template = new boilerplate({
-    fonts: ['IBM Plex Sans']
-});
-
-// This event will happen when there is a resize or first load of document
-template.on("inputs-change", () => {
-    // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
-    // template.maxLineCheck();
-    // template.maxHeightCheck();
-    // template.charLimit();
-    // template.dynamicReplace();
-    template.completeRender();
-}
-```
-
-### Vital Functions in [Boilerplate.js](modules/boilerplate.js)
-#### template.start()
-- runs all checks (e.g. if DOM content is loaded, if fonts are loaded) 
-- after all checks, emits a `textValidation` event, which `index.html.mst` listens for (and this is where we run limiter functions like `maxHeightCheck` in `index.html.mst` - see code block above
-- at a 1000ms interval, checks for overflows and if any are found, emits an "overflows" event 
-- runs image compression (after everything else) if state is "document"
-
-
-#### completeRender()
+#### Vital Functions in [Boilerplate.js](modules/boilerplate.js)
+##### completeRender()
 - after `document.readyState` is "complete", dispatches "printready" event
 
 
-### Other Functions/Utilities in [Boilerplate.js](modules/boilerplate.js)
-#### Overflow functions
+#### Other Functions/Utilities in [Boilerplate.js](modules/boilerplate.js)
+##### Overflow functions
 ```
 // max line check: adds an overflow if the number of lines is greater than data-max-line 
 template.maxLineCheck();
@@ -71,7 +62,7 @@ template.maxHeightCheck();
 // char limit: adds an overflow if the number of characters is larger than data-char-limit
 template.charLimit();
 ```
-#### Utilites
+##### Utilites
 ```
 // this function can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
 template.addStyle('body { background: red; }')
@@ -92,7 +83,7 @@ template.addStyle('body { background: red; }')
 - invalidFontList()
     checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid) -->
 
-## [Replace.js](modules/replace.js) (formatters)
+### [Replace.js](modules/replace.js) (formatters)
 - Replaces something in the template with something else
 - The first parameter is the element the replace function will run on
 - The second parameter is an array of changes
@@ -111,12 +102,12 @@ If no arguments are given the function will replaces text inside of `data-replac
 ```
 template.dynamicReplace()
 ```
-## [Textfit.js](modules/textFit.js) 
+### [Textfit.js](modules/textFit.js) 
 ```
 template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
 ```
 
-## [MTO.js](modules/mto.js) 
+### [MTO.js](modules/mto.js) 
 ```
 template.setupMTO({}, "{{{team.mto}}}", 'Branch Selection')
 runMTO({{{mto-v3}}});
