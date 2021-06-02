@@ -105,7 +105,7 @@ template.dynamicReplace('.name', [
 
 `<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
 ```
-template.dynamicReplace()
+template.dynamicReplace() // => Hey sam
 ```
 ### [Textfit.js](modules/textFit.js) 
 ```
