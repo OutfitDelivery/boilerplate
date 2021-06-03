@@ -63,7 +63,7 @@ export default class boilerplate {
       console.log(`templateProps is not a valid JSON object`);
     }
     if (config.colorsFromProps && this.templateProps && this.templateProps['account'] && this.templateProps['account']['colors']) {
-      jsonToCssVariables(this.templateProps['account']['colors']);
+      this.addStyle(jsonToCssVariables(this.templateProps['account']['colors']));
     }
     // all these checks need to be done before the tempalte code can be run
     let checkList = [
