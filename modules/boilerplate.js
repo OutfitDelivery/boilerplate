@@ -55,6 +55,10 @@ export default class boilerplate {
     try {
       if (config.templateProps) {
         this.templateProps = JSON.parse(JSON.stringify(config.templateProps));
+        // add colours from account as CSS varibles for access later 
+        if (this.templateProps['account'] && this.templateProps['account']['colors']) {
+          this.addStyle(jsonToCssVariables(this.templateProps['account']['colors']));
+        }
       } else {
         this.templateProps = JSON.parse("{}");
       }
@@ -62,9 +66,7 @@ export default class boilerplate {
       this.templateProps = JSON.parse("{}");
       console.log(`templateProps is not a valid JSON object`);
     }
-    if (config.colorsFromProps && this.templateProps && this.templateProps['account'] && this.templateProps['account']['colors']) {
-      this.addStyle(jsonToCssVariables(this.templateProps['account']['colors']));
-    }
+
     // all these checks need to be done before the tempalte code can be run
     let checkList = [
       domReady, 

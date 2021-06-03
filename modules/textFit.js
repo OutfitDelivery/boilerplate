@@ -155,7 +155,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     }
 
     var maxLine = parseInt(el.dataset.maxLine || settings.maxLine);
-    console.log(maxLine, 'maxline')
+    // console.log(maxLine, 'maxline')
     var startingSize = innerSpan.style.fontSize;
 
     low = settings.minFontSize;
