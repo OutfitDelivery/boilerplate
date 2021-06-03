@@ -276,7 +276,9 @@ function maxHeightCheck(element = null) {
     if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightDynamic === "true") {
       dynamicAssign(block);
     }
-    const blockHeight = getHeight(block);
+    // scroll height needs to be used as that will take into account the overflow's height
+    const blockHeight = block.scrollHeight; 
+    block.dataset.calculatedScrollHeight = blockHeight
     const maxHeight = block.dataset.maxHeight;
     let maxHeightFound;
     // TODO improve this 
@@ -284,7 +286,7 @@ function maxHeightCheck(element = null) {
       const computedBlockStyle = window.getComputedStyle(block);
       const cssMaxHeight = parseFloat(computedBlockStyle.maxHeight);
       if (!cssMaxHeight) {
-        console.error('There needs to be a max height set on the element if you want to use data-max-height="css"')
+        console.error(block, 'There needs to be a max height set on the element if you want to use data-max-height="css"')
       }
       maxHeightFound = cssMaxHeight
     } else {
