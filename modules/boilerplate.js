@@ -1,5 +1,5 @@
 import { imageCompression, ensureAllImagesLoaded } from "./pageSetup.js";
-import { defaultsRemoved, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState, hotReloadOnChange } from "./utilities.js";
+import { defaultsRemoved, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState, hotReloadOnChange, jsonToCssVariables } from "./utilities.js";
 import { dynamicReplace } from "./replace.js";
 import setupPlaceholder from "./placeholder.js";
 import textFit from "./textFit.js";
@@ -43,6 +43,7 @@ export default class boilerplate {
     if (config.cssVariables) {
       this.addStyle(`:root{${config.cssVariables}}`);
     }
+   
     if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
       addCropMarks(this.trimMarks, this.allowLegacyRendering);
     }
@@ -61,7 +62,9 @@ export default class boilerplate {
       this.templateProps = JSON.parse("{}");
       console.log(`templateProps is not a valid JSON object`);
     }
-
+    if (config.colorsFromProps && this.templateProps && this.templateProps['account'] && this.templateProps['account']['colors']) {
+      jsonToCssVariables(this.templateProps['account']['colors']);
+    }
     // all these checks need to be done before the tempalte code can be run
     let checkList = [
       domReady, 
