@@ -278,7 +278,7 @@ function maxHeightCheck(element = null) {
     }
     const blockHeight = getHeight(block);
     const maxHeight = block.dataset.maxHeight;
-
+    let maxHeightFound;
     // TODO improve this 
     if (block.dataset.maxHeight === "css") {
       const computedBlockStyle = window.getComputedStyle(block);
@@ -286,14 +286,14 @@ function maxHeightCheck(element = null) {
       if (!cssMaxHeight) {
         console.error('There needs to be a max height set on the element if you want to use data-max-height="css"')
       }
-      maxHeight = cssMaxHeight
+      maxHeightFound = cssMaxHeight
     } else {
       // Setting the element's max-height
       block.style.maxHeight = maxHeight + block.dataset.maxHeightUnit || "px";
-
+      maxHeightFound = maxHeight;
       // Recalculating maxHeight in case 'rem' is set as a unit
       if (block.dataset.maxHeightUnit === "rem") {
-        maxHeight = maxHeight * parseFloat(window.getComputedStyle(document.body).fontSize);
+        maxHeightFound = maxHeight * parseFloat(window.getComputedStyle(document.body).fontSize);
       }
     }
 

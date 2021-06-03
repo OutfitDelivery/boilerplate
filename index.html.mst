@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html async>
-  <head>
-  <!--  Template Admin Build Instructions 
+
+<head>
+  <!-- Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data
         4. Ensure you are using external css and js files 
         5. Include fonts in the boilerplate config
         6. Add your inputs to the script tag bellow
-        7. Have a lovely day 👉👈
+        7. Have a lovely day 
         8. Remove this comment
   -->
-    <title>PUT_TEMPLATE_NAME_HERE</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>
-    <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
-    <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
-    <meta name="updates" content=""/>
-    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
-    <link rel="stylesheet" type="text/less" href="css/styles.less">
+  <title>PUT_TEMPLATE_NAME_HERE</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="PUT_YOUR_NAME_HERE" />
+  <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE" />
+  <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
+  <link rel="stylesheet" type="text/less" href="css/styles.less">
 
-    <script id="inputInjection">
-      const templateProps = {
-        "trim-marks": `{{{trim-marks}}}`,
-        "placeholder-visibility": `{{{placeholder-visibility}}}`,
-        "placeholder-1": `{{{placeholder-1}}}`
-      }
-      const cssVariables = `
+  <script id="inputInjection">
+    const templateProps = {
+      "trim-marks": `{{{trim-marks}}}`,
+      "placeholder-visibility": `{{{placeholder-visibility}}}`,
+      "placeholder-1": `{{{placeholder-1}}}`
+    }
+    const cssVariables = `
         --red: #E41E46;
         --navy: #1F2A44;
         --black: #111820; 
@@ -37,18 +38,20 @@
         --brown: #453536;
         --teal: #94B7BB;
       `
-    </script>
-  </head>
-  <body>
-    <div class="page">
-      <div class="bleed">
-        <div class="container">
-          <h1>I appreciate you </h1>
-        </div>
+  </script>
+</head>
+
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <h1>I appreciate you </h1>
       </div>
     </div>
+  </div>
 
-   <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.0/boilerplate.js"></script>
-   <script src="js/main.js"></script>
-  </body>
+  <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.0/boilerplate.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
 </html>
