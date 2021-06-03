@@ -10,16 +10,16 @@ Download [boilerplate.zip](https://github.com/OutfitDelivery/boilerplate/blob/3.
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
-This version of the boilerplate is recommended with external stylesheets and scripts. Please provide a comment at the top of your index.html.mst explaining why you can't place styles externaly if you are going to do that (Note: if you create style tags inside index.html.mst, you'll receive error messages in your console about this.) 
+This version of the boilerplate is recommended with external stylesheets and scripts. Please provide a comment at the top of your index.html.mst explaining why you can't place styles externally if you are going to do that (Note: if you create style tags inside index.html.mst, you'll receive error messages in your console about this.) 
 
 ## Getting Started
 Before you start building the template there are few things that you need to do.
 1. Add a Template Name in the `<title>` Tag.
 2. Fill out the metadata tags in the head `template-built-by`, `scope`, `build`, `updates`. In each of them just fill out the data in the `content` attribute.
-3. Import all of your required fonts as `<link>` tags.
+3. Import all of your required fonts as `<link>` tags or account snippets.
 4. List out all of your fonts in the `fonts` array of the boilerplate config in `main.js`.
 5. Ensure you are using external css and js files. 
-6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names exactly, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
+6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names **exactly**, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
 7. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
 8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary.
 
@@ -88,12 +88,12 @@ template.addStyle('body { background: red; }')
 - invalidFontList()
     checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid) -->
 
-### [Replace.js](modules/replace.js) (formatters)
-- Replaces something in the template with something else
+### [Replace.js](modules/replace.js) (aka formatters)
+- Replaces a string with another string
 - The first parameter is the element the replace function will run on
 - The second parameter is an array of changes
-    - The 1st element is the new content to be inserted
-    - The 2nd element is the content to be replaced/removed
+    - The 1st element is the new string to be inserted
+    - The 2nd element is the string to be replaced/removed
 ```
 template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES]);
 template.dynamicReplace('.name', [
@@ -101,11 +101,11 @@ template.dynamicReplace('.name', [
     ['henry','lastname']
 ])
 ```
-If no arguments are given the function will replaces text inside of `data-replace-from=` with `data-replace-to=` on all elements on the page
+- If no arguments are given, the `dynamicReplace()` function will run on any elements on the page with `data-replace-from=` (i.e. the string to be replaced/removed) and `data-replace-to=` (i.e. the new string) attributes.
 
 `<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
 ```
-template.dynamicReplace()
+template.dynamicReplace() // => Hey sam
 ```
 ### [Textfit.js](modules/textFit.js) 
 ```
@@ -128,6 +128,6 @@ handleMTOData(mtoData, settings)
 
 <!-- The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates. -->
 
-1. This function requires a team metadata input to be given as the first arugment. 
-2. The second arguments is the list of teams the user is allowed to access based on there team. This will come out of the teams metadata and will bew in the format of a comma separated string of team ID's 
+1. This function requires a team metadata input to be given as the first argument. 
+2. The second argument is the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
 3. The last argument is the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access. 
