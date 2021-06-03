@@ -300,7 +300,7 @@ function maxHeightCheck(element = null) {
     }
 
     // Adding an 'overflow' class to an element if it's offset height exceedes the max-line-height
-    blockHeight > maxHeight
+    blockHeight > maxHeightFound
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
