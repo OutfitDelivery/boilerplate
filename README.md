@@ -33,60 +33,56 @@ Final note: if using *Less*, when you finish your build, for performance reasons
 
 ## Scripts
 There are two key scripts imported into index.html.mst:
-- boilerplate.js
 - main.js
+- boilerplate.js
 
 ### [Main.js](js/main.js)
 `Main.js` runs all the vital functions for any template to function. Anything being called by default shouldn't be removed. In addition, there are various functions commented out. This is simply to save resources, not running functions that are not required by all templates. Uncomment functions as required.
 
-The boilerplate object has various properties. There are a few key ones for builders. At the end of a build you would need to change some of these in order to remove them from production:
-- `hotReloadOnChange`: at the end of your build, remove this property entirely.
-- `placeholderVisibility`: at the end of your build, remove this property entirely.
-- `placeholderImages`: takes a single image as a string **or** an array of images. At the end of your build, remove this property entirely.
+The boilerplate object has various properties. There are a few key ones for builders:
+- `hotReloadOnChange`
+- `placeholderVisibility`
+- `placeholderImages`: takes a single image as a string **or** an array of images.
+
+At the end of your build, please remove these three properties entirely so they aren't left in production.
 
 ### [Boilerplate.js](modules/boilerplate.js)
 `Boilerplate.js` contains the boilerplate class, vital functionality and utilities used in `main.js`. 
 
-#### Vital Functions in [Boilerplate.js](modules/boilerplate.js)
-##### completeRender()
-- after `document.readyState` is "complete", dispatches "printready" event
-
-#### Other Functions/Utilities in [Boilerplate.js](modules/boilerplate.js)
-##### Overflow functions
+###### completeRender()
+This is vital to the functioning of the template. After `document.readyState` is "complete", it dispatches the "printready" event.
 ```
-// max line check: adds an overflow if the number of lines is greater than data-max-line 
+template.completeRender();
+```
+
+#### Overflow functions
+###### maxLineCheck()
+Adds an overflow if the number of lines is greater than data-max-line 
+```
 template.maxLineCheck();
-
-// min line check: adds an overflow if the number of lines is lower than data-min-line 
+```
+###### minLineCheck()
+Adds an overflow if the number of lines is lower than data-min-line 
+```
 template.minLineCheck();
-
-// max height check: adds an overflow if data-max-height is larger than the element's actual height
-// it also supports data-max-height="css" and data-max-height="parent" if you want the hight to be set via the css value or the height of the parent  
+```
+###### maxHeightCheck()
+Adds an overflow if data-max-height is larger than the element's actual height. It also supports data-max-height="css" and data-max-height="parent" if you want the hight to be set via the css value or the height of the parent 
+``` 
 template.maxHeightCheck();
-
-// char limit: adds an overflow if the number of characters is larger than data-char-limit
+```
+###### charLimit()
+Adds an overflow if the number of characters is larger than data-char-limit
+```
 template.charLimit();
 ```
-##### Utilites
+
+#### Utilites
+###### addStyle()
+Can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
 ```
-// this function can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
 template.addStyle('body { background: red; }')
 ```
-
-<!-- - setSize()
-    Sets the font size based on the window width & height, and some other factors.
-- setupPlaceholder()
-    If certain conditions are met, this function creates and inserts a div class="placeholderImage" at the beginning of the <page>.
-- setOutfitState()
-    Determines if the window is in mode of exports, templates, projects, preview or localhost, adds a correspdonding HTML attribute "document-state" with that value, e.g. document-state="exports", and returns that value.
-- imageCompression()
-    Selects any img element with a [data-custom-compression] attribute and adds a query flag to the image URL so that large images don't affect performance in preview mode.
-- pageHeightSetup()
-    Based on the renderer (either "1" or "2"), returns the appropriate page height. For renderer 1, or if renderer is not set, this is 100vh. For renderer 2, this is calc(100vh - 1px) to adjust for the "magic pixel" error.
-- setupMutationObserver()
-    creates a new MutationObserver from the provided parameters.
-- invalidFontList()
-    checks if there were no fonts listed or if the placeholder "PUT_ALL_FONT_NAMES_HERE" is still present, and if either of these is true, returns true (i.e. the font list IS invalid) -->
 
 ### [Replace.js](modules/replace.js) (aka formatters)
 - Replaces a string with another string
@@ -101,7 +97,7 @@ template.dynamicReplace('.name', [
     ['henry','lastname']
 ])
 ```
-- If no arguments are given, the `dynamicReplace()` function will run on any elements on the page with `data-replace-from=` (i.e. the string to be replaced/removed) and `data-replace-to=` (i.e. the new string) attributes.
+If no arguments are given, the `dynamicReplace()` function will run on any elements on the page with `data-replace-from=` (i.e. the string to be replaced/removed) and `data-replace-to=` (i.e. the new string) attributes.
 
 `<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
 ```
@@ -113,21 +109,30 @@ template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSiz
 ```
 
 ### [MTO.js](modules/mto.js) 
-```
-template.setupMTO({}, "{{{team.mto}}}", 'Branch Selection')
-runMTO({{{mto-v3}}});
+MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s' meta-data. MTO hides all the teams listed within the input except the ones listed in the team.mto team metadata field. 
+- Note: MTO functionality only runs on documents, not templates.
 
-let runMTO = (data) => {
-    console.log(data)
+###### setupMTO()
+- Does everything described above
+- 1st argument - the team metadata input
+- 2nd argument - the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
+- 3rd argument -  the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access.
+```
+template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
+```
+- Note: `setupMTO()` is required before calling `runMTO()`
+
+###### Using MTO
+You can use the data provided by `setupMTO()` and manipulate the DOM in whichever ways the template requires. There is no standard across all clients for what a template might do with MTO data. Consult squad leads or past templates for possible examples that are relevant to your client/template.
+In general, you would define a function in your template and pass {{{mto-v3}}} to it, e.g.
+```
+let runMTO = (mtoData) => {
+    console.log(mtoData)
+    //your DOM manipulations
 }
-or 
-
-template.setupMTO({{{mto-v3}}}, "{{{team.mto}}}", 'Branch Selection')
-handleMTOData(mtoData, settings)
+runMTO({{{mto-v3}}});
 ```
 
-<!-- The purpose of this function is to implement MTO v3 into a template. Not sure what MTO is, well then you probably shouldn't be using it in the template. Essentially MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s meta-data. The MTO function comes in and hides all the teams listed within the input except the ones listed in the team.mto team metadata field. It also disables the input functionality on templates. -->
 
-1. This function requires a team metadata input to be given as the first argument. 
-2. The second argument is the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
-3. The last argument is the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access. 
+
+
