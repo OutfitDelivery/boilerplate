@@ -120,7 +120,7 @@ MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Meta
 ```
 template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ```
-- Note: `setupMTO()` is required before calling `runMTO()`
+- Note: `setupMTO()` is required before attempting to use mto data in any way (e.g. by calling a function like `runMTO()` below)
 
 ###### Using MTO
 You can use the data provided by `setupMTO()` and manipulate the DOM in whichever ways the template requires. There is no standard across all clients for what a template might do with MTO data. Consult squad leads or past templates for possible examples that are relevant to your client/template.
