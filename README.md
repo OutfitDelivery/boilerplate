@@ -117,7 +117,27 @@ MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Meta
 - 1st argument - the team metadata input
 - 2nd argument - the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
 - 3rd argument -  the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access.
+- Before setupMTO() can run correctly, the state needs to have been set, e.g.
 ```
+var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
+mode =
+    !mode && window.location.href.indexOf("templates") > -1
+    ? "template"
+    : mode;
+mode =
+    !mode && window.location.href.indexOf("projects") > -1
+    ? "document"
+    : mode;
+mode =
+    !mode && window.location.href.indexOf("preview") > -1 ? "preview" : mode;
+mode =
+    !mode && window.location.href.indexOf("localhost") > -1 ? "local" : mode;
+if (!mode) {
+    mode = "error";
+}
+document.body.setAttribute("document-state", mode);
+window.state = mode;
+
 template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ```
 - Note: `setupMTO()` is required before attempting to use mto data in any way (e.g. by calling a function like `runMTO()` below)
@@ -132,7 +152,20 @@ let runMTO = (mtoData) => {
 }
 runMTO({{{mto-v3}}});
 ```
-
+Many implementations of a function like `runMTO()` also require a `formatPhoneNumber()` function e.g. 
+```
+let formatPhoneNumber = (str) => {
+    str = str.replace(/[^.\d]/g, '').replace(/ /g,'');
+    if (str.length === 8) {
+    return str.replace(/(\d{4})(\d{4})/, "$1 $2");
+    } else if (str.length === 10) {
+    return str.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+    } else {
+    return [str.slice(0, 4), " ", str.slice(4)].join('');
+    }
+}
+```
+For a full example of `runMTO()` see [Bendigo runMTO()](https://github.com/OutfitDelivery/boilerplate/wiki/Bendigo-runMTO())
 
 
 
