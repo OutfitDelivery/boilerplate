@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html async>
+
+<head>
+  <title>Max height testing</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="testte" />
+  <meta name="scope" content="DTB-123" />
+  <meta name="build" content="DTB-456" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .container {
+      display: grid;
+      grid-row: auto;
+      width: 100%;
+      padding: 3mm;
+      row-gap: 1ch;
+      background-color: #D1D3D4;
+      overflow: scroll;
+      width: 1000px;
+    }
+
+    .test-row {
+      background-color: white;
+      height: fit-content;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <div class="test-row">
+          <div id="example1">
+            <div data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85); height: 50px;">
+            </div>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example2">
+            <p data-max-height="dynamic" style="width: 100%; background-color: rgb(62, 177, 85); height: 50px;">
+            </p>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example3">
+            <p data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85); height: 50.2px;">
+            </p>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example4">
+            <p data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85); height: 50.7px;">
+            </p>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example5">
+            <p  data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85); height: 50.3px;">
+              <strong style="height: 50.6px;">s</strong>
+            </p>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example6">
+            <div data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85);">
+              <div>
+                Erat accumsan cras senectus quisque
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example7">
+            <div data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85);margin-bottom: 10px;">
+              <div>
+                Erat accumsan cras senectus quisque
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example8">
+            <div data-max-height="parent" style="width: 100%; background-color: rgb(62, 177, 85); height: 50px;">
+              <div style="height: 100px;">
+                big overflow
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/dist/boilerplate.js"></script>
+<script>
+  let template = new boilerplate({
+    fonts: ['IBM Plex Sans'],
+    templateProps: {}
+  });
+
+  // This function will run whenever there is a change to any text input
+  template.on('inputs-change', () => {
+    template.maxHeightCheck();
+    template.completeRender();
+  })
+</script>
+
+</html>

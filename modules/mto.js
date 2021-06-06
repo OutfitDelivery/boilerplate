@@ -36,7 +36,7 @@
         }
         if (state === "document") {
         // turn teamsAllowed from string into array
-          teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
+          teamsAllowed = teamsAllowed.toLowerCase().split(',').filter(n => n)
             let hideTeamsThatAreNotAllowed = () => {
               if (teamsAllowed.length > 0) {
                 // if we are only allowing the user to select some of the teams then we should remove the ones that the user hasn't got access to. 

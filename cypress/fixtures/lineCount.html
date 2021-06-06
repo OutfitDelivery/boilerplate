@@ -182,13 +182,9 @@
   <script>
     let template = new boilerplate({
       fonts: ['IBM Plex Sans'],
-      inputProps: {}
+      templateProps: {}
     });
-    // Please put all fonts needed for the tempate into the array bellow
-    template.start().then(() => {
-      template.completeRender();
-    }).catch(console.trace);
-
+   
     // This function will run whenever there is a change to any text input
     template.on('inputs-change', () => {
       // let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });

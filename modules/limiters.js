@@ -48,10 +48,6 @@ function findTextNode(target) {
 }
 // not so simple rounding for line counting purposes
 function simpleRounding(num) {
-  if (num > 10) {
-    return Math.round(num);
-    // return num.toFixed(0).replace(/(\.0+|0+)$/, '');
-  }
   return Math.round(num)//.replace(/(\.0+|0+)$/, '');
 }
 // count the number of lines inside of the current direct element
@@ -300,7 +296,7 @@ function maxHeightCheck(element = null) {
     }
 
     // Adding an 'overflow' class to an element if it's offset height exceedes the max-line-height
-    blockHeight > maxHeightFound
+    blockHeight > simpleRounding(maxHeightFound)
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
