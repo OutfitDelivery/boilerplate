@@ -117,7 +117,7 @@ MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Meta
 - 1st argument - the team metadata input
 - 2nd argument - the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
 - 3rd argument -  the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access.
-
+```
 template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ```
 - Note: `setupMTO()` is required before attempting to use mto data in any way (e.g. by calling a function like `runMTO()` below)
@@ -125,6 +125,7 @@ template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ###### Using MTO
 You can use the data provided by `setupMTO()` and manipulate the DOM in whichever ways the template requires. There is no standard across all clients for what a template might do with MTO data. Consult squad leads or past templates for possible examples that are relevant to your client/template.
 In general, you would define a function in your template and pass {{{mto-v3}}} to it, e.g.
+
 ```
 let runMTO = (mtoData) => {
     console.log(mtoData)
@@ -132,7 +133,9 @@ let runMTO = (mtoData) => {
 }
 runMTO({{{mto-v3}}});
 ```
+
 Many implementations of a function like `runMTO()` also require a `formatPhoneNumber()` function e.g. 
+
 ```
 let formatPhoneNumber = (str) => {
     str = str.replace(/[^.\d]/g, '').replace(/ /g,'');
@@ -145,6 +148,7 @@ let formatPhoneNumber = (str) => {
     }
 }
 ```
+
 For a full example of `runMTO()` see [Bendigo runMTO()](https://github.com/OutfitDelivery/boilerplate/wiki/Bendigo-runMTO())
 
 
