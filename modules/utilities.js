@@ -1,7 +1,3 @@
-window.less = {
-  env: "development"
-};
-
 import FontFaceObserver from "./fontfaceobserver.js";
 
 const defaultsRemoved = () => {
@@ -352,8 +348,12 @@ const loadLESS = () => {
   return new Promise(async (resolve, reject) => {
     try {
       if (document.querySelector('[type="text/less"]') !== null) {
-        let less = await require("less");
-        await less.watch()
+        window.less = {
+          async: true,
+          env: 'development'
+        } 
+        let less = await require('./less.js')
+        await less.refresh();
         document
           .querySelectorAll('style[media=""][data-href$=".less"]:not([href])')
           .forEach((e) => e.remove());
