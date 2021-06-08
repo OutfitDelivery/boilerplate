@@ -1,3 +1,4 @@
+// import less from "less";
 import FontFaceObserver from "./fontfaceobserver.js";
 
 const defaultsRemoved = () => {
@@ -348,6 +349,12 @@ const loadLESS = (variables = {}) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (document.querySelector('[type="text/less"]') !== null) {
+        window.less = {
+          env: "development",
+          async: true,
+          globalVars: variables
+        };
+        // less.render(file.content)
         require("less");
         document
           .querySelectorAll('style[media=""][data-href$=".less"]:not([href])')
