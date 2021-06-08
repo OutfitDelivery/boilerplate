@@ -62,7 +62,7 @@ function countLines(elements, advanced) {
   }
   let result = [].slice.call(elements).map(target => {
     if (true) {
-      let muiltCount = 0;
+      let multiCount = 0;
       let textNodes = textNodesUnder(target);
       // console.log(textNodes, 'textNodes that have height')
       textNodes.forEach(el => {
@@ -71,12 +71,12 @@ function countLines(elements, advanced) {
         // console.log(el, metrics)
         if (line) {
           el.dataset.rawLinesCount = line;
-          muiltCount += line;
+          multiCount += line;
         }
       })
-      muiltCount = simpleRounding(muiltCount)
-      target.dataset.calculatedLinesCount = muiltCount // adds property for CSS targeting
-      return muiltCount
+      multiCount = simpleRounding(multiCount)
+      target.dataset.calculatedLinesCount = multiCount // adds property for CSS targeting
+      return multiCount
     } else {
       if (false) {
           target.classList.add('countingLines');
@@ -204,7 +204,17 @@ function getWidth(el) {
   return width;
 }
 
-function maxLineCheck(element = null) {
+function maxLineCheck(elements = null, limit = null) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elements && 
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+
   const isExportMode = window.location.href.indexOf("exports") > -1;
   const isLocalDev = window.location.href.indexOf("localhost") > -1;
   const preventExportOverflow =
@@ -215,11 +225,11 @@ function maxLineCheck(element = null) {
 
   if ((isExportMode && preventExportOverflow) || isProjectKit) return;
 
-  const blocks = document.querySelectorAll("[data-max-line]");
+  const blocks = elements || document.querySelectorAll("[data-max-line]");
   blocks.forEach((block) => {
     const lineCount = countLines(block);
     // Getting the data-max-line attribute value (max number of lines allowed) 
-    const maxLine = block.dataset.maxLineAlt || block.dataset.maxLine;
+    const maxLine = limit || block.dataset.maxLine;
 
     lineCount > maxLine
       ? block.classList.add("overflow")
@@ -228,7 +238,16 @@ function maxLineCheck(element = null) {
   return true;
 }
 
-function minLineCheck(element = null) {
+function minLineCheck(element = null, limit = null) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elements &&
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
   const isExportMode = window.location.href.indexOf("exports") > -1;
   const isLocalDev = window.location.href.indexOf("localhost") > -1;
   const preventExportOverflow =
@@ -239,11 +258,11 @@ function minLineCheck(element = null) {
 
   if ((isExportMode && preventExportOverflow) || isProjectKit) return;
 
-  const blocks = document.querySelectorAll("[data-min-line]");
+  const blocks = elements || document.querySelectorAll("[data-min-line]");
   blocks.forEach((block) => {
     const lineCount = countLines(block);
     // Getting the data-max-line attribute value (max number of lines allowed) 
-    const minLine = block.dataset.minLineAlt || block.dataset.maxLine;
+    const minLine = limit || block.dataset.maxLine;
 
     lineCount <= minLine
       ? block.classList.add("overflow")
@@ -256,7 +275,16 @@ function minLineCheck(element = null) {
 *Detailed instruction can be found here:
  https://github.com/aleks-frontend/max-height-check
 */
-function maxHeightCheck(element = null) {
+function maxHeightCheck(elements = null, limit = null) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elements &&
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
   const isExportMode = window.location.href.indexOf("exports") > -1;
   const isLocalDev = window.location.href.indexOf("localhost") > -1;
   const preventExportOverflow =
@@ -267,18 +295,18 @@ function maxHeightCheck(element = null) {
 
   if ((isExportMode && preventExportOverflow) || isProjectKit) return;
 
-  const blocks = document.querySelectorAll("[data-max-height]");
+  const blocks = elements || document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    if (block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightDynamic === "true") {
+    if ((limit && limit === "parent") || block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightDynamic === "true") {
       dynamicAssign(block);
     }
     // scroll height needs to be used as that will take into account the overflow's height
     const blockHeight = block.scrollHeight; 
     block.dataset.calculatedScrollHeight = blockHeight
-    const maxHeight = block.dataset.maxHeight;
+    const maxHeight = limit || block.dataset.maxHeight;
     let maxHeightFound;
     // TODO improve this 
-    if (block.dataset.maxHeight === "css") {
+    if (maxHeight === "css") {
       const computedBlockStyle = window.getComputedStyle(block);
       const cssMaxHeight = parseFloat(computedBlockStyle.maxHeight);
       if (!cssMaxHeight) {
@@ -287,12 +315,12 @@ function maxHeightCheck(element = null) {
       maxHeightFound = cssMaxHeight
     } else {
       // Setting the element's max-height
-      block.style.maxHeight = maxHeight + block.dataset.maxHeightUnit || "px";
+      block.style.maxHeight = maxHeight + "px";
       maxHeightFound = maxHeight;
-      // Recalculating maxHeight in case 'rem' is set as a unit
-      if (block.dataset.maxHeightUnit === "rem") {
-        maxHeightFound = maxHeight * parseFloat(window.getComputedStyle(document.body).fontSize);
-      }
+      // // Recalculating maxHeight in case 'rem' is set as a unit
+      // if (block.dataset.maxHeightUnit === "rem") {
+      //   maxHeightFound = maxHeight * parseFloat(window.getComputedStyle(document.body).fontSize);
+      // }
     }
 
     // Adding an 'overflow' class to an element if it's offset height exceedes the max-line-height
@@ -306,14 +334,6 @@ function maxHeightCheck(element = null) {
 function dynamicAssign(element = null) {
   const container = element.parentNode;
   container.style.overflow = "hidden";
-  // const containerComputed = {
-  //   height: parseFloat(window.getComputedStyle(container).height),
-  //   top: parseFloat(window.getComputedStyle(container).paddingTop),
-  //   bottom: parseFloat(window.getComputedStyle(container).paddingBottom),
-  // };
-  // const containerHeight = Math.floor(
-  //   containerComputed.height - containerComputed.top - containerComputed.bottom
-  // );
   const containerHeight = getHeight(container)
   // TODO work out what subtrahend is 
   const subtrahends = [].slice.call(container.querySelectorAll(".js-subtrahend"));
@@ -340,10 +360,19 @@ function dynamicAssign(element = null) {
 }
 
 // Adding limit for the word length
-function charLimit(element = null) {
-  const blocks = document.querySelectorAll("[data-char-limit]");
+function charLimit(elements = null, limit = null) {
+  var elType = Object.prototype.toString.call(elements);
+  if (
+    elements &&
+    elType !== "[object Array]" &&
+    elType !== "[object NodeList]" &&
+    elType !== "[object HTMLCollection]"
+  ) {
+    elements = [elements];
+  }
+  const blocks = elements || document.querySelectorAll("[data-char-limit]");
   blocks.forEach((element) => {
-    const limit = element.dataset.charLimit;
+    const lettersLimit = limit || element.dataset.charLimit;
 
     if (element === null) {
       return;
@@ -355,7 +384,7 @@ function charLimit(element = null) {
     }
     var code = element.innerText;
     element.dataset.calculatedCharCount = code.length;
-    if (code.length > limit) {
+    if (code.length > lettersLimit) {
       // Check Token Again
       if (tokenValue.length != 0) {
         element.parentNode.classList.add("overflow");

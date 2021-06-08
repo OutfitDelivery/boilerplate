@@ -173,6 +173,36 @@
             </div>
           </div>
         </div>
+        <div class="test-row js">
+          <div id="example7">
+            <div class="target" >
+              <p><strong>Talk to a farm finance expert today.</strong></p>
+              <strong>Search Rural Bank.</strong>
+            </div>
+          </div>
+        </div>
+        <div class="test-row js">
+          <div id="example8">
+            <div class="targets first" >
+              <p><strong>Talk to a farm finance expert today.</strong></p>
+              <strong>Search Rural Bank.</strong>
+            </div>
+            <div class="targets second" >
+              <p><strong>Talk to a farm finance expert today.</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="test-row dataset">
+          <div id="example9">
+            <div class="targets first" data-max-line="1">
+              <p><strong>Talk to a farm finance expert today.</strong></p>
+              <strong>Search Rural Bank.</strong>
+            </div>
+            <div class="targets second" data-max-line="1">
+              <p><strong>Talk to a farm finance expert today.</strong></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -201,6 +231,12 @@
       console.table(template.countLines(document.querySelectorAll('.column')))
       
       console.table(template.countLines(document.querySelectorAll('#example6 .cta')))
+
+      // run directly on element
+      template.maxLineCheck(document.querySelector('.target'), 1)
+      template.maxLineCheck(document.querySelectorAll('.targets'), 1)
+
+      template.maxLineCheck()
       // console.table('cta', template.countLines(document.querySelectorAll('.cta')))
 
       // console.log(textNodesUnder(document.querySelector('.column1')))

@@ -39,5 +39,25 @@ describe('Max height checks ', () => {
         // this should overflow
         cy.get('#example8 > div').should('have.class', 'overflow')
         
+        // js targeted checks
+        cy.get('#example9 p').invoke('attr', 'data-max-height').should('equal', '50')
+        cy.get('#example9 p').invoke('attr', 'data-calculated-scroll-height').should('equal', '50')
+        cy.get('#example9 p').should('not.have.class', 'overflow')
+
+        cy.get('#example10 .first p').invoke('attr', 'data-max-height').should('equal', '50')
+        cy.get('#example10 .first p').invoke('attr', 'data-calculated-scroll-height').should('equal', '50')
+        cy.get('#example10 .first p').should('not.have.class', 'overflow')
+
+        cy.get('#example10 .second p').invoke('attr', 'data-max-height').should('equal', '50')
+        cy.get('#example10 .second p').invoke('attr', 'data-calculated-scroll-height').should('equal', '51')
+        cy.get('#example10 .second p').should('have.class', 'overflow')
+
+        cy.get('#example11  p').invoke('attr', 'data-max-height').should('be.undefined')
+        cy.get('#example11  p').invoke('attr', 'data-calculated-scroll-height').should('equal', '50')
+        cy.get('#example11  p').should('not.have.class', 'overflow')
+
+        cy.get('#example12  .height').invoke('attr', 'data-max-height').should('be.undefined')
+        cy.get('#example12  .height').invoke('attr', 'data-calculated-scroll-height').should('equal', '101')
+        cy.get('#example12  .height').should('have.class', 'overflow')
     });
 })
