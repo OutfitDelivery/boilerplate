@@ -116,7 +116,9 @@ export default class boilerplate {
   }
   start() {
     return new Promise((resolve, reject) => {
-      console.log('there is no need to call start. just create a template.on("inputs-change", (e) => {}) event')
+      console.log(`there is no need to call start. just create a template.on("inputs-change", (e) => {
+        // code here
+      }) event`)
       resolve()
     })
   }

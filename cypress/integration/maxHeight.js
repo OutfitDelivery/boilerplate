@@ -2,8 +2,8 @@
 //     Cypress.Cookies.preserveOnce('_outfit_session_staging', '_outfit_session_production')
 //   })
 
-describe('Counting lines', () => {
-    it('test large lines', async () => {
+describe('Max height checks ', () => {
+    it('test html file loads as expected', async () => {
         cy.visit('cypress/fixtures/maxHeight.html');
         cy.get('#example1 > div').invoke('attr', 'data-calculated-scroll-height').should('equal', '50')
         cy.get('#example1 > div').invoke('attr', 'data-max-height').should('equal', '50')

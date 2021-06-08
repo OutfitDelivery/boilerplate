@@ -1,4 +1,7 @@
-// import less from "less";
+window.less = {
+  env: "development"
+};
+
 import FontFaceObserver from "./fontfaceobserver.js";
 
 const defaultsRemoved = () => {
@@ -19,7 +22,7 @@ const defaultsRemoved = () => {
           "style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])"
         )
       );
-      styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico ")); // allowed injected style until the ID is added to target this
+      // styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico ")); // allowed injected style until the ID is added to target this
       if (styles.length > 0) {
         console.log(
           "%cIt is best practice not use styles in the html document. Please move all the styles to an external styles.css or styles.less file for constancy",
@@ -345,17 +348,12 @@ const winLoad = new Promise((resolve, reject) => {
   }
 });
 
-const loadLESS = (variables = {}) => {
+const loadLESS = () => {
   return new Promise(async (resolve, reject) => {
     try {
       if (document.querySelector('[type="text/less"]') !== null) {
-        window.less = {
-          env: "development",
-          async: true,
-          globalVars: variables
-        };
-        // less.render(file.content)
-        require("less");
+        let less = await require("less");
+        await less.watch()
         document
           .querySelectorAll('style[media=""][data-href$=".less"]:not([href])')
           .forEach((e) => e.remove());
