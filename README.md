@@ -117,26 +117,6 @@ MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Meta
 - 1st argument - the team metadata input
 - 2nd argument - the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
 - 3rd argument -  the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access.
-- Before setupMTO() can run correctly, the state needs to have been set, e.g.
-```
-var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
-mode =
-    !mode && window.location.href.indexOf("templates") > -1
-    ? "template"
-    : mode;
-mode =
-    !mode && window.location.href.indexOf("projects") > -1
-    ? "document"
-    : mode;
-mode =
-    !mode && window.location.href.indexOf("preview") > -1 ? "preview" : mode;
-mode =
-    !mode && window.location.href.indexOf("localhost") > -1 ? "local" : mode;
-if (!mode) {
-    mode = "error";
-}
-document.body.setAttribute("document-state", mode);
-window.state = mode;
 
 template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ```
