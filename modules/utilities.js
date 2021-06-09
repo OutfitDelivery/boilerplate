@@ -160,13 +160,10 @@ const detectRender = () => {
 };
 // There is an error on render 2 where an extra pixel is added to the end of a template
 // this casues a new page to be made. This fuction removes that extra pixel
-const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
+const pageHeightSetup = (allowLegacyRendering) => {
   let render = detectRender();
   if (render === "2.1") {
-    if (!trimMarks) {
       return "calc(100vh - 1px)";
-    }
-    return "100vh";
   } else if (render === "1.1") {
     return "100vh";
   } else if (render === "1.0") {
@@ -178,10 +175,7 @@ const pageHeightSetup = (trimMarks, allowLegacyRendering) => {
     if (!allowLegacyRendering) {
       blockRender();
     }
-    if (!trimMarks) {
-      return "calc(100vh - 1px)";
-    }
-    return "100vh";
+    return "calc(100vh - 1px)";
   } else {
     return "100vh";
   }
@@ -192,7 +186,7 @@ const addCropMarks = (trimMarks, allowLegacyRendering) => {
   // crop and bleed
   var cropSVG = `<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>`;
 
-  let pageHeight = pageHeightSetup(trimMarks, allowLegacyRendering);
+  let pageHeight = pageHeightSetup(allowLegacyRendering);
   let pages = document.querySelectorAll(".page");
   pages.forEach((page) => {
     page.style.height = pageHeight;
