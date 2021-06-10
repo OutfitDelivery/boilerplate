@@ -162,6 +162,7 @@ export default class boilerplate {
       css.appendChild(document.createTextNode(styles));
     }
     document.getElementsByTagName("head")[0].appendChild(css);
+    return css; 
   }
   // send a event to stop a render
   completeRender(checkList = []) {

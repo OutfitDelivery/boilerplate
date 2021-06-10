@@ -62,11 +62,13 @@ function countLines(elements, advanced) {
   }
   let result = [].slice.call(elements).map(target => {
     if (true) {
+      target.classList.add('countingLines');
       let multiCount = 0;
       let textNodes = textNodesUnder(target);
       // console.log(textNodes, 'textNodes that have height')
       textNodes.forEach(el => {
         let metrics = calculateTextMetrics(el);
+
         let line = simpleRounding(metrics.lineCount)
         // console.log(el, metrics)
         if (line) {
@@ -76,6 +78,7 @@ function countLines(elements, advanced) {
       })
       multiCount = simpleRounding(multiCount)
       target.dataset.calculatedLinesCount = multiCount // adds property for CSS targeting
+      target.classList.remove('countingLines');
       return multiCount
     } else {
       if (false) {
