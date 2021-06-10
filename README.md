@@ -39,7 +39,18 @@ There are two key scripts imported into index.html.mst:
 ### [Main.js](js/main.js)
 `Main.js` runs all the vital functions for any template to function. Anything being called by default shouldn't be removed. In addition, there are various functions commented out. This is simply to save resources, not running functions that are not required by all templates. Uncomment functions as required.
 
-The boilerplate object has various properties. There are a few key ones for builders:
+**Note:** any additional functions you write or add to your template should be called in the same place as all the pre-existing functions, i.e. inside the `template.on("inputs-change"...` block:
+```
+template.on("inputs-change", (templateProps) => {
+  console.table(templateProps);
+
+  // CALL YOUR FUNCTIONS HERE
+
+  template.completeRender();
+});
+```
+
+The boilerplate object in `main.js` has various properties. There are a few key ones for builders:
 - `hotReloadOnChange`
 - `placeholderVisibility`
 - `placeholderImages`: takes a single image as a string **or** an array of images.
