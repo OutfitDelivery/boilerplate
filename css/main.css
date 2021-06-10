@@ -199,6 +199,16 @@ a {
   display: inherit;
 }
 
+/* When we are counting lines it's important to not have padding/margin on any of the elements as this will increase the count */
+.countingLines * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+}
+
 /*
 Overflow styles from the platform that are only here as the platfrom isn't adding them
 https://outfithq.atlassian.net/browse/OP-4123
