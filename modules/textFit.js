@@ -1,4 +1,4 @@
-import { getWidth, getHeight, countLines } from './limiters.js'
+import { getWidth, getHeight, countLines, maxHeightCheck } from './limiters.js'
 /**
  * textFit v3.1.0
  * Previously known as jQuery.textFit
@@ -41,6 +41,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
     minFontSize: 0.3,
     maxFontSize: 1,
     maxLine: false,
+    containerOverflows: [],
     reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
     widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
     alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
@@ -102,6 +103,7 @@ import { getWidth, getHeight, countLines } from './limiters.js'
 
     var innerSpan, originalHeight, originalHTML, originalWidth;
     var low, mid, high;
+    var containerOverflows = settings.containerOverflows;
 
     // Get element data.
     originalHTML = el.innerHTML;
@@ -166,16 +168,24 @@ import { getWidth, getHeight, countLines } from './limiters.js'
       mid = parseFloat(((high + low) / 2).toFixed(2));
       innerSpan.style.fontSize = mid + settings.fontUnit;
 
-      var scrollWidth = getWidth(innerSpan) <= originalWidth;
-      var scrollHeight =
+      let scrollWidth = getWidth(innerSpan) <= originalWidth;
+      let scrollHeight =
         settings.widthOnly || getHeight(innerSpan) <= originalHeight;
 
       // check if too many lines and if it is then we need to adjust the font size accordingly
-      var maxLines = false;
+      let maxLines = false;
       if (Number.isInteger(maxLine)) {
-        var lineCount = countLines(innerSpan);
+        let lineCount = countLines(innerSpan);
         maxLines = lineCount > maxLine;
       }
+
+      let containerOverflow = [].slice.call(containerOverflows).some(el => {
+        let h = maxHeightCheck(el);
+        console.log(el, h)
+        return h;
+      })
+
+      console.log(containerOverflow)
 
       if (scrollWidth && scrollHeight && !maxLines) {
         size = mid;
@@ -210,7 +220,6 @@ import { getWidth, getHeight, countLines } from './limiters.js'
         var lineCount = countLines(innerSpan);
         el.dataset.lineCount = lineCount;
         if (lineCount > maxLine) {
-          // el.dataset.customOverflowMessage = "Too much content has been added for the allowed space";
           el.classList.add("overflow");
         }
       }

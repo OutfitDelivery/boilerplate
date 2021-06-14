@@ -62,7 +62,7 @@
                 hideInput(inputName)
               }
             }
-            setInterval(() => hideTeamsThatAreNotAllowed(), 500)
+            setInterval(() => hideTeamsThatAreNotAllowed(), 300)
             hideTeamsThatAreNotAllowed();
           }
           if (state === "template") {

@@ -1,12 +1,11 @@
 import { imageCompression, ensureAllImagesLoaded } from "./pageSetup.js";
-import { defaultsRemoved, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState, hotReloadOnChange, jsonToCssVariables } from "./utilities.js";
+import { defaultsRemoved, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState, hotReloadOnChange } from "./utilities.js";
 import { dynamicReplace } from "./replace.js";
 import setupPlaceholder from "./placeholder.js";
 import textFit from "./textFit.js";
 import { setupMTO } from "./mto.js";
 import {
   charLimit,
-  dynamicAssign,
   minLineCheck,
   maxHeightCheck,
   maxLineCheck,
@@ -40,9 +39,7 @@ export default class boilerplate {
     if (config.trimMarks) {
       document.body.setAttribute("data-trim", config.trimMarks);
     }
-    if (config.cssVariables) {
-      this.addStyle(`:root{${config.cssVariables}}`);
-    }
+  
    
     if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
       addCropMarks(this.trimMarks, this.allowLegacyRendering);
@@ -52,13 +49,14 @@ export default class boilerplate {
     if (config.placeholderVisibility) {
       setupPlaceholder(config.placeholderVisibility, config.placeholderImages);
     }
+    if (config.cssVariables) {
+      this.addStyle(`:root{${config.cssVariables}}`);
+    }
+  
     try {
       if (config.templateProps) {
         this.templateProps = JSON.parse(JSON.stringify(config.templateProps));
-        // add colours from account as CSS varibles for access later 
-        if (this.templateProps['account'] && this.templateProps['account']['colors']) {
-          this.addStyle(jsonToCssVariables(this.templateProps['account']['colors']));
-        }
+        
       } else {
         this.templateProps = JSON.parse("{}");
       }
@@ -74,6 +72,7 @@ export default class boilerplate {
       fontsLoaded(this.fonts),
     ];
     if (config.waitForImages) {
+      checkList.push(winLoad);
       checkList.push(ensureAllImagesLoaded());
     }
     Promise.all(checkList)
@@ -95,7 +94,10 @@ export default class boilerplate {
             }
           });
         }
-        
+        window.addEventListener('message', (e) => {
+          this.templateProps = { ...this.templateProps, ...e.data }
+          this.emit("inputs-change", this.templateProps);
+        })
       // OutfitIframeShared.eventEmitter.addListener(
       //   'token-value:change',
       //   (e) => {
@@ -181,7 +183,7 @@ export default class boilerplate {
         console.info(`Document has finished rendering in ${loadTime}ms`);
         document.dispatchEvent(new Event("printready"));
 
-        if (state === "document" || state === "template") {
+        if (this.state === "document" || this.state === "template"  || this.state === "local") {
           // set timeout is used here to push this to the end of the heap which means it will load after everything else
           setTimeout(() => {
             if (!this.allowNoMetaData) {

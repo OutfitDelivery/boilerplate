@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html async>
+
+<head>
+  <title>Line count testing</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="testte" />
+  <meta name="scope" content="DTB-" />
+  <meta name="build" content="DTB-456" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
+  <style type="text/less">
+    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .container {
+      display: grid;
+      grid-row: auto;
+      width: 100%;
+      padding: 3mm;
+      row-gap: 1ch;
+      background-color: #D1D3D4;
+      overflow: scroll;
+      width: 500px;
+    }
+
+    .test-row {
+      background-color: white;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <div id="example1" class="test-row simple">
+          <p>
+            Erat accumsan cras senectus quisque
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script src="/dist/boilerplate.js"></script>
+  <script>
+    let template = new boilerplate({
+      fonts: ['IBM Plex Sans'],
+      templateProps: {}
+    });
+   
+    // This function will run whenever there is a change to any text input
+    template.on('inputs-change', () => {
+      template.textFit(document.querySelector('#example1 p'), { minFontSize: 1.5, maxFontSize: 1000, widthOnly: true, maxLine: 3 })
+      // template.completeRender();
+    })
+  </script>
+</body>
+
+</html>

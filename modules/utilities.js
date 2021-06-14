@@ -375,34 +375,34 @@ const hotReloadOnChange = () => {
   }
 };
 
-const jsonToCssVariables = (json, options = {}) => {
-  const offset = options.offset === undefined ? 0 : options.offset;
+// const jsonToCssVariables = (json, options = {}) => {
+//   const offset = options.offset === undefined ? 0 : options.offset;
 
-  let count = 0;
-  let output = `${options.element ? options.element : ":root"} {${
-    options.pretty ? "\n" : ""
-  }`;
+//   let count = 0;
+//   let output = `${options.element ? options.element : ":root"} {${
+//     options.pretty ? "\n" : ""
+//   }`;
 
-  for (let key in json) {
-    if (count >= offset) {
-      let value = json[key];
+//   for (let key in json) {
+//     if (count >= offset) {
+//       let value = json[key];
 
-      if (!isNaN(value) && value !== 0) {
-        value += options.unit === undefined ? "px" : options.unit;
-      }
+//       if (!isNaN(value) && value !== 0) {
+//         value += options.unit === undefined ? "px" : options.unit;
+//       }
 
-      output += `${options.pretty ? "\t" : ""}--${key}: ${value};${
-        options.pretty ? "\n" : ""
-      }`;
-    }
+//       output += `${options.pretty ? "\t" : ""}--${key}: ${value};${
+//         options.pretty ? "\n" : ""
+//       }`;
+//     }
 
-    count++;
-  }
+//     count++;
+//   }
 
-  output += "}";
+//   output += "}";
 
-  return output;
-};
+//   return output;
+// };
 
 export {
   defaultsRemoved,
@@ -415,6 +415,5 @@ export {
   setSize,
   fontsLoaded,
   addCropMarks,
-  setOutfitState,
-  jsonToCssVariables,
+  setOutfitState
 };

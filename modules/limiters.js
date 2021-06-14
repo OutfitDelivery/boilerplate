@@ -38,14 +38,6 @@ function textNodesUnder(el) {
   return a;
 }
 
-// some elements don't have height values set correctly so we need to drill down 
-function findTextNode(target) {
-  // if (child && ['SPAN','TOKEN-VALUE','STRONG','P','EM',''].includes(child.tagName)) {
-  if (target.firstElementChild && !['BR'].includes(target.firstElementChild.tagName)) {
-    target = findTextNode(target.firstElementChild);
-  }
-  return target
-}
 // not so simple rounding for line counting purposes
 function simpleRounding(num) {
   return Math.round(num)//.replace(/(\.0+|0+)$/, '');
@@ -61,7 +53,6 @@ function countLines(elements, advanced) {
     elements = [elements];
   }
   let result = [].slice.call(elements).map(target => {
-    if (true) {
       target.classList.add('countingLines');
       let multiCount = 0;
       let textNodes = textNodesUnder(target);
@@ -80,52 +71,6 @@ function countLines(elements, advanced) {
       target.dataset.calculatedLinesCount = multiCount // adds property for CSS targeting
       target.classList.remove('countingLines');
       return multiCount
-    } else {
-      if (false) {
-          target.classList.add('countingLines');
-          let testBox = document.createElement("div");
-          let counterTarget = findTextNode(target)
-          // console.log(counterTarget)
-          // let targetFix = target.firstChild ? target.firstChild.classList === "textFitted" ? target.firstChild : target : target; 
-          testBox.classList = "lineCounter";
-          // testBox.style.fontFamily = "-webkit-pictograph";
-          // testBox.style.display = "block";
-          // testBox.style.fontSize = targetFix.style.fontSize;
-          testBox.innerText = "​";
-          counterTarget.insertAdjacentElement('afterbegin', testBox) 
-          let oneLineHeight = getHeight(testBox);
-          testBox.remove();
-          let lineCount = getHeight(target) / oneLineHeight;
-          target.classList.remove('countingLines');
-          if (lineCount) {
-            let lineCountRounded = simpleRounding(lineCount);
-            target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
-            return lineCountRounded;
-          }
-          return false;
-        } else {
-        let metrics = calculateTextMetrics(target);
-        let { lineCount } = metrics;
-        target.dataset.rawLinesCount = lineCount; // adds property for CSS targeting
-        if (lineCount) {
-          let lineCountRounded = simpleRounding(lineCount);
-          target.dataset.calculatedLinesCount = lineCountRounded; // adds property for CSS targeting
-          return lineCountRounded;
-        }
-        return false;
-      }
-    }
-    // } else {
- 
-      // let metrics = calculateTextMetrics(target);
-      // if (metrics.lineCount) {
-      //   let lineCountRounded = simpleRounding(metrics.lineCount)
-      //   target.dataset.calculatedLinesCount = lineCountRounded // adds property for CSS targeting
-      //   target.dataset.rawLinesCount = metrics.lineCount; // adds property for CSS targeting
-      //   return lineCountRounded
-      // }
-      // return null
-    // }
   });
   if (result.length == 1) {
     return result[0];
@@ -188,6 +133,9 @@ function getHeight(el) {
     height = height - padding_top - padding_bottom - border_top - border_bottom;
   }
   el.dataset.calculatedHeight = height; // adds property for debuging
+  if (simpleRounding(height) != el.scrollHeight) {
+    el.dataset.calculatedScrollHeight = el.scrollHeight; // adds property for debuging
+  }
   return height;
 }
 
@@ -204,6 +152,9 @@ function getWidth(el) {
     width = width - padding_left - padding_right - border_left - border_right;
   }
   el.dataset.calculatedWidth = width; // adds property for debuging
+  if (simpleRounding(width) != el.scrollWidth) {
+    el.dataset.calculatedScrollWidth = el.scrollWidth; // adds property for debuging
+  }
   return width;
 }
 
@@ -218,27 +169,31 @@ function maxLineCheck(elements = null, limit = null) {
     elements = [elements];
   }
 
-  const isExportMode = window.location.href.indexOf("exports") > -1;
-  const isLocalDev = window.location.href.indexOf("localhost") > -1;
-  const preventExportOverflow =
-    document.body.dataset.preventExportOverflow === "true";
+  let overflowFound = false
+  const isLocalDev = state === "local";
   const isProjectKit = isLocalDev
     ? undefined
     : window.parent.document.querySelector(".preview-frame");
 
-  if ((isExportMode && preventExportOverflow) || isProjectKit) return;
-
+  if ((state === "export" && document.body.dataset.preventExportOverflow === "true") || isProjectKit) return;
+  
   const blocks = elements || document.querySelectorAll("[data-max-line]");
   blocks.forEach((block) => {
     const lineCount = countLines(block);
     // Getting the data-max-line attribute value (max number of lines allowed) 
     const maxLine = limit || block.dataset.maxLine;
 
-    lineCount > maxLine
+    let overflow = lineCount > maxLine
+
+    if (overflow && !overflowFound) {
+      overflowFound = true;
+    }
+
+    (overflow)
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
-  return true;
+  return overflowFound;
 }
 
 function minLineCheck(element = null, limit = null) {
@@ -251,15 +206,14 @@ function minLineCheck(element = null, limit = null) {
   ) {
     elements = [elements];
   }
-  const isExportMode = window.location.href.indexOf("exports") > -1;
-  const isLocalDev = window.location.href.indexOf("localhost") > -1;
-  const preventExportOverflow =
-    document.body.dataset.preventExportOverflow === "true";
+
+  let overflowFound = false;
+  const isLocalDev = state === "local";
   const isProjectKit = isLocalDev
     ? undefined
     : window.parent.document.querySelector(".preview-frame");
 
-  if ((isExportMode && preventExportOverflow) || isProjectKit) return;
+  if ((state === "export" && document.body.dataset.preventExportOverflow === "true") || isProjectKit) return;
 
   const blocks = elements || document.querySelectorAll("[data-min-line]");
   blocks.forEach((block) => {
@@ -267,16 +221,22 @@ function minLineCheck(element = null, limit = null) {
     // Getting the data-max-line attribute value (max number of lines allowed) 
     const minLine = limit || block.dataset.maxLine;
 
-    lineCount <= minLine
+    let overflow = lineCount <= minLine
+
+    if (overflow && !overflowFound) {
+      overflowFound = true;
+    }
+    
+    (overflow)
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
-  return true;
+  return overflowFound;
 }
 
 /**
-*Detailed instruction can be found here:
- https://github.com/aleks-frontend/max-height-check
+* Detailed instruction can be found here:
+  https://github.com/aleks-frontend/max-height-check
 */
 function maxHeightCheck(elements = null, limit = null) {
   var elType = Object.prototype.toString.call(elements);
@@ -288,20 +248,24 @@ function maxHeightCheck(elements = null, limit = null) {
   ) {
     elements = [elements];
   }
-  const isExportMode = window.location.href.indexOf("exports") > -1;
-  const isLocalDev = window.location.href.indexOf("localhost") > -1;
-  const preventExportOverflow =
-    document.body.dataset.preventExportOverflow === "true";
+
+  let overflowFound = false;
+  const isLocalDev = state === "local";
   const isProjectKit = isLocalDev
     ? undefined
     : window.parent.document.querySelector(".preview-frame");
 
-  if ((isExportMode && preventExportOverflow) || isProjectKit) return;
+  if ((state === "export" && document.body.dataset.preventExportOverflow === "true") || isProjectKit) return;
 
   const blocks = elements || document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    if ((limit && limit === "parent") || block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightDynamic === "true") {
-      dynamicAssign(block);
+    if ((limit && limit === "parent") || block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightParent === "true") {
+      const container = block.parentNode;
+      container.style.overflow = "hidden";
+      block.dataset.maxHeightParent = "true";
+      block.dataset.maxHeight = getHeight(container);
+      container.style.overflow = null;
+      // dynamicAssign(block);
     }
     // scroll height needs to be used as that will take into account the overflow's height
     const blockHeight = block.scrollHeight; 
@@ -320,18 +284,19 @@ function maxHeightCheck(elements = null, limit = null) {
       // Setting the element's max-height
       block.style.maxHeight = maxHeight + "px";
       maxHeightFound = maxHeight;
-      // // Recalculating maxHeight in case 'rem' is set as a unit
-      // if (block.dataset.maxHeightUnit === "rem") {
-      //   maxHeightFound = maxHeight * parseFloat(window.getComputedStyle(document.body).fontSize);
-      // }
     }
 
+    let overflow = blockHeight > simpleRounding(maxHeightFound);
+
+    if (overflow && !overflowFound) {
+      overflowFound = true;
+    }
     // Adding an 'overflow' class to an element if it's offset height exceedes the max-line-height
-    blockHeight > simpleRounding(maxHeightFound)
+    (overflow)
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });
-  return true;
+  return overflowFound;
 }
 
 function dynamicAssign(element = null) {
@@ -340,7 +305,6 @@ function dynamicAssign(element = null) {
   const containerHeight = getHeight(container)
   // TODO work out what subtrahend is 
   const subtrahends = [].slice.call(container.querySelectorAll(".js-subtrahend"));
-
   const subtrahendsHeight = subtrahends.reduce((totalHeight, subtrahend) => {
     const subtrahendMargins = {
       top: parseFloat(window.getComputedStyle(subtrahend).marginTop),
@@ -356,7 +320,7 @@ function dynamicAssign(element = null) {
 
   const dynamicHeight = containerHeight - subtrahendsHeight;
 
-  element.dataset.maxHeightDynamic = "true";
+  element.dataset.maxHeightParent = "true";
   element.dataset.maxHeight = dynamicHeight;
   container.style.overflow = "visible";
   return dynamicHeight;
@@ -373,13 +337,12 @@ function charLimit(elements = null, limit = null) {
   ) {
     elements = [elements];
   }
+
+  let overflowFound = false;
   const blocks = elements || document.querySelectorAll("[data-char-limit]");
   blocks.forEach((element) => {
     const lettersLimit = limit || element.dataset.charLimit;
 
-    if (element === null) {
-      return;
-    }
     var tokenValue = element.querySelectorAll(".token-value");
 
     if (tokenValue.length != 0) {
@@ -387,7 +350,13 @@ function charLimit(elements = null, limit = null) {
     }
     var code = element.innerText;
     element.dataset.calculatedCharCount = code.length;
-    if (code.length > lettersLimit) {
+
+    let overflow = code.length > lettersLimit
+
+    if (overflow && !overflowFound) {
+      overflowFound = true;
+    }
+    if (overflow) {
       // Check Token Again
       if (tokenValue.length != 0) {
         element.parentNode.classList.add("overflow");
@@ -403,7 +372,7 @@ function charLimit(elements = null, limit = null) {
       }
     }
   });
-  return true;
+  return overflowFound;
 }
 
-export { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck }
+export { charLimit, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck }
