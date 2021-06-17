@@ -40,7 +40,7 @@ function textNodesUnder(el) {
 
 // not so simple rounding for line counting purposes
 function simpleRounding(num) {
-  return Math.round(num)//.replace(/(\.0+|0+)$/, '');
+  return Math.round(num)
 }
 // count the number of lines inside of the current direct element
 function countLines(elements, advanced) {
@@ -375,4 +375,4 @@ function charLimit(elements = null, limit = null) {
   return overflowFound;
 }
 
-export { charLimit, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck }
+export { charLimit, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck, simpleRounding }

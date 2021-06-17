@@ -1,4 +1,4 @@
-import { getWidth, getHeight, countLines, maxHeightCheck } from './limiters.js'
+import { getWidth, getHeight, countLines, simpleRounding } from './limiters.js'
 /**
  * textFit v3.1.0
  * Previously known as jQuery.textFit
@@ -37,11 +37,12 @@ import { getWidth, getHeight, countLines, maxHeightCheck } from './limiters.js'
     multiLine: false, // if true, textFit will not set white-space: no-wrap
     stopOverflow: false, // if true, a error we be thrown if the content is overflowing
     fontUnit: "rem", // what unit should the final font be. using rems or mm is sometimes useful
-    fontChangeSize: 0.1, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
+    fontChangeSize: 0.01, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
     minFontSize: 0.3,
     maxFontSize: 1,
     maxLine: false,
-    containerOverflows: [],
+    growInSize: false, // set the width and height of the element to 100% to allow the element to grow 
+    containerChecks: [],
     reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
     widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
     alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
@@ -100,15 +101,24 @@ import { getWidth, getHeight, countLines, maxHeightCheck } from './limiters.js'
     if (!settings.reProcess) {
       el.setAttribute("textFitted", 1);
     }
-
+   
     var innerSpan, originalHeight, originalHTML, originalWidth;
     var low, mid, high;
-    var containerOverflows = settings.containerOverflows;
+    var { containerChecks } = settings;
+
+    // if we are going to let the text get larger then we need to adjust the size to give a larger originalHeight and originalWidth
+    if (settings.growInSize) {
+      el.classList.add('fullSize')
+    }
 
     // Get element data.
     originalHTML = el.innerHTML;
     originalWidth = getWidth(el);
     originalHeight = getHeight(el);
+
+    if (settings.growInSize) {
+      el.classList.remove('fullSize')
+    }
 
     // Don't process if we can't find box dimensions
     if (!originalWidth || (!settings.widthOnly && !originalHeight)) {
@@ -179,19 +189,21 @@ import { getWidth, getHeight, countLines, maxHeightCheck } from './limiters.js'
         maxLines = lineCount > maxLine;
       }
 
-      let containerOverflow = [].slice.call(containerOverflows).some(el => {
-        let h = maxHeightCheck(el);
-        console.log(el, h)
-        return h;
+      // check the parent containers for overflows and adjust the font size accordingly to prevent them
+      let containerOverflow = [].slice.call(containerChecks).some(container => {
+        if (container.scrollHeight > simpleRounding(getHeight(container))) {
+          return true;
+        } else {
+          return false;
+        }
       })
 
-      console.log(containerOverflow)
-
-      if (scrollWidth && scrollHeight && !maxLines) {
+      // console.log(scrollWidt h, scrollHeight, !maxLines, !containerOverflow)
+      if (scrollWidth && scrollHeight && !maxLines && !containerOverflow) {
         size = mid;
-        low = mid + settings.fontChangeSize;
+        low = mid + settings.fontChangeSize; // set font size to larger
       } else {
-        high = mid - settings.fontChangeSize;
+        high = mid - settings.fontChangeSize; // set font size to  smaller
       }
       // await injection point
     }
@@ -231,6 +243,7 @@ import { getWidth, getHeight, countLines, maxHeightCheck } from './limiters.js'
         }
       }
     }
+
     // Our height is finalized. If we are aligning vertically, set that up.
     if (settings.alignVert) {
       // addStyleSheet();

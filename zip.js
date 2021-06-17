@@ -25,8 +25,8 @@ archive.pipe(output);
 const file1 = __dirname + '/js/main.js';
 archive.append(fs.createReadStream(file1), { name: '/js/main.js' });
 
-const file2 = __dirname + '/css/styles.less';
-archive.append(fs.createReadStream(file2), { name: '/css/styles.less' });
+const file2 = __dirname + '/css/styles.css';
+archive.append(fs.createReadStream(file2), { name: '/css/styles.css' });
 
 const file3 = __dirname + '/index.html.mst';
 archive.append(fs.createReadStream(file3), { name: 'index.html.mst' });
