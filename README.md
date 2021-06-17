@@ -91,11 +91,11 @@ template.addStyle('body { background: red; }')
     - The 1st element is the new string to be inserted
     - The 2nd element is the string to be replaced/removed
 ```
-template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES]);
+template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES], "fallback colour");
 template.dynamicReplace('.name', [
     ['sam','firstname'],
     ['henry','lastname']
-])
+], "#654534")
 ```
 If no arguments are given, the `dynamicReplace()` function will run on any elements on the page with `data-replace-from=` (i.e. the string to be replaced/removed) and `data-replace-to=` (i.e. the new string) attributes.
 
