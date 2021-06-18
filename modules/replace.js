@@ -32,7 +32,7 @@ function dynamicReplaceMulti(target, data, colour) {
       ) {
         target.innerHTML = target.innerHTML.replaceAll(lookup, inputValue); //If found replace
       } else {
-        let lookupSpan = `<span ${(colour ? `style="color:${colour};` : "")} class='lookup-value'>${lookup}</span>`;
+        let lookupSpan = `<span ${(colour ? `style="color:${colour};"` : "")} class="lookup-value">${lookup}</span>`;
         // console.log(target.innerHTML);
         let temp = target.innerHTML.split(lookupSpan);
         temp = temp.map((x) => x.replaceAll(lookup, lookupSpan));
