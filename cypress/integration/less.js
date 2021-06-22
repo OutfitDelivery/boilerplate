@@ -3,7 +3,7 @@
 //   })
 
 describe('less js needs to run', () => {
-    it('this should run', async () => {
+    it('this should run', () => {
         cy.visit('cypress/fixtures/less.html');
         cy.get('style[type="text/less"]').should('not.exist')
         cy.get('style[type="text/css"]').should('exist')

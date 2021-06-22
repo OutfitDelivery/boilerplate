@@ -1,6 +1,6 @@
 
 describe('Textfit', () => {
-    it('test html file loads as expected', async () => {
+    it('test html file loads as expected', () => {
         cy.visit('cypress/fixtures/textfit.html');
         
         cy.get('#example1 p').should('have.css', 'font-size', '20px')

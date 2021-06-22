@@ -1,7 +1,7 @@
 
 beforeEach(function () {
     Cypress.Cookies.preserveOnce('_outfit_session_staging', '_outfit_session_production')
-  })
+})
 
 describe('Login', () => {
     it('Does not do much!', () => {
@@ -14,7 +14,7 @@ describe('Login', () => {
         cy.get('[type="submit"]').click()
         cy.url().should('eq', 'https://bootstrap-old.staging.outfit.io/')
     })
-    it('create template', async () => {
+    it('create template', () => {
         cy.get('.hamburger').click()
         // cy.get('.button').contains('Templating').click()
         cy.get('[href="/templates"]').click()
@@ -28,7 +28,7 @@ describe('Login', () => {
         //     mimeType: 'image/png'
         // });
     })
-    it('Load existing templates', async () => {
+    it('Load existing templates', () => {
         cy.visit("https://bootstrap-old.staging.outfit.io/previews/2ee81110-be94-11eb-8564-97465a3f844e/configurations/63712/p/");
         cy.get('.container').should('have.css', 'background-color', 'rgb(228, 30, 70)')
 

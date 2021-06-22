@@ -3,7 +3,7 @@
 //   })
 
 describe('Max height checks ', () => {
-    it('test html file loads as expected', async () => {
+    it('test html file loads as expected', () => {
         cy.visit('cypress/fixtures/maxHeight.html');
         cy.get('#example1 > div').invoke('attr', 'data-calculated-scroll-height').should('equal', '50')
         cy.get('#example1 > div').invoke('attr', 'data-max-height').should('equal', '50')

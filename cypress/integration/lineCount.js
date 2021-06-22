@@ -3,7 +3,7 @@
 //   })
 
 describe('Counting lines', () => {
-    it('test large lines', async () => {
+    it('test large lines', () => {
         cy.visit('cypress/fixtures/lineCount.html');
         cy.get('#example1').invoke('attr', 'data-calculated-lines-count').should('equal', '1')
         cy.get('#example2').invoke('attr', 'data-calculated-lines-count').should('equal', '2')
