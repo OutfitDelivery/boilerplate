@@ -365,8 +365,15 @@ const hotReloadOnChange = () => {
     (state === "document" || state === "template") &&
     typeof BroadcastChannel === "function"
   ) {
-    let bc = new BroadcastChannel("fs-sync");
+    let bc = new BroadcastChannel("hot-reload");
     bc.onmessage = (ev) => {
+      if (!window.top.reloading) {
+        window.top.reloading = true;
+        window.top.location.reload();
+      }
+    };
+    let bc2 = new BroadcastChannel("fs-sync");
+    bc2.onmessage = (ev) => {
       if (!window.top.reloading) {
         window.top.reloading = true;
         window.top.location.reload();

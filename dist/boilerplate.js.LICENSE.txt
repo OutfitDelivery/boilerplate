@@ -1,9 +1,0 @@
-/**
- * Less - Leaner CSS v3.13.1
- * http://lesscss.org
- * 
- * Copyright (c) 2009-2020, Alexis Sellier <self@cloudhead.net>
- * Licensed under the Apache-2.0 License.
- *
- * @license Apache-2.0
- */

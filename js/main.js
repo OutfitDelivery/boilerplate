@@ -10,9 +10,12 @@ let template = new boilerplate({
 });
 
 // This function will run whenever there is a change to any text input, resize and on inital load
-template.on("inputs-change", (inputs) => {
-  console.table(inputs);
+template.on("inputs-change", async (inputs) => {
+  console.log(inputs);
+
   // template.textFit(document.querySelectorAll('p'), { fontUnit: 'rem', minFontSize: 0.5, maxFontSize: 1.5 })
+
+  await template.ensureAllImagesLoaded();
   // template.dynamicReplace();
   // template.maxHeightCheck();
   // template.maxLineCheck();
