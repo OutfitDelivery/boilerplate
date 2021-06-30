@@ -60,38 +60,50 @@ At the end of your build, please remove these three properties entirely so they 
 ### [Boilerplate.js](modules/boilerplate.js)
 `Boilerplate.js` contains the boilerplate class, vital functionality and utilities used in `main.js`. 
 
-###### completeRender()
+##### completeRender()
 This is vital to the functioning of the template. After `document.readyState` is "complete", it dispatches the "printready" event.
-```
+```javascript
 template.completeRender();
+```
+##### ensureAllImagesLoaded()
+We don't want to export until all the images are loaded. We also might not want to run limiters until images have loaded as the aspect ratio of a loaded image can change the results. 
+This promise will return when all images have been loaded in a given section of the screen. (Defaults to the entire document).
+It also takes a timeout (in ms) for how long to wait for images to be load. (Defaults to 60 seconds).
+```javascript
+await template.ensureAllImagesLoaded()
+```
+```javascript
+let container = document.querySelector('#container');
+let images = await template.ensureAllImagesLoaded(container, 5000)
+console.log(images)
 ```
 
 #### Overflow functions
 ###### maxLineCheck()
 Adds an overflow if the number of lines is greater than data-max-line 
-```
+```javascript
 template.maxLineCheck();
 ```
 ###### minLineCheck()
 Adds an overflow if the number of lines is lower than data-min-line 
-```
+```javascript
 template.minLineCheck();
 ```
 ###### maxHeightCheck()
 Adds an overflow if data-max-height is larger than the element's actual height. It also supports data-max-height="css" and data-max-height="parent" if you want the hight to be set via the css value or the height of the parent 
-``` 
+```javascript
 template.maxHeightCheck();
 ```
 ###### charLimit()
 Adds an overflow if the number of characters is larger than data-char-limit
-```
+```javascript
 template.charLimit();
 ```
 
 #### Utilites
 ###### addStyle()
 Can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
-```
+```javascript
 template.addStyle('body { background: red; }')
 ```
 
@@ -101,7 +113,7 @@ template.addStyle('body { background: red; }')
 - The second parameter is an array of changes
     - The 1st element is the new string to be inserted
     - The 2nd element is the string to be replaced/removed
-```
+```javascript
 template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES], "fallback colour");
 template.dynamicReplace('.name', [
     ['sam','firstname'],
@@ -111,11 +123,11 @@ template.dynamicReplace('.name', [
 If no arguments are given, the `dynamicReplace()` function will run on any elements on the page with `data-replace-from=` (i.e. the string to be replaced/removed) and `data-replace-to=` (i.e. the new string) attributes.
 
 `<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
-```
+```javascript
 template.dynamicReplace() // => Hey sam
 ```
 ### [Textfit.js](modules/textFit.js) 
-```
+```javascript
 template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
 ```
 
@@ -137,7 +149,7 @@ template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 You can use the data provided by `setupMTO()` and manipulate the DOM in whichever ways the template requires. There is no standard across all clients for what a template might do with MTO data. Consult squad leads or past templates for possible examples that are relevant to your client/template.
 In general, you would define a function in your template and pass {{{mto-v3}}} to it, e.g.
 
-```
+```javascript
 let runMTO = (mtoData) => {
     console.log(mtoData)
     //your DOM manipulations
@@ -147,7 +159,7 @@ runMTO({{{mto-v3}}});
 
 Many implementations of a function like `runMTO()` also require a `formatPhoneNumber()` function e.g. 
 
-```
+```javascript
 let formatPhoneNumber = (str) => {
     str = str.replace(/[^.\d]/g, '').replace(/ /g,'');
     if (str.length === 8) {

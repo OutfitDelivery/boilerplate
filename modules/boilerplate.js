@@ -1,5 +1,16 @@
-import { imageCompression, ensureAllImagesLoaded } from "./pageSetup.js";
-import { defaultsRemoved, loadLESS, winLoad, domReady, highestZ, setBrowserType, setSize, fontsLoaded, addCropMarks, setOutfitState, hotReloadOnChange } from "./utilities.js";
+import {
+  defaultsRemoved,
+  loadLESS,
+  winLoad,
+  domReady,
+  highestZ,
+  setBrowserType,
+  setSize,
+  fontsLoaded,
+  addCropMarks,
+  setOutfitState,
+  hotReloadOnChange,
+} from "./utilities.js";
 import { dynamicReplace } from "./replace.js";
 import setupPlaceholder from "./placeholder.js";
 import textFit from "./textFit.js";
@@ -15,6 +26,7 @@ import {
   lineClamp,
   calculateTextMetrics,
 } from "./limiters";
+import { imageCompression, ensureAllImagesLoaded } from "./images.js";
 
 export default class boilerplate {
   constructor(config = {}) {
@@ -29,34 +41,35 @@ export default class boilerplate {
     this.overflows = false;
     this.browser = setBrowserType();
     this.trimMarks = config.trimMarks || false;
-    this.exportReduceFont = config.exportReduceFont || 0; 
+    this.exportReduceFont = config.exportReduceFont || 0;
     this.allowNoMetaData = config.allowNoMetaData || false;
     this.allowLegacyRendering = config.allowLegacyRendering || false;
     this.ensureImagesLoad = true;
-    if (typeof config.ensureImagesLoad === 'boolean' && config.ensureImagesLoad === false) {
+    if (
+      typeof config.ensureImagesLoad === "boolean" &&
+      config.ensureImagesLoad === false
+    ) {
       this.ensureImagesLoad = false;
     }
     if (config.trimMarks) {
       document.body.setAttribute("data-trim", config.trimMarks);
     }
-  
-   
-    if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
+
+    if (!(typeof config.addCrop === "boolean" && config.addCrop === false)) {
       addCropMarks(this.trimMarks, this.allowLegacyRendering);
     }
-    setSize(config.trimMarks || false,  config.exportReduceFont || 0);
-   
+    setSize(config.trimMarks || false, config.exportReduceFont || 0);
+
     if (config.placeholderVisibility) {
       setupPlaceholder(config.placeholderVisibility, config.placeholderImages);
     }
     if (config.cssVariables) {
       this.addStyle(`:root{${config.cssVariables}}`);
     }
-  
+
     try {
       if (config.templateProps) {
         this.templateProps = JSON.parse(JSON.stringify(config.templateProps));
-        
       } else {
         this.templateProps = JSON.parse("{}");
       }
@@ -66,38 +79,30 @@ export default class boilerplate {
     }
 
     // all these checks need to be done before the tempalte code can be run
-    let checkList = [
-      domReady, 
-      loadLESS(),
-      fontsLoaded(this.fonts),
-    ];
+    let checkList = [domReady, loadLESS(), fontsLoaded(this.fonts)];
     if (config.waitForImages) {
       checkList.push(winLoad);
       checkList.push(ensureAllImagesLoaded());
     }
-    Promise.all(checkList)
-      .then(() => {
-        this.emit("run", this.templateProps);
-        this.emit("inputs-change", this.templateProps);
-        if (typeof window.inputsChange === "function") {
-          window.inputsChange(this.templateProps);
-        }
-        if (state !== "preview") {
-          window.addEventListener("resize", (e) => {
-            setSize(
-              this.trimMarks,
-              this.exportReduceFont
-            );
-            this.emit("inputs-change", this.templateProps);
-            if (typeof window.inputsChange === "function") {
-              window.inputsChange(this.templateProps);
-            }
-          });
-        }
-        window.addEventListener('message', (e) => {
-          this.templateProps = { ...this.templateProps, ...e.data }
+    Promise.all(checkList).then(() => {
+      this.emit("run", this.templateProps);
+      this.emit("inputs-change", this.templateProps);
+      if (typeof window.inputsChange === "function") {
+        window.inputsChange(this.templateProps);
+      }
+      if (state !== "preview") {
+        window.addEventListener("resize", (e) => {
+          setSize(this.trimMarks, this.exportReduceFont);
           this.emit("inputs-change", this.templateProps);
-        })
+          if (typeof window.inputsChange === "function") {
+            window.inputsChange(this.templateProps);
+          }
+        });
+      }
+      window.addEventListener("message", (e) => {
+        this.templateProps = { ...this.templateProps, ...e.data };
+        this.emit("inputs-change", this.templateProps);
+      });
       // OutfitIframeShared.eventEmitter.addListener(
       //   'token-value:change',
       //   (e) => {
@@ -110,19 +115,19 @@ export default class boilerplate {
       // setInterval(() => {
       //   this.getOverflows();
       // }, 1000)
-              
+
       if (state === "document") {
         imageCompression();
       }
-    })
+    });
   }
   start() {
     return new Promise((resolve, reject) => {
       console.log(`there is no need to call start. just create a template.on("inputs-change", (e) => {
         // code here
-      }) event`)
-      resolve()
-    })
+      }) event`);
+      resolve();
+    });
   }
   // on creates a callback event
   on(name, listener) {
@@ -142,7 +147,7 @@ export default class boilerplate {
 
   //   this._events[name] = this._events[name].filter(filterListeners);
   // }
-  
+
   // emit sends a message to a callback
   emit(name, data) {
     if (this._events[name]) {
@@ -164,7 +169,7 @@ export default class boilerplate {
       css.appendChild(document.createTextNode(styles));
     }
     document.getElementsByTagName("head")[0].appendChild(css);
-    return css; 
+    return css;
   }
   // send a event to stop a render
   completeRender(checkList = []) {
@@ -176,32 +181,37 @@ export default class boilerplate {
       .then(() => {
         if (this.getOverflows()) {
           console.log(
-           `%cThis will export with overflow errors`, 'background: #1F2A44; color: white;font-size:16px;'
+            `%cThis will export with overflow errors`,
+            "background: #1F2A44; color: white;font-size:16px;"
           );
         }
         let loadTime = Date.now() - window.performance.timing.navigationStart;
         console.info(`Document has finished rendering in ${loadTime}ms`);
         document.dispatchEvent(new Event("printready"));
 
-        if (this.state === "document" || this.state === "template"  || this.state === "local") {
+        if (
+          this.state === "document" ||
+          this.state === "template" ||
+          this.state === "local"
+        ) {
           // set timeout is used here to push this to the end of the heap which means it will load after everything else
           setTimeout(() => {
             if (!this.allowNoMetaData) {
               defaultsRemoved();
             }
-          }, 5000)
-        };
+          }, 5000);
+        }
       })
       .catch((err) => {
         console.error(err);
         throw "Render failed for logged reason";
       });
   }
- 
-  getOverflows () {
+
+  getOverflows() {
     let overflows = document.querySelectorAll(".overflow, [data-overflow]");
     if (overflows.length > 0) {
-      this.overflows = overflows
+      this.overflows = overflows;
       this.emit("overflow", overflows);
     } else {
       this.overflows = false;
@@ -211,7 +221,7 @@ export default class boilerplate {
   dynamicReplace() {
     return dynamicReplace.apply(this, arguments);
   }
- 
+
   textFit() {
     textFit.apply(this, arguments);
     this.getOverflows();
