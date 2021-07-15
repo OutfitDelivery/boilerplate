@@ -62,36 +62,36 @@ At the end of your build, please remove these three properties entirely so they 
 
 ###### completeRender()
 This is vital to the functioning of the template. After `document.readyState` is "complete", it dispatches the "printready" event.
-```
+```javascript
 template.completeRender();
 ```
 
 #### Overflow functions
 ###### maxLineCheck()
 Adds an overflow if the number of lines is greater than data-max-line 
-```
+```javascript
 template.maxLineCheck();
 ```
 ###### minLineCheck()
 Adds an overflow if the number of lines is lower than data-min-line 
-```
+```javascript
 template.minLineCheck();
 ```
 ###### maxHeightCheck()
 Adds an overflow if data-max-height is larger than the element's actual height. It also supports data-max-height="css" and data-max-height="parent" if you want the hight to be set via the css value or the height of the parent 
-``` 
+```javascript
 template.maxHeightCheck();
 ```
 ###### charLimit()
 Adds an overflow if the number of characters is larger than data-char-limit
-```
+```javascript
 template.charLimit();
 ```
 
 #### Utilites
 ###### addStyle()
 Can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
-```
+```javascript
 template.addStyle('body { background: red; }')
 ```
 
@@ -101,7 +101,7 @@ template.addStyle('body { background: red; }')
 - The second parameter is an array of changes
     - The 1st element is the new string to be inserted
     - The 2nd element is the string to be replaced/removed
-```
+```javascript
 template.dynamicReplace({TARGET SELECTOR}, [ARRAY OF CHANGES], "fallback colour");
 template.dynamicReplace('.name', [
     ['sam','firstname'],
@@ -111,12 +111,31 @@ template.dynamicReplace('.name', [
 If no arguments are given, the `dynamicReplace()` function will run on any elements on the page with `data-replace-from=` (i.e. the string to be replaced/removed) and `data-replace-to=` (i.e. the new string) attributes.
 
 `<div data-replace-from="firstname" data-replace-to="sam" >Hey firstname</div>`
-```
+```javascript
 template.dynamicReplace() // => Hey sam
 ```
 ### [Textfit.js](modules/textFit.js) 
-```
+```javascript
 template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
+```
+Examples of textfit options 
+```javascript 
+template.textFit(document.querySelectorAll('h1'), {
+    alignVert: Boolean, // (default: false) if true, textFit will align vertically using css tables
+    alignHoriz: Boolean, // (default: false) if true, textFit will set text-align: center
+    stopOverflow: Boolean, // (default: false) if true, an overlfow error we be thrown if the content is overflowing
+    fontUnit: String, // (default: "rem") what unit should the final font be. using rems, % or mm is sometimes useful
+    fontChangeSize: Number, // (default: 0.01) how much accuracy should be used by textfit. 0.1 and 0.01 is useful for when using a rem font unit but higher numbers have better performance 
+    minFontSize: Number, // (default: 0.3) the smallest supported font size 
+    maxFontSize: Number, // (default: 1) the largest supported font size 
+    maxLine: Boolean, // (default: null) if set font will reduce until it is equal to or less than this many of lines. This is automaticly set if data-max-line is used 
+    growInSize: Boolean, // (default: false) set the width and height of the element to 100% to allow the element to grow 
+    containerChecks: Array, // (default: []) array of dom elements that also should be considered when ajusting font size. If there is an overflow on these then we are going to assume we need to reduce the font size of textfit
+    reProcess: Boolean, // (default: true) if true, textFit will re-process already-fit nodes. Set to 'false' for better performance 
+    widthOnly: Boolean, // (default: false) if true, textFit will fit text to element width, regardless of text height
+    alignVertWithFlexbox: Boolean, // (default: false) if true, textFit will use flexbox for vertical alignment
+    display: String, // (default: "inline-block") in case you need to change this but I wouldn't recommend it as the default is what is tested
+  });
 ```
 
 ### [MTO.js](modules/mto.js) 
@@ -128,7 +147,7 @@ MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Meta
 - 1st argument - the team metadata input
 - 2nd argument - the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
 - 3rd argument -  the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access.
-```
+```javascript
 template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ```
 - Note: `setupMTO()` is required before attempting to use mto data in any way (e.g. by calling a function like `runMTO()` below)
@@ -137,7 +156,7 @@ template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 You can use the data provided by `setupMTO()` and manipulate the DOM in whichever ways the template requires. There is no standard across all clients for what a template might do with MTO data. Consult squad leads or past templates for possible examples that are relevant to your client/template.
 In general, you would define a function in your template and pass {{{mto-v3}}} to it, e.g.
 
-```
+```javascript
 let runMTO = (mtoData) => {
     console.log(mtoData)
     //your DOM manipulations
@@ -147,7 +166,7 @@ runMTO({{{mto-v3}}});
 
 Many implementations of a function like `runMTO()` also require a `formatPhoneNumber()` function e.g. 
 
-```
+```javascript
 let formatPhoneNumber = (str) => {
     str = str.replace(/[^.\d]/g, '').replace(/ /g,'');
     if (str.length === 8) {
