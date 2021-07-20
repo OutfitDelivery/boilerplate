@@ -214,6 +214,7 @@ sub {
   position: absolute;
   height: 28.81px;
   width: 28.81px;
+  z-index:999;
 }
 
 .crop-marks .crop-mark.top-left {
