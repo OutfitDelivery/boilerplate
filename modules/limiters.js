@@ -259,27 +259,40 @@ function maxHeightCheck(elements = null, limit = null) {
 
   const blocks = elements || document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    if ((limit && limit === "parent") || block.dataset.maxHeight === "dynamic" || block.dataset.maxHeight === "parent" || block.dataset.maxHeightParent === "true") {
+    // check of overflow if it's parents height is larger then this elements height
+    if (
+      (limit && limit === "parent") ||
+      block.dataset.maxHeight === "dynamic" ||
+      block.dataset.maxHeight === "parent" ||
+      block.dataset.maxHeightParent === "true"
+    ) {
       const container = block.parentNode;
       container.style.overflow = "hidden";
       block.dataset.maxHeightParent = "true";
       block.dataset.maxHeight = getHeight(container);
       container.style.overflow = null;
-      // dynamicAssign(block);
+    }
+    // check of overflow if it's own scroll height is larger than it's height
+    if ((limit && limit === "self") || block.dataset.maxHeightSelf === "true") {
+      block.dataset.maxHeightSelf = "true";
+      block.dataset.maxHeight = getHeight(container);
     }
     // scroll height needs to be used as that will take into account the overflow's height
-    const blockHeight = block.scrollHeight; 
-    block.dataset.calculatedScrollHeight = blockHeight
+    const blockHeight = block.scrollHeight;
+    block.dataset.calculatedScrollHeight = blockHeight;
     const maxHeight = limit || block.dataset.maxHeight;
     let maxHeightFound;
-    // TODO improve this 
+    // TODO improve this
     if (maxHeight === "css") {
       const computedBlockStyle = window.getComputedStyle(block);
       const cssMaxHeight = parseFloat(computedBlockStyle.maxHeight);
       if (!cssMaxHeight) {
-        console.error(block, 'There needs to be a max height set on the element if you want to use data-max-height="css"')
+        console.error(
+          block,
+          'There needs to be a max height set on the element if you want to use data-max-height="css"'
+        );
       }
-      maxHeightFound = cssMaxHeight
+      maxHeightFound = cssMaxHeight;
     } else {
       // Setting the element's max-height
       block.style.maxHeight = maxHeight + "px";
@@ -292,7 +305,7 @@ function maxHeightCheck(elements = null, limit = null) {
       overflowFound = true;
     }
     // Adding an 'overflow' class to an element if it's offset height exceedes the max-line-height
-    (overflow)
+    overflow
       ? block.classList.add("overflow")
       : block.classList.remove("overflow");
   });

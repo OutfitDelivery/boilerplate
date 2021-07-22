@@ -19,7 +19,7 @@
   <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE" />
   <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE" />
   <meta name="updates" content="" />
-  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
+  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.1/main.css">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 
   <script id="inputInjection">
@@ -50,7 +50,8 @@
     </div>
   </div>
 
-  <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.0/boilerplate.js"></script>
+  <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.1/boilerplate.js">
+  </script>
   <script src="js/main.js"></script>
 </body>
 

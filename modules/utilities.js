@@ -271,38 +271,40 @@ const setSize = (trimMarks, exportReduceFont) => {
 };
 
 const setBrowserType = () => {
-  let browser = {
-    // Opera 8.0+
-    isOpera:
-      (!!window.opr && !!opr.addons) ||
-      !!window.opera ||
-      navigator.userAgent.indexOf(" OPR/") >= 0,
-    // Firefox 1.0+
-    isFirefox: typeof InstallTrigger !== "undefined",
-    // Safari 3.0+ "[object HTMLElementConstructor]"
-    isSafari:
-      /constructor/i.test(window.HTMLElement) ||
-      (function (p) {
-        return p.toString() === "[object SafariRemoteNotification]";
-      })(
-        !window["safari"] ||
-          (typeof safari !== "undefined" && window["safari"].pushNotification)
-      ),
-    // Internet Explorer 6-11
-    isIE: /*@cc_on!@*/ false || !!document.documentMode,
-    // Chrome 1 - 79
-    isChrome:
-      !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime),
-    // mac detection
-    isMac: window.navigator.appVersion.includes("Mac"),
-  };
-  //  Edge 20+
-  browser["isEdge"] = !browser.isIE && !!window.StyleMedia;
-  // Edge (based on chromium) detection
-  browser["isEdgeChromium"] =
-    browser.isChrome && navigator.userAgent.indexOf("Edg") != -1;
-  // Blink engine detection
-  browser["isBlink"] = (browser.isChrome || browser.isOpera) && !!window.CSS;
+   const browser = {
+     // Opera 8.0+
+     isOpera:
+       (!!window.top.opr && !!opr.top.addons) ||
+       !!window.top.opera ||
+       navigator.userAgent.indexOf(" OPR/") >= 0,
+     // Firefox 1.0+
+     isFirefox: typeof InstallTrigger !== "undefined",
+     // Safari 3.0+ "[object HTMLElementConstructor]"
+     isSafari:
+       /constructor/i.test(window.HTMLElement) ||
+       (function (p) {
+         return p.toString() === "[object SafariRemoteNotification]";
+       })(
+         !window["safari"] ||
+           (typeof safari !== "undefined" && window["safari"].pushNotification)
+       ),
+     // Internet Explorer 6-11
+     isIE: /*@cc_on!@*/ false || !!document.documentMode,
+     // Chrome 1 - 79
+     isChrome:
+       !!window.top.chrome &&
+       (!!window.top.chrome.webstore || !!window.top.chrome.runtime),
+     // mac detection
+     isMac: window.navigator.appVersion.includes("Mac"),
+   };
+   //  Edge 20+
+   browser["isEdge"] = !browser.isIE && !!window.top.StyleMedia;
+   // Edge (based on chromium) detection
+   browser["isEdgeChromium"] =
+     browser.isChrome && navigator.userAgent.indexOf("Edg") != -1;
+   // Blink engine detection
+   browser["isBlink"] =
+     (browser.isChrome || browser.isOpera) && !!window.top.CSS;
 
   Object.keys(browser)
     .filter((key) => {
