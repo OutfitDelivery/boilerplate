@@ -130,6 +130,25 @@ template.dynamicReplace() // => Hey sam
 ```javascript
 template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
 ```
+Examples of textfit options 
+```javascript 
+template.textFit(document.querySelectorAll('h1'), {
+    alignVert: Boolean, // (default: false) if true, textFit will align vertically using css tables
+    alignHoriz: Boolean, // (default: false) if true, textFit will set text-align: center
+    stopOverflow: Boolean, // (default: false) if true, an overlfow error we be thrown if the content is overflowing
+    fontUnit: String, // (default: "rem") what unit should the final font be. using rems, % or mm is sometimes useful
+    fontChangeSize: Number, // (default: 0.01) how much accuracy should be used by textfit. 0.1 and 0.01 is useful for when using a rem font unit but higher numbers have better performance 
+    minFontSize: Number, // (default: 0.3) the smallest supported font size 
+    maxFontSize: Number, // (default: 1) the largest supported font size 
+    maxLine: Boolean, // (default: null) if set font will reduce until it is equal to or less than this many of lines. This is automaticly set if data-max-line is used 
+    growInSize: Boolean, // (default: false) set the width and height of the element to 100% to allow the element to grow 
+    containerChecks: Array, // (default: []) array of dom elements that also should be considered when ajusting font size. If there is an overflow on these then we are going to assume we need to reduce the font size of textfit
+    reProcess: Boolean, // (default: true) if true, textFit will re-process already-fit nodes. Set to 'false' for better performance 
+    widthOnly: Boolean, // (default: false) if true, textFit will fit text to element width, regardless of text height
+    alignVertWithFlexbox: Boolean, // (default: false) if true, textFit will use flexbox for vertical alignment
+    display: String, // (default: "inline-block") in case you need to change this but I wouldn't recommend it as the default is what is tested
+  });
+```
 
 ### [MTO.js](modules/mto.js) 
 MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Metadata input type from Outfit. The Team-Metadata input type lists out all the teams within a specific account and allows a user to select one or more team/s, then the input returns an array of the team/s' meta-data. MTO hides all the teams listed within the input except the ones listed in the team.mto team metadata field. 
@@ -140,7 +159,7 @@ MTO enables Multi-Team Owners (MTO) functionality. It makes use of the Team-Meta
 - 1st argument - the team metadata input
 - 2nd argument - the list of teams the user is allowed to access based on their team. This will come out of the team's metadata and will be in the format of a comma separated string of team ID's.
 - 3rd argument -  the input name that will be used to detect when the the sidebar element is on screen and remove teams that the user is not allowed to access.
-```
+```javascript
 template.setupMTO({{{mto-v3}}}, "{{{team.mto-v3}}}", 'Branch Selection')
 ```
 - Note: `setupMTO()` is required before attempting to use mto data in any way (e.g. by calling a function like `runMTO()` below)
