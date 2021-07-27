@@ -89,15 +89,13 @@ export default class boilerplate {
       if (typeof window.inputsChange === 'function') {
         window.inputsChange(this.templateProps);
       }
-      if (state !== 'preview') {
-        window.addEventListener('resize', (e) => {
-          setSize(this.trimMarks, this.exportReduceFont);
-          this.emit('inputs-change', this.templateProps);
-          if (typeof window.inputsChange === 'function') {
-            window.inputsChange(this.templateProps);
-          }
-        });
-      }
+      window.addEventListener('resize', () => {
+        setSize(this.trimMarks, this.exportReduceFont);
+        this.emit('inputs-change', this.templateProps);
+        if (typeof window.inputsChange === 'function') {
+          window.inputsChange(this.templateProps);
+        }
+      });
       window.addEventListener('message', (e) => {
         this.templateProps = { ...this.templateProps, ...e.data };
         this.emit('inputs-change', this.templateProps);
