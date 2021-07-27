@@ -130,19 +130,19 @@ const highestZ = () => {
 };
 
 // display a message to block rendering for major issues
-const blockRender = () => {
-  document.querySelector("body").outerHTML = `
-    <style>body{ background: #D1D3D4!important; color: #111820!important; } #ujmjuBlock { position: absolute; background: #D1D3D4!important; color: #111820!important; font-family: sans-serif; font-size: 1rem; z-index: ${highestZ()}; height: 100%; width: 100%;} #sdsgfdgsBlock { margin: 1rem; width: 80%!important; background: #D1D3D4!important; color: #111820!important; } #sdsgfdgsBlock p { font-size: 0.4rem; background: #D1D3D4!important; color: #111820!important; } </style>
-    <div id="ujmjuBlock">
-      <div id="sdsgfdgsBlock">
-        <h2>⚠️ Rendering error detected</h2>
-        <h4>Please update to use a supported renderer or provide a reason for needing to use a legacy renderer and add the following change to the boilerplate config to allow rendering: <br><code>{ allowLegacyRendering: true }</code><br>
-        <br>
-        <p>This template is rendered with ${detectRender()}</p>
-        <p>Please contact support if you see this message.</p>
-      </div>
-    </div>`;
-};
+// const blockRender = () => {
+//   document.querySelector("body").outerHTML = `
+//     <style>body{ background: #D1D3D4!important; color: #111820!important; } #ujmjuBlock { position: absolute; background: #D1D3D4!important; color: #111820!important; font-family: sans-serif; font-size: 1rem; z-index: ${highestZ()}; height: 100%; width: 100%;} #sdsgfdgsBlock { margin: 1rem; width: 80%!important; background: #D1D3D4!important; color: #111820!important; } #sdsgfdgsBlock p { font-size: 0.4rem; background: #D1D3D4!important; color: #111820!important; } </style>
+//     <div id="ujmjuBlock">
+//       <div id="sdsgfdgsBlock">
+//         <h2>⚠️ Rendering error detected</h2>
+//         <h4>Please update to use a supported renderer or provide a reason for needing to use a legacy renderer and add the following change to the boilerplate config to allow rendering: <br><code>{ allowLegacyRendering: true }</code><br>
+//         <br>
+//         <p>This template is rendered with ${detectRender()}</p>
+//         <p>Please contact support if you see this message.</p>
+//       </div>
+//     </div>`;
+// };
 
 const detectRender = () => {
   let agent = navigator.userAgent;
@@ -160,21 +160,15 @@ const detectRender = () => {
 };
 // There is an error on render 2 where an extra pixel is added to the end of a template
 // this casues a new page to be made. This fuction removes that extra pixel
-const pageHeightSetup = (allowLegacyRendering) => {
+const pageHeightSetup = () => {
   let render = detectRender();
   if (render === "2.1") {
       return "calc(100vh - 1px)";
   } else if (render === "1.1") {
     return "100vh";
   } else if (render === "1.0") {
-    if (!allowLegacyRendering) {
-      blockRender();
-    }
     return "100vh";
   } else if (render === "2.0") {
-    if (!allowLegacyRendering) {
-      blockRender();
-    }
     return "calc(100vh - 1px)";
   } else {
     return "100vh";
@@ -182,11 +176,11 @@ const pageHeightSetup = (allowLegacyRendering) => {
 };
 
 // Fix for the resizable background images - fullscreen and digital vairaitons only
-const addCropMarks = (trimMarks, allowLegacyRendering) => {
+const addCropMarks = (trimMarks) => {
   // crop and bleed
   var cropSVG = `<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>`;
 
-  let pageHeight = pageHeightSetup(allowLegacyRendering);
+  let pageHeight = pageHeightSetup();
   let pages = document.querySelectorAll(".page");
   pages.forEach((page) => {
     page.style.height = pageHeight;

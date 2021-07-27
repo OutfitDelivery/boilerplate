@@ -43,7 +43,6 @@ export default class boilerplate {
     this.trimMarks = config.trimMarks || false;
     this.exportReduceFont = config.exportReduceFont || 0;
     this.allowNoMetaData = config.allowNoMetaData || false;
-    this.allowLegacyRendering = config.allowLegacyRendering || false;
     this.ensureImagesLoad = true;
     if (
       typeof config.ensureImagesLoad === 'boolean'
@@ -56,7 +55,7 @@ export default class boilerplate {
     }
 
     if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
-      addCropMarks(this.trimMarks, this.allowLegacyRendering);
+      addCropMarks(this.trimMarks);
     }
     setSize(config.trimMarks || false, config.exportReduceFont || 0);
 
