@@ -2,27 +2,41 @@
   const getSidebar = () => {
     let sidebar = window.top.document.querySelectorAll(".sidebar .current-list");
     if (sidebar.length > 0) {
-      return [...sidebar].pop();
+      return [].slice.call(sidebar).pop();
     } else {
       return undefined;
     }
   }
   const hideInput = (inputValue) => {
-    sidebar.querySelectorAll(".sidebar-items").find((input) => {
-      input.querySelector(".field-variable-tag").innerText === inputValue
-    }).style.display = 'none';
+    getSidebar().querySelectorAll(".sidebar-items")
+    .forEach((input) => {
+      if (input.querySelector(".field-variable-tag").innerText === inputValue) {
+        input.style.display = 'none';
+      }
+    })
   }
-  // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
-  // var state = document.body.getAttribute("document-state");
+
   const setupMTO = (teamMetadata, teamsAllowed = '', inputName = 'Team metadata') => {
     return new Promise((resolve, reject) => {
       try {
         // const sidebar = getSidebar();
-        const metadata = JSON.parse(teamMetadata);
+        // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
+        // const state = document.body.getAttribute("document-state");
+        if (!state) {
+          reject('please set the state attribute')
+        }
         // if we are on any other page then we don't need to do anything to the sidebar and we can skip everything
+        if (state === "template") {
+          let mtoNotSupported = () => {
+            if (getSidebar().firstChild.firstChild.lastChild.innerText == inputName) {
+                getSidebar().querySelector('.choice-variable').innerHTML = `<p>${inputName} functionality is not available on a template level.</p>`;
+            }
+          }
+          setInterval(() => mtoNotSupported(), 500)
+        }
         if (state === "document") {
-            // turn teamsAllowed from string into array
-            teamsAllowed = teamsAllowed.toLowerCase().split("_").join(" ").split(',').filter(n => n)
+        // turn teamsAllowed from string into array
+          teamsAllowed = teamsAllowed.toLowerCase().split(',').filter(n => n)
             let hideTeamsThatAreNotAllowed = () => {
               if (teamsAllowed.length > 0) {
                 // if we are only allowing the user to select some of the teams then we should remove the ones that the user hasn't got access to. 
@@ -40,27 +54,32 @@
                       }
                     }
                   });
-               } else {
-                // This means we are not on the MTO sidebar 
-              }
-            } else {
+                } else {
+                  // This means we are not on the MTO sidebar 
+                }
+              } else {
                 // getSidebar().querySelector('.choice-variable').innerHTML = `<p>${inputName} is not available for your team. Please click back to continue editing your document.</p>`;
                 hideInput(inputName)
               }
             }
-            setInterval(() => hideTeamsThatAreNotAllowed(), 500)
+            setInterval(() => hideTeamsThatAreNotAllowed(), 300)
             hideTeamsThatAreNotAllowed();
           }
           if (state === "template") {
             getSidebar().querySelectorAll('.choice-variable').innerHTML = `<p>${inputName} is only available on the edit page.</p>`;
           }
-          if (typeof window.handleMTOData === 'function') {
-            window.handleMTOData(metadata);
+          if (['document', 'export', 'preview'].includes(state)) {
+            if (typeof window.handleMTOData === 'function') {
+              window.handleMTOData(teamMetadata);
+            }
+            resolve(teamMetadata);
           }
-          resolve(metadata);
       } catch (error) {
         console.error("An MTO error has occurred. Please try again later. If the issue still persists please contact Outfit Support");
         reject(error);
       }
     })
   }
+
+
+export { setupMTO, getSidebar };

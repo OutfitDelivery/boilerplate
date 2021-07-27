@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html async>
+
+<head>
+  <title>Max height testing</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="testte" />
+  <meta name="scope" content="DTB-123" />
+  <meta name="build" content="DTB-456" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <link rel="stylesheet" type="text/less" href="/css/styles.less">
+  <style type="text/less">
+    .container {
+      display: grid;
+      grid-row: auto;
+      width: 100%;
+      padding: 3mm;
+      row-gap: 1ch;
+      background-color: #D1D3D4;
+      overflow: scroll;
+      width: 1000px;
+      .test-row {
+        background-color: white;
+        height: fit-content;
+        .green {
+          width: 100%; background-color: rgb(62, 177, 85); height: 50px;
+        }
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <div class="test-row">
+          <div id="example1">
+            <div class="green">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/dist/boilerplate.js"></script>
+<script>
+  let template = new boilerplate({
+    fonts: ['IBM Plex Sans']
+  });
+
+  // This function will run whenever there is a change to any text input
+  template.on('inputs-change', () => {
+    console.log('inputs-change')
+    template.completeRender();
+  })
+</script>
+
+</html>

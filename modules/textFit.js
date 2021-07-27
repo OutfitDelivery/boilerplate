@@ -1,5 +1,6 @@
+import { getWidth, getHeight, countLines, simpleRounding } from './limiters.js'
 /**
- * textFit v3.0.0
+ * textFit v3.1.0
  * Previously known as jQuery.textFit
  * 11/2014 by STRML (strml.github.com)
  * MIT License
@@ -13,41 +14,42 @@
  */
 /* global define:true, document:true, window:true, HTMLElement:true*/
 
-(function (root, factory) {
-  "use strict";
+// (function (root, factory) {
+//   "use strict";
 
-  // UMD shim
-  if (typeof define === "function" && define.amd) {
-    // AMD
-    define([], factory);
-  } else if (typeof exports === "object") {
-    // Node/CommonJS
-    module.exports = factory();
-  } else {
-    // Browser
-    root.textFit = factory();
-  }
-})(typeof global === "object" ? global : this, function () {
-  "use strict";
+//   // UMD shim
+//   if (typeof define === "function" && define.amd) {
+//     // AMD
+//     define([], factory);
+//   } else if (typeof exports === "object") {
+//     // Node/CommonJS
+//     module.exports = factory();
+//   } else {
+//     // Browser
+//     root.textFit = factory();
+//   }
+// })(typeof global === "object" ? global : this, function () {
+//   "use strict";
 
   var defaultSettings = {
     alignVert: false, // if true, textFit will align vertically using css tables
     alignHoriz: false, // if true, textFit will set text-align: center
     multiLine: false, // if true, textFit will not set white-space: no-wrap
     stopOverflow: false, // if true, a error we be thrown if the content is overflowing
-    maxLine: false, // if true, textFit will throw and error if the text is over the supplied number of lines
-    detectMultiLine: true, // disable to turn off automatic multi-line sensing
-    fontUnit: "px", // what unit should the final font be. using rems or mm is sometimes useful
-    fontChangeSize: 0.1, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
-    minFontSize: 6,
-    display: "inline-block", // in case you need to change this
-    maxFontSize: 80,
+    fontUnit: "rem", // what unit should the final font be. using rems or mm is sometimes useful
+    fontChangeSize: 0.01, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
+    minFontSize: 0.3,
+    maxFontSize: 1,
+    maxLine: false,
+    growInSize: false, // set the width and height of the element to 100% to allow the element to grow 
+    containerChecks: [],
     reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
     widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
     alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
+    display: "inline-block", // in case you need to change this
   };
 
-  return function textFit(els, options) {
+  export default function textFit(els, options) {
     if (!options) options = {};
 
     // Extend options.
@@ -80,7 +82,7 @@
       try {
         processItem(els[i], settings);
       } catch (e) {
-        throw new Error(e.message);
+        throw e;
       }
     }
   };
@@ -99,32 +101,43 @@
     if (!settings.reProcess) {
       el.setAttribute("textFitted", 1);
     }
-
+   
     var innerSpan, originalHeight, originalHTML, originalWidth;
     var low, mid, high;
+    var { containerChecks } = settings;
+
+    // if we are going to let the text get larger then we need to adjust the size to give a larger originalHeight and originalWidth
+    if (settings.growInSize) {
+      el.classList.add('fullSize')
+    }
 
     // Get element data.
     originalHTML = el.innerHTML;
     originalWidth = getWidth(el);
     originalHeight = getHeight(el);
 
+    if (settings.growInSize) {
+      el.classList.remove('fullSize')
+    }
+
     // Don't process if we can't find box dimensions
     if (!originalWidth || (!settings.widthOnly && !originalHeight)) {
       if (!settings.widthOnly)
         throw new Error(
-          "Set a static height and width on the target element " +
+          "Set a height and width on the target element " +
             el.outerHTML +
             " before using textFit!"
         );
       else
         throw new Error(
-          "Set a static width on the target element " +
+          "Set a width on the target element " +
             el.outerHTML +
             " before using textFit!"
         );
     }
+    let textFittedSpan = el.querySelector("span.textFitted")
     // Add textFitted span inside this container.
-    if (originalHTML.indexOf("textFitted") === -1) {
+    if (!textFittedSpan) {
       innerSpan = document.createElement("span");
       innerSpan.className = "textFitted";
       // Inline block ensure it takes on the size of its contents, even if they are enclosed
@@ -135,9 +148,9 @@
       el.appendChild(innerSpan);
     } else {
       // Reprocessing.
-      innerSpan = el.querySelector("span.textFitted");
+      innerSpan = textFittedSpan;
       // Remove vertical align if we're reprocessing.
-      if (hasClass(innerSpan, "textFitAlignVert")) {
+      if (innerSpan.classList.contains("textFitAlignVert")) {
         innerSpan.className = innerSpan.className.replace(
           "textFitAlignVert",
           ""
@@ -153,23 +166,8 @@
       innerSpan.style["text-align"] = "center";
     }
 
-    // Check if this string is multiple lines
-    // Not guaranteed to always work if you use wonky line-heights
-    var multiLine = settings.multiLine;
-    if (
-      settings.detectMultiLine &&
-      !multiLine &&
-      getHeight(innerSpan) >=
-        parseFloat(window.getComputedStyle(innerSpan)["font-size"], 10) * 2
-    ) {
-      multiLine = true;
-    }
-    // If we're not treating this as a multiline string, don't var it wrap.
-    if (!multiLine) {
-      el.style["white-space"] = "nowrap";
-    }
-
     var maxLine = parseInt(el.dataset.maxLine || settings.maxLine);
+    // console.log(maxLine, 'maxline')
     var startingSize = innerSpan.style.fontSize;
 
     low = settings.minFontSize;
@@ -180,27 +178,37 @@
       mid = parseFloat(((high + low) / 2).toFixed(2));
       innerSpan.style.fontSize = mid + settings.fontUnit;
 
-      var currentWidth = getWidth(innerSpan) <= originalWidth;
-      var currentlHeight =
+      let scrollWidth = getWidth(innerSpan) <= originalWidth;
+      let scrollHeight =
         settings.widthOnly || getHeight(innerSpan) <= originalHeight;
 
       // check if too many lines and if it is then we need to adjust the font size accordingly
-      var maxLines = false;
+      let maxLines = false;
       if (Number.isInteger(maxLine)) {
-        var lineCount = countLines(innerSpan);
+        let lineCount = countLines(innerSpan);
         maxLines = lineCount > maxLine;
       }
 
-      if (currentWidth && currentlHeight && !maxLines) {
+      // check the parent containers for overflows and adjust the font size accordingly to prevent them
+      let containerOverflow = [].slice.call(containerChecks).some(container => {
+        if (container.scrollHeight > simpleRounding(getHeight(container))) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+
+      // console.log(scrollWidt h, scrollHeight, !maxLines, !containerOverflow)
+      if (scrollWidth && scrollHeight && !maxLines && !containerOverflow) {
         size = mid;
-        low = mid + settings.fontChangeSize;
+        low = mid + settings.fontChangeSize; // set font size to larger
       } else {
-        high = mid - settings.fontChangeSize;
+        high = mid - settings.fontChangeSize; // set font size to  smaller
       }
       // await injection point
     }
-    if (startingSize !== size) {
-      console.log("textFit font changed size: ", size + settings.fontUnit);
+    if (startingSize !== size + settings.fontUnit) {
+      console.log("textFit font changed to:", size + settings.fontUnit);
     }
     // updating font if differs:
     if (innerSpan.style.fontSize != size + settings.fontUnit)
@@ -208,15 +216,14 @@
 
     // add the required CSS in order to stop overflows
     if (Number.isInteger(maxLine) || settings.stopOverflow) {
-      if (!document.getElementById("overflowStyleSheet")) {
-        var style = [".overflow > span {", "overflow: hidden;", "}"].join("");
-
-        var css = document.createElement("style");
-        css.type = "text/css";
-        css.id = "overflowStyleSheet";
-        css.innerHTML = style;
-        document.body.appendChild(css);
-      }
+      // if (!document.getElementById("overflowStyleSheet")) {
+      //   var style = [".overflow > span {", "overflow: hidden;", "}"].join("");
+      //   var css = document.createElement("style");
+      //   css.type = "text/css";
+      //   css.id = "overflowStyleSheet";
+      //   css.innerHTML = style;
+      //   document.body.appendChild(css);
+      // }
 
       // detect if data max lines has been exceeded
       if (Number.isInteger(maxLine)) {
@@ -225,8 +232,6 @@
         var lineCount = countLines(innerSpan);
         el.dataset.lineCount = lineCount;
         if (lineCount > maxLine) {
-          el.dataset.customOverflowMessage =
-            "Too much content has been added for the allowed space";
           el.classList.add("overflow");
         }
       }
@@ -238,56 +243,25 @@
         }
       }
     }
+
     // Our height is finalized. If we are aligning vertically, set that up.
     if (settings.alignVert) {
-      addStyleSheet();
+      // addStyleSheet();
       var height = getHeight(innerSpan);
       if (window.getComputedStyle(el)["position"] === "static") {
         el.style["position"] = "relative";
       }
-      if (!hasClass(innerSpan, "textFitAlignVert")) {
+      if (!innerSpan.classList.contains("textFitAlignVert")) {
         innerSpan.className = innerSpan.className + " textFitAlignVert";
       }
       innerSpan.style["height"] = height + "px";
       if (
         settings.alignVertWithFlexbox &&
-        !hasClass(el, "textFitAlignVertFlex")
+        !el.classList.contains("textFitAlignVertFlex")
       ) {
         el.className = el.className + " textFitAlignVertFlex";
       }
     }
-  }
-
-  // Calculate height without padding.
-  function getHeight(el) {
-    var style = window.getComputedStyle(el, null);
-    var height = parseFloat(style.getPropertyValue("height"));
-    var box_sizing = style.getPropertyValue("box-sizing");
-    if (box_sizing == 'border-box')
-    {
-      var padding_top = parseFloat(style.getPropertyValue("padding-top"));
-      var padding_bottom = parseFloat(style.getPropertyValue("padding-bottom"));
-      var border_top = parseFloat(style.getPropertyValue("border-top-width"));
-      var border_bottom = parseFloat(style.getPropertyValue("border-bottom-width"));
-      height = height - padding_top - padding_bottom - border_top - border_bottom
-    }
-    return height;
-  }
-
-  // Calculate width without padding.
-  function getWidth(el) {
-    var style = window.getComputedStyle(el, null);
-    var width = parseFloat(style.getPropertyValue("width"));
-    var box_sizing = style.getPropertyValue("box-sizing");
-    if (box_sizing == 'border-box')
-    {
-      var padding_left = parseFloat(style.getPropertyValue("padding-left"));
-      var padding_right = parseFloat(style.getPropertyValue("padding-right"));
-      var border_left = parseFloat(style.getPropertyValue("border-left-width"));
-      var border_right = parseFloat(style.getPropertyValue("border-right-width"));
-      width = width - padding_left - padding_right - border_left - border_right;
-    }
-    return width;
   }
 
   // Returns true if it is a DOM element
@@ -300,49 +274,3 @@
           o.nodeType === 1 &&
           typeof o.nodeName === "string";
   }
-
-  function hasClass(element, cls) {
-    return (" " + element.className + " ").indexOf(" " + cls + " ") > -1;
-  }
-
-  // count the number of lines inside of the current direct element  
-  function countLines(target) {
-    var testBox = document.createElement("span")
-    // testBox.setAttribute('style', target.getAttribute('style'));
-    testBox.style.fontSize = target.style.fontSize;
-    testBox.style.display = 'inline-block';
-    testBox.innerText = '⠀';
-    target.appendChild(testBox);
-    var oneLineHeight = getHeight(testBox);
-    testBox.remove();
-    var lines = getHeight(target) / oneLineHeight;
-    return lines;
-  }
-
-  // Better than a stylesheet dependency
-  function addStyleSheet() {
-    if (document.getElementById("textFitStyleSheet")) return;
-    var style = [
-      ".textFitAlignVert{",
-      "position: absolute;",
-      "top: 0; right: 0; bottom: 0; left: 0;",
-      "margin: auto;",
-      "display: flex;",
-      "justify-content: center;",
-      "flex-direction: column;",
-      "}",
-      ".textFitAlignVertFlex{",
-      "display: flex;",
-      "}",
-      ".textFitAlignVertFlex .textFitAlignVert{",
-      "position: static;",
-      "}",
-    ].join("");
-
-    var css = document.createElement("style");
-    css.type = "text/css";
-    css.id = "textFitStyleSheet";
-    css.innerHTML = style;
-    document.body.appendChild(css);
-  }
-});
