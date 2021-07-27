@@ -4,7 +4,8 @@ on:
  push:
     tags:
       - '*'
-
+    branches:
+      - master
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -33,3 +34,4 @@ jobs:
           AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
           SOURCE_DIR: 'dist'  
           DEST_DIR: 'templateBoilerplate/${{ env.RELEASE_VERSION }}'
+w
