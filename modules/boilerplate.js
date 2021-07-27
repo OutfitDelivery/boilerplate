@@ -89,7 +89,7 @@ export default class boilerplate {
       if (typeof window.inputsChange === 'function') {
         window.inputsChange(this.templateProps);
       }
-      window.addEventListener('resize', (e) => {
+      window.addEventListener('resize', () => {
         setSize(this.trimMarks, this.exportReduceFont);
         this.emit('inputs-change', this.templateProps);
         if (typeof window.inputsChange === 'function') {
