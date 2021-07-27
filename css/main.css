@@ -1,18 +1,17 @@
 /*minireset.css*/
-html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,iframe,hr,h1,h2,h3,h4,h5,h6{margin:0;padding:0}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}ul{list-style:none}button,input,select,textarea{margin:0}html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}img,embed,iframe,object,audio,video{height:auto;max-width:100%}iframe{border:0}table{border-collapse:collapse;border-spacing:0}td,th{padding:0;text-align:left}
+html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,iframe,hr,h1,h2,h3,h4,h5,h6{margin:0;padding:0}h1,h2,h3,h4,h5,h6{font-size:unset;font-weight:normal}ul{list-style:none}button,input,select,textarea{margin:0}html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}img,embed,iframe,object,audio,video{height:auto;max-width:100%}iframe{border:0}table{border-collapse:collapse;border-spacing:0}td,th{padding:0;text-align:left}
 
 * {
   -webkit-font-smoothing: antialiased;
 }
 
 html {
+  --trimOffset: 0;
   font-size: 16px;
   color: #000000;
-  word-break: break-word !important;
-}
-
-body {
+  word-break: break-word;
   background: #ffffff;
+  line-height: 1; 
 }
 
 @media screen {
@@ -48,82 +47,13 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
-
 .contain {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
 }
-
 .blend {
   background-blend-mode: overlay;
-}
-
-/** Overflow Styles **/
-[data-limit-exceeded="true"] {
-  --standardOverflowColor: #D13D3D;
-  
-  position: relative !important;
-  outline: 3px solid var(--overrideOverflowColor, var(--standardOverflowColor));
-  /*color: var(--overrideOverflowColor, var(--standardOverflowColor)) !important;*/
-}
-
-[data-limit-exceeded="true"] * { 
-  color: inherit !important; 
-}
-
-[data-limit-exceeded="true"] {
-  box-shadow: 0 0 0 0.0362rem color: var(--overrideOverflowColor, var(--standardOverflowColor)) !important;
-  /*background: rgba(255, 0, 0, 0.4);*/
-  position: relative;
-  z-index: 999;}
-[data-limit-exceeded="true"] h1, 
-[data-limit-exceeded="true"] h2, 
-[data-limit-exceeded="true"] h3, 
-[data-limit-exceeded="true"] h4, 
-[data-limit-exceeded="true"] h5, 
-[data-limit-exceeded="true"] h6, 
-[data-limit-exceeded="true"] p, 
-[data-limit-exceeded="true"] li { color: var(--overrideOverflowColor, var(--standardOverflowColor)) !important; }
-[data-limit-exceeded="true"]::before {
-  content: "";
-  position: absolute;
-  z-index: 5;
-  top: -2px;
-  left: -2px;
-  height: 40px;
-  width: 40px;
-  max-height: 100%;
-  color: white !important;
-  padding: 0;
-  box-sizing: border-box;
-  font-size: 16px;
-  text-align: center;
-  line-height: 1;
-  background-color: var(--overrideOverflowColor, var(--standardOverflowColor));
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMSIgZmlsbD0ibm9uZSIgeG1sbnM6dj0iaHR0cHM6Ly92ZWN0YS5pby9uYW5vIj48bWFzayBpZD0iQSIgbWFzay10eXBlPSJhbHBoYSIgbWFza1VuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIxIj48cGF0aCBkPSJNOS4wNjMgMTQuNTYzYS45NC45NCAwIDAgMSAuOTM4LS45MzcuOTQuOTQgMCAwIDEgLjkzOC45MzguOTQuOTQgMCAwIDEtLjkzNy45MzguOTQuOTQgMCAwIDEtLjkzNy0uOTM3ek0xMCA0LjI1Yy4zNDUgMCAuNjI1LjI4LjYyNS42MjV2Ni44NzVjMCAuMzQ1LS4yOC42MjUtLjYyNS42MjVzLS42MjUtLjI4LS42MjUtLjYyNVY0Ljg3NWMwLS4zNDUuMjgtLjYyNS42MjUtLjYyNXpNMCAxMC41YTEwIDEwIDAgMSAxIDIwIDAgMTAgMTAgMCAxIDEtMjAgMHptMTAtOC43NWE4Ljc1IDguNzUgMCAxIDAgMCAxNy41IDguNzUgOC43NSAwIDEgMCAwLTE3LjV6IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiMwMDAiLz48L21hc2s+PGcgbWFzaz0idXJsKCNBKSI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTS0uODMzLS4zMzNoMjEuNjY3djIxLjY2N0gtLjgzM3oiLz48L2c+PC9zdmc+);
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 0 0 10px 0;
-}
-
-[data-limit-exceeded="true"]:not([data-hide-error-message]):hover:before {
-  background-color: var(--overrideOverflowColor, var(--standardOverflowColor)) !important;
-  color: white;
-  /*background-image: unset;*/
-      background-position: 10px;
-  content: "Max Height Exceeded";
-  padding: 0 20px 0px 40px;
-  width: auto;
-}
-
-
-[data-limit-exceeded="true"] .token-value.token-empty {
-  display: none;
 }
 
 /* Small fix that prevents Superscript and Subscript from breaking the element's line-height */
@@ -134,7 +64,6 @@ sub {
   top: -0.4em;        
   line-height: 1em;
 }
-
 sub {
   top: 0.4em;
 }   
@@ -147,7 +76,6 @@ sub {
 
 /* Dynamic Inject container style */
 .js-dynamicInjectMaster { display: none; }
-
 .js-dynamicInjectMasterReposition {
   position: absolute;
   opacity: 0;
@@ -157,6 +85,9 @@ sub {
   z-index: -1;
 }
 
+/* Helper classes */
+.u-hide { display: none; }
+
 .backgroundImage {
   position: absolute;
   top: 0;
@@ -165,17 +96,12 @@ sub {
   right: 0;
   overflow: hidden;
 }
-
 .backgroundImage div {
   width: auto !important;
   height: auto !important;
   right: 0;
   bottom: 0;
 }
-
-/* Helper classes */
-.u-hide { display: none; }
-
 /* Helper class for fixing Reposition tool bug */
 .reposition-fix {
   position: absolute;
@@ -185,7 +111,6 @@ sub {
   bottom: 0;
   right: 0;        
 }
-
 .reposition-fix div {
   top: 0 !important;
   bottom: 0 !important;
@@ -214,26 +139,21 @@ sub {
   position: absolute;
   height: 28.81px;
   width: 28.81px;
-  z-index:999;
 }
-
 .crop-marks .crop-mark.top-left {
   top: 0;
   left: 0;
 }
-
 .crop-marks .crop-mark.top-right { 
   top: 0;
   right: 0;
   transform: rotate(90deg);
 }
-
 .crop-marks .crop-mark.bottom-left {
   bottom: 0;
   left: 0;
   transform: rotate(270deg);
 }
-
 .crop-marks .crop-mark.bottom-right {
   bottom: 0;
   right: 0;
@@ -243,11 +163,9 @@ sub {
 [data-trim="true"] .bleed {
   --trimOffset: 4.41mm;
 }
-
-[data-trim="false"] .bleed {
+[data-trim="false"] .bleed, .bleed {
   --trimOffset: -3mm;
 }
-
 .bleed {
   position: absolute;
   top: var(--trimOffset);
@@ -255,6 +173,122 @@ sub {
   bottom: var(--trimOffset);
   right: var(--trimOffset);
 }
+
 a { 
   display: inline-block;
-} 
+}
+
+/* textfit styles */
+.textFitAlignVert {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.textFitAlignVertFlex {
+  display: flex;
+}
+.textFitAlignVertFlex .textFitAlignVert {
+  position: static;
+}
+
+.fullSize {
+  width: 100%;
+  height: 100%;
+}
+
+/* rich text inputs can have tags which break line counting so we set all those tags to block for consistent heights */
+.token-value {
+  display: inherit;
+}
+
+/* When we are counting lines it's important to not have padding/margin on any of the elements as this will increase the count */
+.countingLines * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+}
+
+/*
+Overflow styles from the platform that are only here as the platfrom isn't adding them
+https://outfithq.atlassian.net/browse/OP-4123
+*/
+.overflow, [data-overflow] {
+  position: relative !important;
+  color: red !important;
+  border: none;
+  box-shadow: 0 0 0 0.0362rem red;
+  background: red;
+  background: rgba(255,0,0,0.4);
+  z-index: 999;
+}
+.overflow *, [data-overflow] * {
+  color: red !important;
+}
+.overflow::before, [data-overflow]::before {
+  content: '+';
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  height: 1em;
+  width: 1em;
+  max-height: 100%;
+  color: red;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 1em;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overflow:hover:before, [data-overflow]:hover:before {
+  background-color: red;
+  color: white;
+}
+.overflow:hover:after, [data-overflow]:hover:after {
+  display: block;
+  content: 'More content has been added than space allows';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: black;
+  color: white;
+  border-radius: 0;
+  padding: 0.3em 1.5em 0.3em .5em;
+  box-sizing: border-box;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-align: right;
+  line-height: 1em;
+  z-index: 2;
+}
+.overflow:after, [data-overflow]:after {
+  display: none;
+}
+.overflow .token-value.token-empty, [data-overflow] .token-value.token-empty {
+  display: none;
+}
+[data-overflow]:hover:after {
+  content: attr(data-overflow);
+}
+.overflow[data-max-line]:hover:after {
+  content: "There cannot be more than " attr(data-max-line) " lines of content here";
+}
+.overflow[data-max-line="1"]:hover:after {
+  content: "There can only be a single line of content here";
+}
+.overflow[data-char-limit]:hover:after {
+  content: "There can't be more than " attr(data-char-limit) " characters here";
+}
+.overflow[data-custom-overflow-message]:hover:after {
+  content: attr(data-custom-overflow-message);
+}

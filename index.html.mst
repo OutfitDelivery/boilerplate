@@ -1,86 +1,58 @@
 <!DOCTYPE html>
 <html async>
-  <!-- <script>window.onerror = (e) => {document.querySelector('body').insertAdjacentHTML('afterbegin', `<p id="debug">${e}</p><style>#debug{font-size: 18px; font-family: monospace;}</style>`)}</script> -->
-  <head>
-  <!--  Template Admin Build Instructions 
+
+<head>
+  <!-- Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data
-        4. Remove this comment
+        4. Ensure you are using external css and js files 
+        5. Include fonts in the boilerplate config
+        6. Add your inputs to the script tag bellow
+        7. Have a lovely day 
+        8. Remove this comment
   -->
-    <title>PUT_TEMPLATE_NAME_HERE</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>
-    <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE"/>
-    <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE"/>
-    <meta name="updates" content=""/>
+  <title>PUT_TEMPLATE_NAME_HERE</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="PUT_YOUR_NAME_HERE" />
+  <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE" />
+  <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.1/main.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/css/main.min.css"/>
-    <style>
-      /* ADD_ROOT_STYLES_HERE */
-    </style>
-  </head>
-  <body data-trim="{{trim-marks}}{{^trim-marks}}true{{/trim-marks}}" data-renderer="2" data-reduce-export-font-size-by-percent="0" data-reduce-firefox-font-size-by-percent="0" data-development="true">
-    <div class="page">
-      <div class="bleed">
-        <div class="container">
-          
-        </div>
+  <script id="inputInjection">
+    const templateProps = {
+      "trim-marks": `{{{trim-marks}}}`,
+      "placeholder-visibility": `{{{placeholder-visibility}}}`,
+      "placeholder-1": `{{{placeholder-1}}}`
+    }
+    const cssVariables = `
+      --red: #E41E46;
+      --navy: #1F2A44;
+      --black: #111820; 
+      --orange: #FF8674;
+      --gray: #D1D3D4;
+      --slate: #BEC6C4;
+      --brown: #453536;
+      --teal: #94B7BB;
+    `
+  </script>
+</head>
+
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <h1>I appreciate you </h1>
       </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/fontfaceobserver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/limiters.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/prefixfree.min.js"></script>
+  <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.1/boilerplate.js">
+  </script>
+  <script src="js/main.js"></script>
+</body>
 
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/formatters.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/custom-rich-text.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/hide-empty-titles.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/qrcode.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/textfit.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/validate.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/all-images-loaded-callback.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/OutfitDelivery/boilerplate@2.5/js/mto.min.js"></script>-->
-    
-    <script>
-      console.clear();
-    	const state = setOutfitState();
-      window.addEventListener('load', (event) => {
-        const fonts = ['PUT_ALL_FONT_NAMES_HERE']; //List your document fonts here
-        if(!validFontList(fonts)) return;
-
-        Promise.all(fonts.map(font => {
-          return new FontFaceObserver(font).load();
-        })).then(async (load) => {
-          /* Functions To Run After Load */
-          setupPlaceholder("{{placeholder-visibility}}", ["{{{placeholder-1}}}", "{{{placeholder-2}}}"]);
-          checkCrop();
-
-          observerAndLoad();
-
-          if (state === "document") {
-            imageCompression();
-          }
-          // if (state === "template" || state === "document") {
-          //   setupMutationObserver(document.body, { characterData: true, childList: true, subtree: true, characterDataOldValue: true }, observerAndLoad);
-          // }
-         
-          completeRender()
-        }).catch((err) => {
-          throw err;
-        });
-      });
-
-      let observerAndLoad = () => {
-        if (state !== "preview") {
-          maxLineCheck();
-          maxHeightCheck();
-          charLimit();
-          // dynamicReplace();
-        }
-      }
-    </script>
-  </body>
 </html>

@@ -8,16 +8,16 @@ String.prototype.replaceAll = function (str, newStr) {
   return this.split(str).join(newStr);
 };
 
-function dynamicReplace(selector = null, data = null) {
+function dynamicReplace(selector = null, data = null, colour = null) {
   if (selector != null && data != null) 
   { 
-    dynamicReplaceMulti(selector, data);
+    dynamicReplaceMulti(selector, data, colour);
   } else {
     dynamicReplaceSingle();
   }
 }
 
-function dynamicReplaceMulti(target, data) {
+function dynamicReplaceMulti(target, data, colour) {
   const targets = document.querySelectorAll(target);
   if (targets.length === 0) return;
 
@@ -32,7 +32,7 @@ function dynamicReplaceMulti(target, data) {
       ) {
         target.innerHTML = target.innerHTML.replaceAll(lookup, inputValue); //If found replace
       } else {
-        let lookupSpan = `<span class='lookup-value'>${lookup}</span>`;
+        let lookupSpan = `<span ${(colour ? `style="color:${colour};"` : "")} class="lookup-value">${lookup}</span>`;
         // console.log(target.innerHTML);
         let temp = target.innerHTML.split(lookupSpan);
         temp = temp.map((x) => x.replaceAll(lookup, lookupSpan));
@@ -57,3 +57,5 @@ function dynamicReplaceSingle() {
     }
   });
 }
+
+export { dynamicReplace, dynamicReplaceSingle, dynamicReplaceMulti }

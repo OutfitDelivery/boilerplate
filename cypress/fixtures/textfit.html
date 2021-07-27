@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html async>
+
+<head>
+  <title>Line count testing</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="testte" />
+  <meta name="scope" content="DTB-" />
+  <meta name="build" content="DTB-456" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <style type="text/less">
+    @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+
+    html {
+      font-size: 20px!important;
+    }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .container {
+      display: grid;
+      grid-row: auto;
+      width: 100%;
+      padding: 3mm;
+      row-gap: 1ch;
+      background-color: #D1D3D4;
+      overflow: scroll;
+      .test-row {
+        width: 500px;
+        background-color: white;
+        > div {
+          height: 100%;
+        }
+      }
+
+      #example1 {
+        height: 100px;
+      }
+      #example2 {
+        height: 300px;
+      }
+      #example3 {
+        height: 300px;
+      }
+      #example4 {
+        height: 300px;
+      }
+    }
+
+       h2 {
+      font-size: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <div id="example1" class="test-row simple">
+          <div>
+            <p>
+              Erat accumsan cras senectus quisque
+            </p>
+          </div>
+        </div>
+        <div id="example2" class="test-row simple">
+          <div>
+            <p>
+              Erat accumsan cras senectus quisque
+            </p>
+          </div>
+        </div>
+        <div id="example3" class="test-row simple">
+          <div>
+            <div class="textFit">
+              <h4>
+                Erat accumsan cras senectus quisque
+              </h4>
+            </div>
+            <p>
+              other Text that changes the result kinda - Erat accumsan cras senectus quisque Erat accumsan cras senectus
+              quisque
+            </p>
+          </div>
+        </div>
+        <div id="example4" class="test-row simple">
+          <div>
+            <div class="textFit">
+              <h4>
+                Erat accumsan cras senectus quisque
+              </h4>
+            </div>
+            <p>
+              other Text that changes the result kinda - Erat accumsan cras senectus quisque Erat accumsan cras senectus
+              quisque
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/dist/boilerplate.js"></script>
+  <script>
+    let template = new boilerplate({
+      fonts: ['IBM Plex Sans'],
+      templateProps: {}
+    });
+
+    // This function will run whenever there is a change to any text input
+    template.on('inputs-change', () => {
+      template.textFit(document.querySelector('#example1 div'))
+      template.textFit(document.querySelector('#example2 div'), { fontUnit: 'px', minFontSize: 10, maxFontSize: 1000 })
+      template.textFit(document.querySelector('#example3 .textFit'), { maxFontSize: 1000, growInSize: true })
+      template.textFit(document.querySelector('#example4 .textFit'), { maxFontSize: 100, growInSize: true, containerChecks: [document.querySelector('#example4')] })
+      // template.completeRender();
+    })
+  </script>
+</body>
+
+</html>

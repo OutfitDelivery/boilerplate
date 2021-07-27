@@ -1,3 +1,10 @@
 node_modules
 coverage
 dist
+dist/
+*.env
+cypress/videos
+cypress/screenshots
+cypress/screenshots/
+cypress/videos/
+dist
