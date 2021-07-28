@@ -5,12 +5,13 @@
   <!-- Template Admin Build Instructions 
         1. Fill Out Title Meta-Data
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
-        3. Fill Out Build Card Meta-Data
+        3. Fill Out Build Card Meta-Data (you can find this number linked on the Jira Card)
         4. Ensure you are using external css and js files 
         5. Include fonts in the boilerplate config
         6. Add your inputs to the script tag bellow
         7. Have a lovely day 
         8. Remove this comment
+        9. Create an amazing template
   -->
   <title>PUT_TEMPLATE_NAME_HERE</title>
   <meta charset="utf-8" />
@@ -26,7 +27,10 @@
     const templateProps = {
       "trim-marks": `{{{trim-marks}}}`,
       "placeholder-visibility": `{{{placeholder-visibility}}}`,
-      "placeholder-1": `{{{placeholder-1}}}`
+      "placeholder-1": `{{{placeholder-1}}}`,
+      "user": {
+        "name": `{{{user.name}}}`
+      }
     }
     const cssVariables = `
       --red: #E41E46;
@@ -45,14 +49,14 @@
   <div class="page">
     <div class="bleed">
       <div class="container">
-        <h1>I appreciate you </h1>
+        <h1>To get started follow the rules at the top of the code</h1>
       </div>
     </div>
   </div>
-
-  <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.1/boilerplate.js">
-  </script>
-  <script src="js/main.js"></script>
 </body>
 
+<script src="https://outfit-assets-production.s3.amazonaws.com/template/3.1/boilerplate.js"></script>
+<script src="js/main.js"></script>
+
 </html>
+

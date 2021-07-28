@@ -1,8 +1,8 @@
+import camelcaseKeys from 'camelcase-keys';
 import {
   defaultsRemoved,
   loadLESS,
   winLoad,
-  domReady,
   highestZ,
   setBrowserType,
   setSize,
@@ -10,11 +10,11 @@ import {
   addCropMarks,
   setOutfitState,
   hotReloadOnChange,
-} from './utilities.js';
-import { dynamicReplace } from './replace.js';
-import setupPlaceholder from './placeholder.js';
-import textFit from './textFit.js';
-import { setupMTO } from './mto.js';
+} from './utilities';
+import { dynamicReplace } from './replace';
+import setupPlaceholder from './placeholder';
+import textFit from './textFit';
+import { setupMTO } from './mto';
 import {
   charLimit,
   minLineCheck,
@@ -26,21 +26,21 @@ import {
   lineClamp,
   calculateTextMetrics,
 } from './limiters';
-import { imageCompression, ensureAllImagesLoaded } from './images.js';
+import { imageCompression, ensureAllImagesLoaded } from './images';
 
 export default class boilerplate {
   constructor(config = {}) {
     console.clear();
-
     this.state = setOutfitState(config.trimMarks || false);
     if (config.hotReloadOnChange) {
       hotReloadOnChange();
     }
-    this._events = {};
+    this.events = {};
     this.fonts = config.fonts || [];
     this.overflows = false;
     this.browser = setBrowserType();
     this.trimMarks = config.trimMarks || false;
+    this.camelCase = config.camelCase || false;
     this.exportReduceFont = config.exportReduceFont || 0;
     this.allowNoMetaData = config.allowNoMetaData || false;
     this.ensureImagesLoad = true;
@@ -69,6 +69,11 @@ export default class boilerplate {
     try {
       if (config.templateProps) {
         this.templateProps = JSON.parse(JSON.stringify(config.templateProps));
+        if (this.camelCase) {
+          this.templateProps = camelcaseKeys(this.templateProps, {
+            deep: true,
+          });
+        }
       } else {
         this.templateProps = JSON.parse('{}');
       }
@@ -97,6 +102,9 @@ export default class boilerplate {
         }
       });
       window.addEventListener('message', (e) => {
+        if (this.camelCase) {
+          e.data = camelcaseKeys(e.data);
+        }
         this.templateProps = { ...this.templateProps, ...e.data };
         this.emit('inputs-change', this.templateProps);
       });
@@ -130,31 +138,31 @@ export default class boilerplate {
 
   // on creates a callback event
   on(name, listener) {
-    if (!this._events[name]) {
-      this._events[name] = [];
+    if (!this.events[name]) {
+      this.events[name] = [];
     }
 
-    this._events[name].push(listener);
+    this.events[name].push(listener);
   }
 
   // removeListener(name, listenerToRemove) {
-  //   if (!this._events[name]) {
+  //   if (!this.events[name]) {
   //     throw new Error(`Can't remove a listener. Event "${name}" doesn't exits.`);
   //   }
 
   //   const filterListeners = (listener) => listener !== listenerToRemove;
 
-  //   this._events[name] = this._events[name].filter(filterListeners);
+  //   this.events[name] = this.events[name].filter(filterListeners);
   // }
 
   // emit sends a message to a callback
   emit(name, data) {
-    if (this._events[name]) {
+    if (this.events[name]) {
       const fireCallbacks = (callback) => {
         callback(data);
       };
 
-      this._events[name].forEach(fireCallbacks);
+      this.events[name].forEach(fireCallbacks);
     }
   }
 
