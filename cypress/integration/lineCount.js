@@ -1,7 +1,18 @@
 // beforeEach(function () {
 //     Cypress.Cookies.preserveOnce('_outfit_session_staging', '_outfit_session_production')
 //   })
+// no console errors
+Cypress.on("window:before:load", (win) => {
+  cy.spy(win.console, "error");
+  cy.spy(win.console, "warn");
+});
 
+afterEach(() => {
+  cy.window().then((win) => {
+    expect(win.console.error).to.have.callCount(0);
+    expect(win.console.warn).to.have.callCount(0);
+  });
+});
 describe('Counting lines', () => {
     it('test large lines', () => {
         cy.visit('cypress/fixtures/lineCount.html');

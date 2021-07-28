@@ -76,10 +76,10 @@ export default class boilerplate {
           });
         }
       } else {
-        this.templateProps = JSON.parse('{}');
+        this.templateProps = {};
       }
     } catch (e) {
-      this.templateProps = JSON.parse('{}');
+      this.templateProps = {};
       console.log('templateProps is not a valid JSON object');
     }
 
