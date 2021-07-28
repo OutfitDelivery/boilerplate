@@ -45,6 +45,24 @@ let template = new boilerplate({
 });
 ```
 There is only one required config option and that is the font array. This array is used to ensure that the fonts are all loaded before we run any text validation as the font size can be effected by the font file.  
+Here is a list of the available config options:
+```javascript
+let template = new boilerplate({
+  fonts: Array, // (default: "") an array of fonts that need to be checked are loaded. If these fonts don't load in 3 seconds then the template will stop running
+  templateProps: Object, // (default: {}) default input values that should be passed into the input-change event before the platform injects the users changes
+  trimMarks: Boolean, // (default: false) if this is true the boilerplate will add trim marks around this template. If trim marks are added then you will need to also configure trim marks in the templates format. 
+  addCrop: Boolean, // (default: true) if false crop marks will not be added when crop marks are enabled
+  placeholderVisibility: String, // (default: "") enables the playment of the placeholder image. Placeholders will show up unless this is set ot hide
+  placeholderImages: Array, // (default: []) an array of placeholder images which will be overlayed over the template. When more than one placeholder is passed in they will be placed on sequential pages 
+  domReadyLoad: Boolean, // (default: false) should the template code run after the DOMContentLoaded event or the load event. By default this is the load event and setting this to true will use the DOMContentLoaded event instead
+  ensureImagesLoad: Boolean, // (default: true) should the template wait for  all images areto load before completing the export. This is useful for templates that have a lot of images or very large images
+  exportReduceFont: Number, // (default: 0) should the font size be sacaled based on a factor of the export size
+  camelCase: Boolean, // (default: false) should the input names passed in by the input-change event be converted to camelCased 
+  hotReloadOnChange: Boolean, // (default: false) should the template reload when the fs-sync event is triggered. This is triggered by vs-portal and fs-sync
+  allowNoMetaData: Boolean, // (default: false) should the template allow the user to create a template without the corret metadata 
+  cssVariables: string, // (default: "") a list of CSS variables that should be added to the root tag on the page. 
+});
+```
 
 **Note:** any additional functions you write or add to your template should be called in the same place as all the pre-existing functions, i.e. inside the `template.on("inputs-change"...` block:
 ```javascript

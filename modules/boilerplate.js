@@ -3,6 +3,7 @@ import {
   defaultsRemoved,
   loadLESS,
   winLoad,
+  domReady,
   highestZ,
   setBrowserType,
   setSize,
@@ -83,11 +84,13 @@ export default class boilerplate {
     }
 
     // all these checks need to be done before the tempalte code can be run
-    const checkList = [domReady, loadLESS(), fontsLoaded(this.fonts)];
-    if (config.waitForImages) {
+    const checkList = [winLoad, loadLESS(), fontsLoaded(this.fonts)];
+    if (config.domReadyLoad) {
+      checkList.push(domReady);
+    } else {
       checkList.push(winLoad);
-      checkList.push(ensureAllImagesLoaded());
     }
+
     Promise.all(checkList).then(() => {
       this.emit('run', this.templateProps);
       this.emit('inputs-change', this.templateProps);
