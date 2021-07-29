@@ -9,37 +9,34 @@
     <meta name="build" content="DTB-456"/>
     <meta name="updates" content=""/>
     <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
-    <style type="text/less">
-      /* ADD_ONLY_ROOT_STYLES_HERE
-      All styles should be put in css/styles.less file for consistency */
-      :root {
-        --white: #fff;
-      }
-      h1 {
-        letter-spacing: 0.2rem;
-      } 
-    </style>
-    <link rel="stylesheet" type="text/less" href="css/styles.less"
   </head>
+  <style>
+      @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+
+      body {
+          font-family: 'IBM Plex Sans', sans-serif;
+      }
+  </style>
   <body>
     <div class="page">
       <div class="bleed">
         <div class="container">
-          <h1 data-max-line='1'>you are </h1>
+          <h1 data-max-line='1'>testing text </h1>
         </div>
-      </div>
+      </div> 
     </div>
 
-   <script src="/dist/boilerplate.js"></script>
+   <script src="./dist/boilerplate.js"></script>
    <script>
       let template = new boilerplate({
         fonts: ['IBM Plex Sans'],
-        //sdsds 
+        camelCase: true,
+        templateProps: {"test-input_test": "hey"}
       });
 
       // This function will run whenever there is a change to any text input
-      template.on("inputs-change", () => {
-        console.log('inputs-change');
+      template.on("inputs-change", (e) => {
+        console.log('inputs-change', e);
         // template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
         template.maxLineCheck();
         let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });

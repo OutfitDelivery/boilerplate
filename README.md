@@ -6,7 +6,7 @@ The standard template build boilerplate used by Outfit's Delivery Team.
 If this is your first template maybe have a look at Delivery Academy for a great tutorial and tips/tricks
 
 ## Usage in Outfit
-Download [boilerplate.zip](https://github.com/OutfitDelivery/boilerplate/blob/3.0/boilerplate.zip?raw=true) from the boilerplate repo. 
+Download [boilerplate.zip](https://github.com/OutfitDelivery/boilerplate/raw/master/boilerplate.zip) from the boilerplate repo.
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
@@ -21,16 +21,15 @@ Before you start building the template there are few things that you need to do.
 5. Ensure you are using external css and js files. 
 6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names **exactly**, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
 7. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
-8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1 or pass in `allowLegacyRendering: true`. If you need to use a legacy render please document the reason why this is necessary.
+8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1
 
 We are using AWS S3 for delivery and versioning. If you do notice that the version of the scripts does not match the Boilerplate version that you downloaded please chat with Sam.
 
-The boilerplate is set up for use with *Less*. For *Less* to compile, you will need to be using *VS Portal* (please contact Sam about this if you haven't got *VS Portal* set up).
+The boilerplate is set up for use with *Less*. For *Less* to compile, you will need to be using *VS Portal* or handle this with CI tools (please contact Sam about this if you haven't got *VS Portal* set up).
 
 If you prefer plain CSS, you can create your own styles.css file and link to that from index.html.mst.
 
 Final note: if using *Less*, when you finish your build, for performance reasons, it's preferable to change your stylesheet link over to the compiled CSS file instead of maintaining the link to the .less file. 
-
 ## Scripts
 There are two key scripts imported into index.html.mst:
 - main.js
@@ -39,10 +38,36 @@ There are two key scripts imported into index.html.mst:
 ### [Main.js](js/main.js)
 `Main.js` runs all the vital functions for any template to function. Anything being called by default shouldn't be removed. In addition, there are various functions commented out. This is simply to save resources, not running functions that are not required by all templates. Uncomment functions as required.
 
-**Note:** any additional functions you write or add to your template should be called in the same place as all the pre-existing functions, i.e. inside the `template.on("inputs-change"...` block:
+To get started you need to import the boilerplate object. This can be done as a ES6 import modules but seeing that but seeing that is not supported in render 2.0 we will be importing the boilerpalte as a script tag and using it as follows
+```javascript
+let template = new boilerplate({
+  fonts: ["PUT_ALL_FONT_NAMES_HERE"]
+});
 ```
-template.on("inputs-change", (templateProps) => {
-  console.table(templateProps);
+There is only one required config option and that is the font array. This array is used to ensure that the fonts are all loaded before we run any text validation as the font size can be effected by the font file.  
+Here is a list of the available config options:
+```javascript
+let template = new boilerplate({
+  fonts: Array, // (default: "") an array of fonts that need to be checked are loaded. If these fonts don't load in 3 seconds then the template will stop running
+  templateProps: Object, // (default: {}) default input values that should be passed into the input-change event before the platform injects the users changes
+  trimMarks: Boolean, // (default: false) if this is true the boilerplate will add trim marks around this template. If trim marks are added then you will need to also configure trim marks in the templates format. 
+  addCrop: Boolean, // (default: true) if false crop marks will not be added when crop marks are enabled
+  placeholderVisibility: String, // (default: "") enables the playment of the placeholder image. Placeholders will show up unless this is set ot hide
+  placeholderImages: Array, // (default: []) an array of placeholder images which will be overlayed over the template. When more than one placeholder is passed in they will be placed on sequential pages 
+  domReadyLoad: Boolean, // (default: false) should the template code run after the DOMContentLoaded event or the load event. By default this is the load event and setting this to true will use the DOMContentLoaded event instead
+  ensureImagesLoad: Boolean, // (default: true) should the template wait for  all images areto load before completing the export. This is useful for templates that have a lot of images or very large images
+  exportReduceFont: Number, // (default: 0) should the font size be sacaled based on a factor of the export size
+  camelCase: Boolean, // (default: false) should the input names passed in by the input-change event be converted to camelCased 
+  hotReloadOnChange: Boolean, // (default: false) should the template reload when the fs-sync event is triggered. This is triggered by vs-portal and fs-sync
+  allowNoMetaData: Boolean, // (default: false) should the template allow the user to create a template without the corret metadata
+  cssVariables: string, // (default: "") a list of CSS variables that should be added to the root tag on the page. 
+});
+```
+
+**Note:** any additional functions you write or add to your template should be called in the same place as all the pre-existing functions, i.e. inside the `template.on("inputs-change"...` block:
+```javascript
+template.on("inputs-change", (inputs) => {
+  console.table(inputs);
 
   // CALL YOUR FUNCTIONS HERE
 
