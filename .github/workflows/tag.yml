@@ -34,4 +34,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
           SOURCE_DIR: 'dist'  
-          DEST_DIR: 'template/{{ steps.tag_version.outputs.new_tag }}'
+          DEST_DIR: 'template/${{ steps.tag_version.outputs.new_tag }}'
