@@ -20,7 +20,7 @@ jobs:
 # #         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         
       - name: Install Dependencies
-        run: npm install
+        run: npm install --only=prod
 
       - name: Build for production
         run: npm run build
