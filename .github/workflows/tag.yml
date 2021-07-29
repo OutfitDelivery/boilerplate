@@ -15,8 +15,9 @@ jobs:
           tag_prefix: ""  
           github_token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+#       - name: Set env
+#         run: echo "RELEASE_VERSION=${new_tag}" >> $new_tag
+# #         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         
       - name: Install Dependencies
         run: npm install
@@ -33,4 +34,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
           SOURCE_DIR: 'dist'  
-          DEST_DIR: 'template/${{ env.RELEASE_VERSION }}'
+          DEST_DIR: 'template/{{ steps.tag_version.outputs.new_tag }}'
