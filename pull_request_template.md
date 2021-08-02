@@ -1,8 +1,8 @@
 ### Problem
-Issue/card link (if appropriate): 
+[Issue link](https://outfithq.atlassian.net/browse/OP-9999) (if appropriate)
 Your terse summary of what this PR aims to achieve (in your own words).
 
-### Type of change
+### Type of Change
 Please delete options that are not relevant.
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
