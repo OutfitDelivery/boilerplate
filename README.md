@@ -60,7 +60,7 @@ let template = new boilerplate({
   camelCase: Boolean, // (default: false) should the input names passed in by the input-change event be converted to camelCased 
   hotReloadOnChange: Boolean, // (default: false) should the template reload when the fs-sync event is triggered. This is triggered by vs-portal and fs-sync
   allowNoMetaData: Boolean, // (default: false) should the template allow the user to create a template without the corret metadata
-  cssVariables: string, // (default: "") a list of CSS variables that should be added to the root tag on the page. 
+  cssVariables: String, // (default: "") a list of CSS variables that should be added to the root tag on the page. 
 });
 ```
 
