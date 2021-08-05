@@ -14,16 +14,12 @@ jobs:
         with:
           tag_prefix: ""  
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      
-#       - name: Set env
-#         run: echo "RELEASE_VERSION=${new_tag}" >> $new_tag
-# #         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         
       - name: Install Dependencies
         run: npm install --only=prod
 
       - name: Build for production
-        run: npm run build
+        run: npm run build-ci
         
       - uses: jakejarvis/s3-sync-action@master
         with:
