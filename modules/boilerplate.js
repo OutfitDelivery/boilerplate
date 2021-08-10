@@ -105,16 +105,20 @@ export default class boilerplate {
         }
       });
       window.addEventListener('message', (e) => {
-        let data = e.data;
-        if (data) {
-          if (this.camelCase) {
-            data = camelcaseKeys(data);
+        try {
+          let data = JSON.parse(e.data);
+          if (data) {
+            if (this.camelCase) {
+              data = camelcaseKeys(data);
+            }
+            this.templateProps = { ...this.templateProps, ...data };
+            this.emit('inputs-change', this.templateProps);
+            if (typeof window.inputsChange === 'function') {
+              window.inputsChange(this.templateProps);
+            }
           }
-          this.templateProps = { ...this.templateProps, ...data };
-          this.emit('inputs-change', this.templateProps);
-          if (typeof window.inputsChange === 'function') {
-            window.inputsChange(this.templateProps);
-          }
+        } catch (e) {
+          console.error('input update error', e) 
         }
       });
       // OutfitIframeShared.eventEmitter.addListener(
