@@ -106,15 +106,17 @@ export default class boilerplate {
       });
       window.addEventListener('message', (e) => {
         try {
-          let data = JSON.parse(e.data);
-          if (data) {
-            if (this.camelCase) {
-              data = camelcaseKeys(data);
-            }
-            this.templateProps = { ...this.templateProps, ...data };
-            this.emit('inputs-change', this.templateProps);
-            if (typeof window.inputsChange === 'function') {
-              window.inputsChange(this.templateProps);
+          if (data)
+            let data = JSON.parse(e.data);
+            if (data) {
+              if (this.camelCase) {
+                data = camelcaseKeys(data);
+              }
+              this.templateProps = { ...this.templateProps, ...data };
+              this.emit('inputs-change', this.templateProps);
+              if (typeof window.inputsChange === 'function') {
+                window.inputsChange(this.templateProps);
+              }
             }
           }
         } catch (e) {
