@@ -268,8 +268,8 @@ const setBrowserType = () => {
    const browser = {
      // Opera 8.0+
      isOpera:
-       (!!window.top.opr && !!opr.top.addons) ||
-       !!window.top.opera ||
+       (!!window.opr && !!opr.addons) ||
+       !!window.opera ||
        navigator.userAgent.indexOf(" OPR/") >= 0,
      // Firefox 1.0+
      isFirefox: typeof InstallTrigger !== "undefined",
@@ -286,19 +286,19 @@ const setBrowserType = () => {
      isIE: /*@cc_on!@*/ false || !!document.documentMode,
      // Chrome 1 - 79
      isChrome:
-       !!window.top.chrome &&
-       (!!window.top.chrome.webstore || !!window.top.chrome.runtime),
+       !!window.chrome &&
+       (!!window.chrome.webstore || !!window.chrome.runtime),
      // mac detection
      isMac: window.navigator.appVersion.includes("Mac"),
    };
    //  Edge 20+
-   browser["isEdge"] = !browser.isIE && !!window.top.StyleMedia;
+   browser["isEdge"] = !browser.isIE && !!window.StyleMedia;
    // Edge (based on chromium) detection
    browser["isEdgeChromium"] =
      browser.isChrome && navigator.userAgent.indexOf("Edg") != -1;
    // Blink engine detection
    browser["isBlink"] =
-     (browser.isChrome || browser.isOpera) && !!window.top.CSS;
+     (browser.isChrome || browser.isOpera) && !!window.CSS;
 
   Object.keys(browser)
     .filter((key) => {
