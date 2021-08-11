@@ -266,40 +266,20 @@ const setSize = (trimMarks, exportReduceFont) => {
 
 const setBrowserType = () => {
    const browser = {
-     // Opera 8.0+
-     isOpera:
-       (!!window.opr && !!opr.addons) ||
-       !!window.opera ||
-       navigator.userAgent.indexOf(" OPR/") >= 0,
-     // Firefox 1.0+
-     isFirefox: typeof InstallTrigger !== "undefined",
-     // Safari 3.0+ "[object HTMLElementConstructor]"
-     isSafari:
-       /constructor/i.test(window.HTMLElement) ||
-       (function (p) {
-         return p.toString() === "[object SafariRemoteNotification]";
-       })(
-         !window["safari"] ||
-           (typeof safari !== "undefined" && window["safari"].pushNotification)
-       ),
-     // Internet Explorer 6-11
-     isIE: /*@cc_on!@*/ false || !!document.documentMode,
-     // Chrome 1 - 79
-     isChrome:
-       !!window.chrome &&
-       (!!window.chrome.webstore || !!window.chrome.runtime),
-     // mac detection
+     isAndroid: /Android/.test(navigator.userAgent),
+     isOpera: /OPR/.test(navigator.userAgent),
+     isFirefox: /Firefox/.test(navigator.userAgent),
+     isSafari: /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent),
+     isEdge: /Edge/.test(navigator.userAgent),
+     isIE: /Trident/.test(navigator.userAgent),
+     isChrome: /Google Inc/.test(navigator.vendor),
+     isChromiumBased: !!window.chrome && !/Edge/.test(navigator.userAgent),
+     isTouchScreen: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+     isIOS: /(iPhone|iPad|iPod)/.test(navigator.platform),
+     isWebComponentsSupported: 'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template'),
      isMac: window.navigator.appVersion.includes("Mac"),
    };
-   //  Edge 20+
-   browser["isEdge"] = !browser.isIE && !!window.StyleMedia;
-   // Edge (based on chromium) detection
-   browser["isEdgeChromium"] =
-     browser.isChrome && navigator.userAgent.indexOf("Edg") != -1;
-   // Blink engine detection
-   browser["isBlink"] =
-     (browser.isChrome || browser.isOpera) && !!window.CSS;
-
+ 
   Object.keys(browser)
     .filter((key) => {
       return browser[key];
@@ -378,34 +358,6 @@ const hotReloadOnChange = () => {
   }
 };
 
-// const jsonToCssVariables = (json, options = {}) => {
-//   const offset = options.offset === undefined ? 0 : options.offset;
-
-//   let count = 0;
-//   let output = `${options.element ? options.element : ":root"} {${
-//     options.pretty ? "\n" : ""
-//   }`;
-
-//   for (let key in json) {
-//     if (count >= offset) {
-//       let value = json[key];
-
-//       if (!isNaN(value) && value !== 0) {
-//         value += options.unit === undefined ? "px" : options.unit;
-//       }
-
-//       output += `${options.pretty ? "\t" : ""}--${key}: ${value};${
-//         options.pretty ? "\n" : ""
-//       }`;
-//     }
-
-//     count++;
-//   }
-
-//   output += "}";
-
-//   return output;
-// };
 
 export {
   defaultsRemoved,
