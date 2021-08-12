@@ -108,7 +108,7 @@ const setOutfitState = () => {
   mode =
     !mode && window.location.href.includes("projects") ? "document" : mode;
   mode =
-    !mode && window.location.href.includes("project-kit=true") ? "projectPreview" : mode;
+    !mode && window.location.href.includes("project_kit=true") ? "projectPreview" : mode;
   mode =
     !mode && window.location.href.includes("preview") ? "preview" : mode;
   mode =
