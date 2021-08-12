@@ -102,15 +102,17 @@ const defaultsRemoved = () => {
 };
 
 const setOutfitState = () => {
-  var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
+  var mode = window.location.href.includes("exports") ? "export" : false;
   mode =
-    !mode && window.location.href.indexOf("templates") > -1 ? "template" : mode;
+    !mode && window.location.href.includes("templates") ? "template" : mode;
   mode =
-    !mode && window.location.href.indexOf("projects") > -1 ? "document" : mode;
+    !mode && window.location.href.includes("projects") ? "document" : mode;
   mode =
-    !mode && window.location.href.indexOf("preview") > -1 ? "preview" : mode;
+    !mode && window.location.href.includes("project-kit=true") ? "projectPreview" : mode;
   mode =
-    !mode && window.location.href.indexOf("localhost") > -1 ? "local" : mode;
+    !mode && window.location.href.includes("preview") ? "preview" : mode;
+  mode =
+    !mode && window.location.href.includes("localhost") ? "local" : mode;
   if (!mode) {
     mode = "error";
   }
@@ -128,21 +130,6 @@ const highestZ = () => {
       .pop() + 1
   );
 };
-
-// display a message to block rendering for major issues
-// const blockRender = () => {
-//   document.querySelector("body").outerHTML = `
-//     <style>body{ background: #D1D3D4!important; color: #111820!important; } #ujmjuBlock { position: absolute; background: #D1D3D4!important; color: #111820!important; font-family: sans-serif; font-size: 1rem; z-index: ${highestZ()}; height: 100%; width: 100%;} #sdsgfdgsBlock { margin: 1rem; width: 80%!important; background: #D1D3D4!important; color: #111820!important; } #sdsgfdgsBlock p { font-size: 0.4rem; background: #D1D3D4!important; color: #111820!important; } </style>
-//     <div id="ujmjuBlock">
-//       <div id="sdsgfdgsBlock">
-//         <h2>⚠️ Rendering error detected</h2>
-//         <h4>Please update to use a supported renderer or provide a reason for needing to use a legacy renderer and add the following change to the boilerplate config to allow rendering: <br><code>{ allowLegacyRendering: true }</code><br>
-//         <br>
-//         <p>This template is rendered with ${detectRender()}</p>
-//         <p>Please contact support if you see this message.</p>
-//       </div>
-//     </div>`;
-// };
 
 const detectRender = () => {
   let agent = navigator.userAgent;
@@ -276,7 +263,6 @@ const setBrowserType = () => {
      isChromiumBased: !!window.chrome && !/Edge/.test(navigator.userAgent),
      isTouchScreen: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
      isIOS: /(iPhone|iPad|iPod)/.test(navigator.platform),
-     isWebComponentsSupported: 'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template'),
      isMac: window.navigator.appVersion.includes("Mac"),
    };
  
