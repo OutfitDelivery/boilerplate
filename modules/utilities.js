@@ -102,15 +102,17 @@ const defaultsRemoved = () => {
 };
 
 const setOutfitState = () => {
-  var mode = window.location.href.indexOf("exports") > -1 ? "export" : false;
+  var mode = window.location.href.includes("exports") ? "export" : false;
   mode =
-    !mode && window.location.href.indexOf("templates") > -1 ? "template" : mode;
+    !mode && window.location.href.includes("templates") ? "template" : mode;
   mode =
-    !mode && window.location.href.indexOf("projects") > -1 ? "document" : mode;
+    !mode && window.location.href.includes("projects") ? "document" : mode;
   mode =
-    !mode && window.location.href.indexOf("preview") > -1 ? "preview" : mode;
+    !mode && window.location.href.includes("project_kit=true") ? "projectPreview" : mode;
   mode =
-    !mode && window.location.href.indexOf("localhost") > -1 ? "local" : mode;
+    !mode && window.location.href.includes("preview") ? "preview" : mode;
+  mode =
+    !mode && window.location.href.includes("localhost") ? "local" : mode;
   if (!mode) {
     mode = "error";
   }
@@ -128,21 +130,6 @@ const highestZ = () => {
       .pop() + 1
   );
 };
-
-// display a message to block rendering for major issues
-// const blockRender = () => {
-//   document.querySelector("body").outerHTML = `
-//     <style>body{ background: #D1D3D4!important; color: #111820!important; } #ujmjuBlock { position: absolute; background: #D1D3D4!important; color: #111820!important; font-family: sans-serif; font-size: 1rem; z-index: ${highestZ()}; height: 100%; width: 100%;} #sdsgfdgsBlock { margin: 1rem; width: 80%!important; background: #D1D3D4!important; color: #111820!important; } #sdsgfdgsBlock p { font-size: 0.4rem; background: #D1D3D4!important; color: #111820!important; } </style>
-//     <div id="ujmjuBlock">
-//       <div id="sdsgfdgsBlock">
-//         <h2>⚠️ Rendering error detected</h2>
-//         <h4>Please update to use a supported renderer or provide a reason for needing to use a legacy renderer and add the following change to the boilerplate config to allow rendering: <br><code>{ allowLegacyRendering: true }</code><br>
-//         <br>
-//         <p>This template is rendered with ${detectRender()}</p>
-//         <p>Please contact support if you see this message.</p>
-//       </div>
-//     </div>`;
-// };
 
 const detectRender = () => {
   let agent = navigator.userAgent;
@@ -266,40 +253,19 @@ const setSize = (trimMarks, exportReduceFont) => {
 
 const setBrowserType = () => {
    const browser = {
-     // Opera 8.0+
-     isOpera:
-       (!!window.top.opr && !!opr.top.addons) ||
-       !!window.top.opera ||
-       navigator.userAgent.indexOf(" OPR/") >= 0,
-     // Firefox 1.0+
-     isFirefox: typeof InstallTrigger !== "undefined",
-     // Safari 3.0+ "[object HTMLElementConstructor]"
-     isSafari:
-       /constructor/i.test(window.HTMLElement) ||
-       (function (p) {
-         return p.toString() === "[object SafariRemoteNotification]";
-       })(
-         !window["safari"] ||
-           (typeof safari !== "undefined" && window["safari"].pushNotification)
-       ),
-     // Internet Explorer 6-11
-     isIE: /*@cc_on!@*/ false || !!document.documentMode,
-     // Chrome 1 - 79
-     isChrome:
-       !!window.top.chrome &&
-       (!!window.top.chrome.webstore || !!window.top.chrome.runtime),
-     // mac detection
+     isAndroid: /Android/.test(navigator.userAgent),
+     isOpera: /OPR/.test(navigator.userAgent),
+     isFirefox: /Firefox/.test(navigator.userAgent),
+     isSafari: /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent),
+     isEdge: /Edge/.test(navigator.userAgent),
+     isIE: /Trident/.test(navigator.userAgent),
+     isChrome: /Google Inc/.test(navigator.vendor),
+     isChromiumBased: !!window.chrome && !/Edge/.test(navigator.userAgent),
+     isTouchScreen: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+     isIOS: /(iPhone|iPad|iPod)/.test(navigator.platform),
      isMac: window.navigator.appVersion.includes("Mac"),
    };
-   //  Edge 20+
-   browser["isEdge"] = !browser.isIE && !!window.top.StyleMedia;
-   // Edge (based on chromium) detection
-   browser["isEdgeChromium"] =
-     browser.isChrome && navigator.userAgent.indexOf("Edg") != -1;
-   // Blink engine detection
-   browser["isBlink"] =
-     (browser.isChrome || browser.isOpera) && !!window.top.CSS;
-
+ 
   Object.keys(browser)
     .filter((key) => {
       return browser[key];
@@ -378,34 +344,6 @@ const hotReloadOnChange = () => {
   }
 };
 
-// const jsonToCssVariables = (json, options = {}) => {
-//   const offset = options.offset === undefined ? 0 : options.offset;
-
-//   let count = 0;
-//   let output = `${options.element ? options.element : ":root"} {${
-//     options.pretty ? "\n" : ""
-//   }`;
-
-//   for (let key in json) {
-//     if (count >= offset) {
-//       let value = json[key];
-
-//       if (!isNaN(value) && value !== 0) {
-//         value += options.unit === undefined ? "px" : options.unit;
-//       }
-
-//       output += `${options.pretty ? "\t" : ""}--${key}: ${value};${
-//         options.pretty ? "\n" : ""
-//       }`;
-//     }
-
-//     count++;
-//   }
-
-//   output += "}";
-
-//   return output;
-// };
 
 export {
   defaultsRemoved,

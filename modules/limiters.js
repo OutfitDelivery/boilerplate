@@ -169,14 +169,8 @@ function maxLineCheck(elements = null, limit = null) {
     elements = [elements];
   }
 
-  let overflowFound = false
-  const isLocalDev = state === "local";
-  const isProjectKit = isLocalDev
-    ? undefined
-    : window.parent.document.querySelector(".preview-frame");
-
-  if ((state === "export" && document.body.dataset.preventExportOverflow === "true") || isProjectKit) return;
-  
+  let overflowFound = false;
+  if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-max-line]");
   blocks.forEach((block) => {
     const lineCount = countLines(block);
@@ -208,13 +202,7 @@ function minLineCheck(element = null, limit = null) {
   }
 
   let overflowFound = false;
-  const isLocalDev = state === "local";
-  const isProjectKit = isLocalDev
-    ? undefined
-    : window.parent.document.querySelector(".preview-frame");
-
-  if ((state === "export" && document.body.dataset.preventExportOverflow === "true") || isProjectKit) return;
-
+  if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-min-line]");
   blocks.forEach((block) => {
     const lineCount = countLines(block);
@@ -250,13 +238,7 @@ function maxHeightCheck(elements = null, limit = null) {
   }
 
   let overflowFound = false;
-  const isLocalDev = state === "local";
-  const isProjectKit = isLocalDev
-    ? undefined
-    : window.parent.document.querySelector(".preview-frame");
-
-  if ((state === "export" && document.body.dataset.preventExportOverflow === "true") || isProjectKit) return;
-
+  if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
     // check of overflow if it's parents height is larger then this elements height
@@ -352,6 +334,7 @@ function charLimit(elements = null, limit = null) {
   }
 
   let overflowFound = false;
+  if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-char-limit]");
   blocks.forEach((element) => {
     const lettersLimit = limit || element.dataset.charLimit;
