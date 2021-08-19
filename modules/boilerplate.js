@@ -32,15 +32,14 @@ import { imageCompression, ensureAllImagesLoaded } from './images';
 export default class boilerplate {
   constructor(config = {}) {
     console.clear();
-    this.state = setOutfitState(config.trimMarks || false);
+    this.trimMarks = config.trimMarks || false;
+    this.state = setOutfitState(this.trimMarks);
     if (config.hotReloadOnChange) {
       hotReloadOnChange();
     }
     this.events = {};
-    this.fonts = config.fonts || [];
     this.overflows = false;
     this.browser = setBrowserType();
-    this.trimMarks = config.trimMarks || false;
     this.camelCase = config.camelCase || false;
     this.exportReduceFont = config.exportReduceFont || 0;
     this.allowNoMetaData = config.allowNoMetaData || false;
@@ -84,7 +83,14 @@ export default class boilerplate {
     }
 
     // all these checks need to be done before the tempalte code can be run
-    const checkList = [winLoad, loadLESS(), fontsLoaded(this.fonts)];
+    const checkList = [winLoad, loadLESS()]
+    if (config.fonts) {
+      this.fonts = config.fonts
+      if (!Array.isArray(this.fonts)) {
+        this.fonts = [this.fonts];
+      }
+      checkList.push(fontsLoaded(this.fonts));
+    }
     if (config.domReadyLoad) {
       checkList.push(domReady);
     } else {
@@ -123,18 +129,6 @@ export default class boilerplate {
           console.error('input update error', e) 
         }
       });
-      // OutfitIframeShared.eventEmitter.addListener(
-      //   'token-value:change',
-      //   (e) => {
-      //     console.log(e)
-      //     // this.templateProps = JSON.parse(JSON.stringify(e.details));
-      //     // this.emit("inputs-change", this.templateProps);
-      //   }
-      // );
-
-      // setInterval(() => {
-      //   this.getOverflows();
-      // }, 1000)
 
       if (state === 'document') {
         imageCompression();
