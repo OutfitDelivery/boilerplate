@@ -114,13 +114,14 @@ export default class boilerplate {
         try {
           if (e && e.data ) {
             let data = JSON.parse(e.data);
-            if (data) {
+            // check if there is json data and that it's not a message event from "app.fullstory.com"
+            if (data && !data["__fs"]) {
               if (this.camelCase) {
                 data = camelcaseKeys(data);
               }
               this.templateProps = { ...this.templateProps, ...data };
-              this.emit('inputs-change', this.templateProps);
-              if (typeof window.inputsChange === 'function') {
+              this.emit("inputs-change", this.templateProps);
+              if (typeof window.inputsChange === "function") {
                 window.inputsChange(this.templateProps);
               }
             }
