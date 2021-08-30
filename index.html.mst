@@ -24,6 +24,7 @@
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 
   <script id="inputInjection">
+    // Input naming rule [client initials]-[input name from scope]-[initials of template name]",
     const templateProps = {
       "trim-marks": `{{{trim-marks}}}`,
       "placeholder-visibility": `{{{placeholder-visibility}}}`,

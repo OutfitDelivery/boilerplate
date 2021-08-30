@@ -83,7 +83,7 @@ export default class boilerplate {
     }
 
     // all these checks need to be done before the tempalte code can be run
-    const checkList = [winLoad, loadLESS()]
+    const checkList = [loadLESS()]
     if (config.fonts) {
       this.fonts = config.fonts
       if (!Array.isArray(this.fonts)) {
