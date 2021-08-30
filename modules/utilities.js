@@ -206,11 +206,7 @@ const addCropMarks = (trimMarks) => {
 
 const fontsLoaded = (fontsListed) => {
   return new Promise((resolve, reject) => {
-    if (!Array.isArray(fontsListed)) {
-      fontsListed = [fontsListed];
-    }
     if (
-      !fontsListed ||
       (fontsListed && fontsListed.length < 1) ||
       fontsListed[0] === "PUT_ALL_FONT_NAMES_HERE"
     ) {

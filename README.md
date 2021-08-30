@@ -17,11 +17,10 @@ Before you start building the template there are few things that you need to do.
 1. Add a Template Name in the `<title>` Tag.
 2. Fill out the metadata tags in the head `template-built-by`, `scope`, `build`, `updates`. In each of them just fill out the data in the `content` attribute.
 3. Import all of your required fonts as `<link>` tags or account snippets.
-4. List out all of your fonts in the `fonts` array of the boilerplate config in `main.js`.
-5. Ensure you are using external css and js files. 
-6. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names **exactly**, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
-7. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
-8. Choose your renderer. You will need to set your renderer to 1.1 or 2.1
+4. Ensure you are using external css and js files. 
+5. Add your inputs to the `templateProps` object in the top script tag. The naming of these properties needs to match the input names **exactly**, e.g. ``` "placeholder-visibility": `{{{placeholder-visibility}}}` ```.
+6. Add any account colours required to the cssVariables object in the top script tag. These variables will be available in your external stylesheet as normal.
+7. Choose your renderer. You will need to set your renderer to 1.1 or 2.1
 
 We are using AWS S3 for delivery and versioning. If you do notice that the version of the scripts does not match the Boilerplate version that you downloaded please chat with Sam.
 
@@ -40,15 +39,12 @@ There are two key scripts imported into index.html.mst:
 
 To get started you need to import the boilerplate object. This can be done as a ES6 import modules but seeing that but seeing that is not supported in render 2.0 we will be importing the boilerpalte as a script tag and using it as follows
 ```javascript
-let template = new boilerplate({
-  fonts: ["PUT_ALL_FONT_NAMES_HERE"]
-});
+let template = new boilerplate();
 ```
-There is only one required config option and that is the font array. This array is used to ensure that the fonts are all loaded before we run any text validation as the font size can be effected by the font file.  
 Here is a list of the available config options:
 ```javascript
 let template = new boilerplate({
-  fonts: Array, // (default: "") an array of fonts that need to be checked are loaded. If these fonts don't load in 3 seconds then the template will stop running
+  fonts: Array, // (default: undefined) an array of fonts that need to be checked are loaded. If these fonts don't load in 3 seconds then the template will stop running. This array is used to ensure that the fonts are all loaded before we run any text validation as the font size can be effect load time of the document.  
   templateProps: Object, // (default: {}) default input values that should be passed into the input-change event before the platform injects the users changes
   trimMarks: Boolean, // (default: false) if this is true the boilerplate will add trim marks around this template. If trim marks are added then you will need to also configure trim marks in the templates format. 
   addCrop: Boolean, // (default: true) if false crop marks will not be added when crop marks are enabled

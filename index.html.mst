@@ -7,7 +7,7 @@
         2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
         3. Fill Out Build Card Meta-Data (you can find this number linked on the Jira Card)
         4. Ensure you are using external css and js files 
-        5. Include fonts in the boilerplate config
+        5. Include fonts in the boilerplate config if needed
         6. Add your inputs to the script tag bellow
         7. Have a lovely day 
         8. Remove this comment
@@ -20,10 +20,11 @@
   <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE" />
   <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE" />
   <meta name="updates" content="" />
-  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.1.2/main.css">
+  <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.1.4/main.css">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
 
   <script id="inputInjection">
+    // Input naming rule [client initials]-[input name from scope]-[initials of template name]",
     const templateProps = {
       "trim-marks": `{{{trim-marks}}}`,
       "placeholder-visibility": `{{{placeholder-visibility}}}`,
@@ -55,7 +56,7 @@
   </div>
 </body>
 
-<script src="https://outfit-assets-production.s3.amazonaws.com/template/3.1.2/boilerplate.js"></script>
+<script src="https://outfit-assets-production.s3.amazonaws.com/template/3.1.4/boilerplate.js"></script>
 <script src="js/main.js"></script>
 
 </html>
