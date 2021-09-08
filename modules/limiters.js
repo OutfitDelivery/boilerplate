@@ -1,5 +1,5 @@
 import LineClamp from "./lineClamp.js"
-
+import detectElementOverflow from "./detectElementOverflow.js"
 function hasHeightValue(el, target) {
   if (el.isSameNode(target)) {
     return el;
@@ -173,6 +173,9 @@ function maxLineCheck(elements = null, limit = null) {
   if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-max-line]");
   blocks.forEach((block) => {
+    if (limit && !block.dataset.customOverflowMessage) {
+      block.dataset.customOverflowMessage = `There can't be more than ${limit} lines of content here`;
+    }
     const lineCount = countLines(block);
     // Getting the data-max-line attribute value (max number of lines allowed) 
     const maxLine = limit || block.dataset.maxLine;
@@ -205,6 +208,10 @@ function minLineCheck(element = null, limit = null) {
   if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-min-line]");
   blocks.forEach((block) => {
+    if (limit && !block.dataset.customOverflowMessage) {
+      block.dataset.customOverflowMessage = `There must be at least ${limit} lines of content here`;
+    }
+
     const lineCount = countLines(block);
     // Getting the data-max-line attribute value (max number of lines allowed) 
     const minLine = limit || block.dataset.maxLine;
@@ -226,7 +233,7 @@ function minLineCheck(element = null, limit = null) {
 * Detailed instruction can be found here:
   https://github.com/aleks-frontend/max-height-check
 */
-function maxHeightCheck(elements = null, limit = null) {
+function maxHeightCheck(elements = null, inputLimit = null) {
   var elType = Object.prototype.toString.call(elements);
   if (
     elements &&
@@ -238,87 +245,71 @@ function maxHeightCheck(elements = null, limit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return;
+  if (state === "projectPreview") return false;
   const blocks = elements || document.querySelectorAll("[data-max-height]");
   blocks.forEach((block) => {
-    // check of overflow if it's parents height is larger then this elements height
-    if (
-      (limit && limit === "parent") ||
-      block.dataset.maxHeight === "dynamic" ||
-      block.dataset.maxHeight === "parent" ||
-      block.dataset.maxHeightParent === "true"
-    ) {
-      const container = block.parentNode;
-      container.style.overflow = "hidden";
-      block.dataset.maxHeightParent = "true";
-      block.dataset.maxHeight = getHeight(container);
-      container.style.overflow = null;
-    }
-    // check of overflow if it's own scroll height is larger than it's height
-    if ((limit && limit === "self") || block.dataset.maxHeightSelf === "true") {
-      block.dataset.maxHeightSelf = "true";
-      block.dataset.maxHeight = getHeight(container);
-    }
-    // scroll height needs to be used as that will take into account the overflow's height
-    const blockHeight = block.scrollHeight;
-    block.dataset.calculatedScrollHeight = blockHeight;
-    const maxHeight = limit || block.dataset.maxHeight;
-    let maxHeightFound;
-    // TODO improve this
-    if (maxHeight === "css") {
-      const computedBlockStyle = window.getComputedStyle(block);
-      const cssMaxHeight = parseFloat(computedBlockStyle.maxHeight);
-      if (!cssMaxHeight) {
-        console.error(
-          block,
-          'There needs to be a max height set on the element if you want to use data-max-height="css"'
-        );
+    let { scrollHeight, dataset } = block;
+    let { maxHeight } = dataset;
+    let elementHeight;
+    block.dataset.calculatedScrollHeight = scrollHeight; // adds property for debuging
+    let limit = inputLimit;
+
+    // get limit based on what type of check is going to be done
+    if (!limit) {
+      if (maxHeight === "parent") {
+        limit = "parent";
+      } else if (maxHeight === "self") {
+        limit = "self";
+      } else if (maxHeight === "css") {
+        limit = "css";
+      } else {
+          if (isNaN(limit)) {
+            limit = "self";
+            // defaulting to self type if not number
+          } else {
+            limit = maxHeight;
+          }
       }
-      maxHeightFound = cssMaxHeight;
-    } else {
-      // Setting the element's max-height
-      block.style.maxHeight = maxHeight + "px";
-      maxHeightFound = maxHeight;
     }
 
-    let overflow = blockHeight > simpleRounding(maxHeightFound);
+    if (limit) {
+      switch (limit) {
+        case "parent":
+          var parent = block.parentNode;
+          elementHeight = getHeight(parent);
+          break;
+        case "self":
+          elementHeight = getHeight(block);
+          break;
+        case "css":
+          const computedBlockStyle = window.getComputedStyle(block);
+          elementHeight = parseFloat(computedBlockStyle.maxHeight);
+          if (!elementHeight) {
+            console.error(
+              block,
+              'There needs to be a max height set on the element if you want to use data-max-height="css"'
+            );
+          }
+          break;
+        default:
+          elementHeight = getHeight(block);
+          // this means that the limit is a number passed in and not based on the element scrollheight
+          elementHeight = limit; 
+          break;
+      }
+      block.dataset.limitType = limit;
 
-    if (overflow && !overflowFound) {
-      overflowFound = true;
+      let overflow =
+        simpleRounding(scrollHeight) > simpleRounding(elementHeight);
+      if (overflow && !overflowFound) {
+        overflowFound = true;
+      }
+      overflow
+        ? block.classList.add("overflow")
+        : block.classList.remove("overflow");
     }
-    // Adding an 'overflow' class to an element if it's offset height exceedes the max-line-height
-    overflow
-      ? block.classList.add("overflow")
-      : block.classList.remove("overflow");
   });
   return overflowFound;
-}
-
-function dynamicAssign(element = null) {
-  const container = element.parentNode;
-  container.style.overflow = "hidden";
-  const containerHeight = getHeight(container)
-  // TODO work out what subtrahend is 
-  const subtrahends = [].slice.call(container.querySelectorAll(".js-subtrahend"));
-  const subtrahendsHeight = subtrahends.reduce((totalHeight, subtrahend) => {
-    const subtrahendMargins = {
-      top: parseFloat(window.getComputedStyle(subtrahend).marginTop),
-      bottom: parseFloat(window.getComputedStyle(subtrahend).marginBottom),
-    };
-    return (
-      totalHeight +
-      subtrahend.offsetHeight +
-      subtrahendMargins.top +
-      subtrahendMargins.bottom
-    );
-  }, 0);
-
-  const dynamicHeight = containerHeight - subtrahendsHeight;
-
-  element.dataset.maxHeightParent = "true";
-  element.dataset.maxHeight = dynamicHeight;
-  container.style.overflow = "visible";
-  return dynamicHeight;
 }
 
 // Adding limit for the word length
@@ -332,11 +323,15 @@ function charLimit(elements = null, limit = null) {
   ) {
     elements = [elements];
   }
-
+  
   let overflowFound = false;
   if (state === 'projectPreview') return;
   const blocks = elements || document.querySelectorAll("[data-char-limit]");
   blocks.forEach((element) => {
+    if (limit && !element.dataset.customOverflowMessage) {
+      element.dataset.customOverflowMessage = `There can't be more than ${limit} characters here`;
+    }
+
     const lettersLimit = limit || element.dataset.charLimit;
 
     var tokenValue = element.querySelectorAll(".token-value");

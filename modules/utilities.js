@@ -30,8 +30,9 @@ const defaultsRemoved = () => {
         document.querySelectorAll("script:not(#inputInjection):not([src])")
       );
       scripts = scripts.filter(
-        (e) => !e.innerHTML.startsWith("var OutfitIframeShared")
-      ); // allowed injected script
+        (e) => !e.innerHTML.startsWith("var OutfitIframeShared") || !e.innerHTML.startsWith("window.brandSystem = ")
+      ); // allowed injected scripts
+
       if (scripts.length > 0) {
         console.log(
           "%cIt looks like there is javascript that has been placed in the html document. Please move all javascript to a external js files for constancy",

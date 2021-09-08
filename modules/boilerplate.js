@@ -1,4 +1,4 @@
-import camelcaseKeys from 'camelcase-keys';
+import camelcaseKeys from "camelcase-keys";
 import {
   defaultsRemoved,
   loadLESS,
@@ -11,11 +11,11 @@ import {
   addCropMarks,
   setOutfitState,
   hotReloadOnChange,
-} from './utilities';
-import { dynamicReplace } from './replace';
-import setupPlaceholder from './placeholder';
-import textFit from './textFit';
-import { setupMTO } from './mto';
+} from "./utilities";
+import { dynamicReplace } from "./replace";
+import setupPlaceholder from "./placeholder";
+import textFit from "./textFit";
+import { setupMTO } from "./mto";
 import {
   charLimit,
   minLineCheck,
@@ -26,8 +26,9 @@ import {
   countLines,
   lineClamp,
   calculateTextMetrics,
-} from './limiters';
-import { imageCompression, ensureAllImagesLoaded } from './images';
+} from "./limiters";
+import { imageCompression, ensureAllImagesLoaded } from "./images";
+import detectElementOverflow from "./detectElementOverflow.js";
 
 export default class boilerplate {
   constructor(config = {}) {
@@ -45,16 +46,16 @@ export default class boilerplate {
     this.allowNoMetaData = config.allowNoMetaData || false;
     this.ensureImagesLoad = true;
     if (
-      typeof config.ensureImagesLoad === 'boolean'
-      && config.ensureImagesLoad === false
+      typeof config.ensureImagesLoad === "boolean" &&
+      config.ensureImagesLoad === false
     ) {
       this.ensureImagesLoad = false;
     }
     if (config.trimMarks) {
-      document.body.setAttribute('data-trim', config.trimMarks);
+      document.body.setAttribute("data-trim", config.trimMarks);
     }
 
-    if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
+    if (!(typeof config.addCrop === "boolean" && config.addCrop === false)) {
       addCropMarks(this.trimMarks);
     }
     setSize(config.trimMarks || false, config.exportReduceFont || 0);
@@ -79,13 +80,13 @@ export default class boilerplate {
       }
     } catch (e) {
       this.templateProps = {};
-      console.log('templateProps is not a valid JSON object');
+      console.log("templateProps is not a valid JSON object");
     }
 
     // all these checks need to be done before the tempalte code can be run
-    const checkList = [loadLESS()]
+    const checkList = [loadLESS()];
     if (config.fonts) {
-      this.fonts = config.fonts
+      this.fonts = config.fonts;
       if (!Array.isArray(this.fonts)) {
         this.fonts = [this.fonts];
       }
@@ -98,21 +99,21 @@ export default class boilerplate {
     }
 
     Promise.all(checkList).then(() => {
-      this.emit('run', this.templateProps);
-      this.emit('inputs-change', this.templateProps);
-      if (typeof window.inputsChange === 'function') {
+      this.emit("run", this.templateProps);
+      this.emit("inputs-change", this.templateProps);
+      if (typeof window.inputsChange === "function") {
         window.inputsChange(this.templateProps);
       }
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         setSize(this.trimMarks, this.exportReduceFont);
-        this.emit('inputs-change', this.templateProps);
-        if (typeof window.inputsChange === 'function') {
+        this.emit("inputs-change", this.templateProps);
+        if (typeof window.inputsChange === "function") {
           window.inputsChange(this.templateProps);
         }
       });
-      window.addEventListener('message', (e) => {
+      window.addEventListener("message", (e) => {
         try {
-          if (e && e.data ) {
+          if (e && e.data) {
             let data = JSON.parse(e.data);
             // check if there is json data and that it's not a message event from "app.fullstory.com"
             if (data && !data["__fs"]) {
@@ -127,11 +128,11 @@ export default class boilerplate {
             }
           }
         } catch (e) {
-          console.error('input update error', e) 
+          console.error("input update error", e);
         }
       });
 
-      if (state === 'document') {
+      if (state === "document") {
         imageCompression();
       }
     });
@@ -177,15 +178,15 @@ export default class boilerplate {
   }
 
   // textValidation(callback)
-  addStyle(styles = '') {
-    const css = document.createElement('style');
-    css.classList = 'injectedStyle';
+  addStyle(styles = "") {
+    const css = document.createElement("style");
+    css.classList = "injectedStyle";
     if (css.styleSheet) {
       css.styleSheet.cssText = styles;
     } else {
       css.appendChild(document.createTextNode(styles));
     }
-    document.getElementsByTagName('head')[0].appendChild(css);
+    document.getElementsByTagName("head")[0].appendChild(css);
     return css;
   }
 
@@ -199,18 +200,18 @@ export default class boilerplate {
       .then(() => {
         if (this.getOverflows()) {
           console.log(
-            '%cThis will export with overflow errors',
-            'background: #1F2A44; color: white;font-size:16px;',
+            "%cThis will export with overflow errors",
+            "background: #1F2A44; color: white;font-size:16px;"
           );
         }
         const loadTime = Date.now() - window.performance.timing.navigationStart;
         console.info(`Document has finished rendering in ${loadTime}ms`);
-        document.dispatchEvent(new Event('printready'));
+        document.dispatchEvent(new Event("printready"));
 
         if (
-          this.state === 'document'
-          || this.state === 'template'
-          || this.state === 'local'
+          this.state === "document" ||
+          this.state === "template" ||
+          this.state === "local"
         ) {
           // set timeout is used here to push this to the end of the heap which means it will load after everything else
           setTimeout(() => {
@@ -222,15 +223,15 @@ export default class boilerplate {
       })
       .catch((err) => {
         console.error(err);
-        throw 'Render failed for logged reason';
+        throw "Render failed for logged reason";
       });
   }
 
   getOverflows() {
-    const overflows = document.querySelectorAll('.overflow, [data-overflow]');
+    const overflows = document.querySelectorAll(".overflow, [data-overflow]");
     if (overflows.length > 0) {
       this.overflows = overflows;
-      this.emit('overflow', overflows);
+      this.emit("overflow", overflows);
     } else {
       this.overflows = false;
     }
@@ -242,28 +243,34 @@ export default class boilerplate {
   }
 
   textFit() {
-    textFit.apply(this, arguments);
+    let t = textFit.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   maxLineCheck() {
-    maxLineCheck.apply(this, arguments);
+    let t = maxLineCheck.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   minLineCheck() {
-    minLineCheck.apply(this, arguments);
+    let t = minLineCheck.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   maxHeightCheck() {
-    maxHeightCheck.apply(this, arguments);
+    let t = maxHeightCheck.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   charLimit() {
-    charLimit.apply(this, arguments);
+    let t = charLimit.apply(this, arguments);
     this.getOverflows();
+    return t;
+    ß;
   }
 
   highestZindex() {
@@ -296,5 +303,9 @@ export default class boilerplate {
 
   lineClamp() {
     return lineClamp.apply(this, arguments);
+  }
+
+  detectElementOverflow() {
+    return detectElementOverflow.apply(this, arguments);
   }
 }
