@@ -170,7 +170,7 @@ function maxLineCheck(elements = null, limit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return;
+  if (state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll("[data-max-line]");
   blocks.forEach((block) => {
     if (limit && !block.dataset.customOverflowMessage) {
@@ -205,7 +205,7 @@ function minLineCheck(element = null, limit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return;
+  if (state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll("[data-min-line]");
   blocks.forEach((block) => {
     if (limit && !block.dataset.customOverflowMessage) {
@@ -325,7 +325,7 @@ function charLimit(elements = null, limit = null) {
   }
   
   let overflowFound = false;
-  if (state === 'projectPreview') return;
+  if (state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll("[data-char-limit]");
   blocks.forEach((element) => {
     if (limit && !element.dataset.customOverflowMessage) {

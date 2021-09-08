@@ -17,7 +17,7 @@ const detectElementOverflow = (element, container) => ({
     return this.collidedTop || this.collidedBottom;
   },
   get collidedZ() {
-    return this.collidedTop || this.collidedBottom;
+    return this.collidedLeft || this.collidedRight;
   },
   get collidedAny() {
     return this.collidedY || this.collidedZ;
@@ -34,7 +34,6 @@ const detectElementOverflow = (element, container) => ({
   get overflowRight() {
     return getRect(element).right - getRect(container).right;
   },
-
 });
 
 export default detectElementOverflow;
