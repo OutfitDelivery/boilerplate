@@ -297,7 +297,7 @@ function maxHeightCheck(elements = null, inputLimit = null) {
           elementHeight = limit; 
           break;
       }
-      block.dataset.limitType = limit;
+      // block.dataset.limitType = limit;
 
       let overflow =
         simpleRounding(scrollHeight) > simpleRounding(elementHeight);

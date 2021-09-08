@@ -30,7 +30,7 @@ const defaultsRemoved = () => {
         document.querySelectorAll("script:not(#inputInjection):not([src])")
       );
       scripts = scripts.filter(
-        (e) => !e.innerHTML.startsWith("var OutfitIframeShared") || !e.innerHTML.startsWith("window.brandSystem = ")
+        (e) => !e.innerHTML.startsWith("var OutfitIframeShared") && !e.innerHTML.startsWith("window.brandSystem = ")
       ); // allowed injected scripts
 
       if (scripts.length > 0) {
