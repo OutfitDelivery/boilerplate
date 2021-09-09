@@ -138,6 +138,40 @@
               <div class="height">
                 <p style="height: 101px;">
                   targets js set height
+                </p>  
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example13">
+            <div style="width: 100%; background-color: rgb(62, 177, 85);">
+              <div data-max-height="120" class="">
+                <p style="height: 101px;">
+                  this is data-max-height=120
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example14">
+            <div style="width: 100%; background-color: rgb(62, 177, 85);">
+              <div data-max-height="self" class=""
+              style="height: 42px;margin:0;">
+                <p >
+                  data-max-height=self with height 42px
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="test-row">
+          <div id="example15">
+            <div style="width: 100%; background-color: rgb(62, 177, 85);">
+              <div data-max-height="self" class="" style="height: 50px;margin:0;">
+                <p>
+                  data-max-height=self with height 50px
                 </p>
               </div>
             </div>
@@ -155,7 +189,9 @@
   });
 
   // This function will run whenever there is a change to any text input
-  template.on('inputs-change', () => {
+  template.on('inputs-change', async () => {
+    await template.ensureAllImagesLoaded()
+
     template.maxHeightCheck(document.querySelector('.target p'), 'parent');
     template.maxHeightCheck(document.querySelectorAll('.targets p'), 'parent');
     template.maxHeightCheck(document.querySelectorAll('.css p'), 'css');

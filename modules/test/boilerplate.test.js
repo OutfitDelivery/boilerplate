@@ -1,67 +1,67 @@
-const boilerplate = require("../boilerplate").default;
-const utilities = require("../utilities");
+const boilerplate = require('../boilerplate').default;
+const utilities = require('../utilities');
 
-test("1 + 2 to equal 3", () => {
+test('1 + 2 to equal 3', () => {
   expect(1 + 2).toBe(3);
 });
-describe("import tests", () => {
-  test("boilerpalte import", () => {
-    var template = new boilerplate({});
+describe('import tests', () => {
+  test('boilerpalte import', () => {
+    const template = new boilerplate({});
     expect(template);
   });
-  test("boilerpalte import without object", () => {
-    var template = new boilerplate();
+  test('boilerpalte import without object', () => {
+    const template = new boilerplate();
     expect(template);
   });
-  test("boilerpalte import without fonts", () => {
-    var template = new boilerplate();
+  test('boilerpalte import without fonts', () => {
+    const template = new boilerplate();
     expect(template.fonts).toBe(undefined);
     expect(template.textFit).toBeInstanceOf(Function);
   });
-  test("boilerpalte fonts will be turned into arrays ", () => {
-    var template = new boilerplate({ fonts: "PUT_ALL_FONT_NAMES_HERE" });
-    expect(template.fonts).toStrictEqual(["PUT_ALL_FONT_NAMES_HERE"]);
+  test('boilerpalte fonts will be turned into arrays ', () => {
+    const template = new boilerplate({ fonts: 'PUT_ALL_FONT_NAMES_HERE' });
+    expect(template.fonts).toStrictEqual(['PUT_ALL_FONT_NAMES_HERE']);
   });
-  test("boilerpalte fonts can be an array", () => {
-    var template = new boilerplate({ fonts: ["PUT_ALL_FONT_NAMES_HERE"] });
-    expect(template.fonts).toStrictEqual(["PUT_ALL_FONT_NAMES_HERE"]);
+  test('boilerpalte fonts can be an array', () => {
+    const template = new boilerplate({ fonts: ['PUT_ALL_FONT_NAMES_HERE'] });
+    expect(template.fonts).toStrictEqual(['PUT_ALL_FONT_NAMES_HERE']);
   });
-  test("boilerpalte blank font arrays ", () => {
-    var template = new boilerplate({ fonts: [] });
+  test('boilerpalte blank font arrays ', () => {
+    const template = new boilerplate({ fonts: [] });
     expect(template.fonts).toStrictEqual([]);
   });
-  test("boilerpalte fonts can be an array of many items", () => {
-    var template = new boilerplate({ fonts: ["Outfit", "Bendgio Sans"] });
-    expect(template.fonts).toStrictEqual(["Outfit", "Bendgio Sans"]);
+  test('boilerpalte fonts can be an array of many items', () => {
+    const template = new boilerplate({ fonts: ['Outfit', 'Bendgio Sans'] });
+    expect(template.fonts).toStrictEqual(['Outfit', 'Bendgio Sans']);
   });
-  test("check default values are be set", () => {
-    var template = new boilerplate();
+  test('check default values are be set', () => {
+    const template = new boilerplate();
     expect(template.fonts).toStrictEqual(undefined);
     expect(template.ensureImagesLoad).toStrictEqual(true);
     expect(template.exportReduceFont).toStrictEqual(0);
     // expect(template.variables).toStrictEqual({});
   });
-  test("check values can be changed", () => {
-    var template = new boilerplate({
-      fonts: ["Test"],
+  test('check values can be changed', () => {
+    const template = new boilerplate({
+      fonts: ['Test'],
       ensureImagesLoad: false,
       addCrop: false,
       exportReduceFont: 0.4,
-      cssVariables: "--plum: red;",
+      cssVariables: '--plum: red;',
       random:
         "this will not be saved as it's not something I know what to do with",
     });
-    expect(template.fonts).toStrictEqual(["Test"]);
+    expect(template.fonts).toStrictEqual(['Test']);
     expect(template.ensureImagesLoad).toStrictEqual(false);
     expect(template.exportReduceFont).toStrictEqual(0.4);
     expect(template.random).toStrictEqual(undefined);
   });
-  test("check error get thrown if no html is found", async () => {
+  test('check error get thrown if no html is found', async () => {
     try {
-      var template = new boilerplate({ variables: { test: "hey" } });
+      const template = new boilerplate({ variables: { test: 'hey' } });
     } catch (e) {
       expect(e).toBe(
-        "No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }"
+        "No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }",
       );
     }
   });

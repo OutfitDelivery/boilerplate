@@ -1,4 +1,6 @@
-import { charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines } from '../limiters'
+import {
+  charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines,
+} from '../limiters';
 
 describe('getHeight', () => {
   test('check getHeight() runs', () => {
@@ -17,9 +19,9 @@ describe('getHeight', () => {
           some text here
         </div>
       </div>
-    ` 
-    let testBox = document.querySelector('.testBox');
-    let height = getHeight(testBox)
+    `;
+    const testBox = document.querySelector('.testBox');
+    const height = getHeight(testBox);
     expect(height).toBe(100);
   });
   test('check getHeight() runs', () => {
@@ -46,16 +48,15 @@ describe('getHeight', () => {
           </span>
         </p>
       </div>
-    ` 
-    let testBox = document.querySelector('.testBox');
-    let height = getHeight(testBox)
-    let lines = countLines(testBox)
+    `;
+    const testBox = document.querySelector('.testBox');
+    const height = getHeight(testBox);
+    const lines = countLines(testBox);
     expect(height).toBe(100);
-    expect(testBox.dataset.calculatedHeight).toBe("100");
+    expect(testBox.dataset.calculatedHeight).toBe('100');
     expect(lines).toBe(0);
-    expect(testBox.dataset.calculatedLinesCount).toBe("0");
-
+    expect(testBox.dataset.calculatedLinesCount).toBe('0');
   });
-  // TODO test line counting and line counting with textfix 
-  // inner elements such as strong/p/em/span tags effect line counting as they don't always have the same height as the parent 
+  // TODO test line counting and line counting with textfix
+  // inner elements such as strong/p/em/span tags effect line counting as they don't always have the same height as the parent
 });

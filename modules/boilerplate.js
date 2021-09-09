@@ -28,6 +28,7 @@ import {
   calculateTextMetrics,
 } from './limiters';
 import { imageCompression, ensureAllImagesLoaded } from './images';
+import detectElementOverflow from './detectElementOverflow.js';
 
 export default class boilerplate {
   constructor(config = {}) {
@@ -83,9 +84,9 @@ export default class boilerplate {
     }
 
     // all these checks need to be done before the tempalte code can be run
-    const checkList = [loadLESS()]
+    const checkList = [loadLESS()];
     if (config.fonts) {
-      this.fonts = config.fonts
+      this.fonts = config.fonts;
       if (!Array.isArray(this.fonts)) {
         this.fonts = [this.fonts];
       }
@@ -112,37 +113,28 @@ export default class boilerplate {
       });
       window.addEventListener('message', (e) => {
         try {
-          if (e && e.data ) {
+          if (e && e.data) {
             let data = JSON.parse(e.data);
             // check if there is json data and that it's not a message event from "app.fullstory.com"
-            if (data && !data["__fs"]) {
+            if (data && !data.__fs) {
               if (this.camelCase) {
                 data = camelcaseKeys(data);
               }
               this.templateProps = { ...this.templateProps, ...data };
-              this.emit("inputs-change", this.templateProps);
-              if (typeof window.inputsChange === "function") {
+              this.emit('inputs-change', this.templateProps);
+              if (typeof window.inputsChange === 'function') {
                 window.inputsChange(this.templateProps);
               }
             }
           }
         } catch (e) {
-          console.error('input update error', e) 
+          console.error('input update error', e);
         }
       });
 
       if (state === 'document') {
         imageCompression();
       }
-    });
-  }
-
-  start() {
-    return new Promise((resolve, reject) => {
-      console.log(`there is no need to call start. just create a template.on("inputs-change", (e) => {
-        // code here
-      }) event`);
-      resolve();
     });
   }
 
@@ -242,28 +234,34 @@ export default class boilerplate {
   }
 
   textFit() {
-    textFit.apply(this, arguments);
+    const t = textFit.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   maxLineCheck() {
-    maxLineCheck.apply(this, arguments);
+    const t = maxLineCheck.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   minLineCheck() {
-    minLineCheck.apply(this, arguments);
+    const t = minLineCheck.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   maxHeightCheck() {
-    maxHeightCheck.apply(this, arguments);
+    const t = maxHeightCheck.apply(this, arguments);
     this.getOverflows();
+    return t;
   }
 
   charLimit() {
-    charLimit.apply(this, arguments);
+    const t = charLimit.apply(this, arguments);
     this.getOverflows();
+    return t;
+    ß;
   }
 
   highestZindex() {
@@ -296,5 +294,9 @@ export default class boilerplate {
 
   lineClamp() {
     return lineClamp.apply(this, arguments);
+  }
+
+  detectElementOverflow() {
+    return detectElementOverflow.apply(this, arguments);
   }
 }
