@@ -1,4 +1,3 @@
-// "postbuild": "node zip.js",
 {
   "name": "boilerplate",
   "version": "3.0.0",
