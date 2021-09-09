@@ -9,7 +9,6 @@
     "watch": "webpack --watch --progress --config webpack.config.dev.js",
     "test": "jest",
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
-    "lint:fix": "eslint ./ --cache --ignore-pattern .gitignore ",
     "lint:fix": "eslint ./ --cache --ignore-pattern .gitignore --fix",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "checkbuild": "node ./pre-commit-build.js",
