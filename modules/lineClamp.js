@@ -1,4 +1,4 @@
-import { getHeight } from './limiters.js'
+import { getHeight } from './limiters.js';
 
 /**
  * Reduces font size or trims text to make it fit within specified bounds.
@@ -64,36 +64,36 @@ export default class LineClamp {
       hardClampAsFallback = true,
       minFontSize = 1,
       maxFontSize = undefined,
-      ellipsis = "…",
-    } = {}
+      ellipsis = '…',
+    } = {},
   ) {
-    Object.defineProperty(this, "originalWords", {
+    Object.defineProperty(this, 'originalWords', {
       writable: false,
       value: element.textContent.match(/\S+\s*/g) || [],
-    })
+    });
 
-    Object.defineProperty(this, "updateHandler", {
+    Object.defineProperty(this, 'updateHandler', {
       writable: false,
       value: () => this.apply(),
-    })
+    });
 
-    Object.defineProperty(this, "observer", {
+    Object.defineProperty(this, 'observer', {
       writable: false,
       value: new MutationObserver(this.updateHandler),
-    })
+    });
 
     if (undefined === maxFontSize) {
-      maxFontSize = parseInt(window.getComputedStyle(element).fontSize, 10)
+      maxFontSize = parseInt(window.getComputedStyle(element).fontSize, 10);
     }
 
-    this.element = element
-    this.maxLines = maxLines
-    this.maxHeight = maxHeight
-    this.useSoftClamp = useSoftClamp
-    this.hardClampAsFallback = hardClampAsFallback
-    this.minFontSize = minFontSize
-    this.maxFontSize = maxFontSize
-    this.ellipsis = ellipsis
+    this.element = element;
+    this.maxLines = maxLines;
+    this.maxHeight = maxHeight;
+    this.useSoftClamp = useSoftClamp;
+    this.hardClampAsFallback = hardClampAsFallback;
+    this.minFontSize = minFontSize;
+    this.maxFontSize = maxFontSize;
+    this.ellipsis = ellipsis;
   }
 
   /**
@@ -104,39 +104,38 @@ export default class LineClamp {
    * Layout metrics for the clamped element's text.
    */
   calculateTextMetrics() {
-    const element = this.element
-    const clone = element.cloneNode(true)
-    const style = clone.style
+    const { element } = this;
+    const clone = element.cloneNode(true);
+    const { style } = clone;
 
     // Append, don't replace
-    style.cssText += ";min-height:0!important;max-height:none!important"
-    element.replaceWith(clone)
+    style.cssText += ';min-height:0!important;max-height:none!important';
+    element.replaceWith(clone);
 
-    const naturalHeight = getHeight(clone) // clone.offsetHeight
+    const naturalHeight = getHeight(clone); // clone.offsetHeight
 
     // Clear to measure empty height. textContent faster than innerHTML
-    clone.textContent = ""
+    clone.textContent = '';
 
-    const naturalHeightWithoutText = getHeight(clone) // clone.offsetHeight
-    const textHeight = naturalHeight - naturalHeightWithoutText
+    const naturalHeightWithoutText = getHeight(clone); // clone.offsetHeight
+    const textHeight = naturalHeight - naturalHeightWithoutText;
 
     // Fill element with single non-breaking space to find height of one line
-    clone.textContent = "\xa0"
+    clone.textContent = '\xa0';
 
     // Get height of element with only one line of text
-    const naturalHeightWithOneLine = getHeight(clone) // clone.offsetHeight
-    const firstLineHeight = naturalHeightWithOneLine - naturalHeightWithoutText
+    const naturalHeightWithOneLine = getHeight(clone); // clone.offsetHeight
+    const firstLineHeight = naturalHeightWithOneLine - naturalHeightWithoutText;
 
     // Add line (<br> + nbsp). appendChild() faster than innerHTML
-    clone.appendChild(document.createElement("br"))
-    clone.appendChild(document.createTextNode("\xa0"))
+    clone.appendChild(document.createElement('br'));
+    clone.appendChild(document.createTextNode('\xa0'));
 
-    const additionalLineHeight = getHeight(clone) - naturalHeightWithOneLine // clone.offsetHeight - naturalHeightWithOneLine
-    const lineCount =
-      1 + (naturalHeight - naturalHeightWithOneLine) / additionalLineHeight
+    const additionalLineHeight = getHeight(clone) - naturalHeightWithOneLine; // clone.offsetHeight - naturalHeightWithOneLine
+    const lineCount = 1 + (naturalHeight - naturalHeightWithOneLine) / additionalLineHeight;
 
     // Restore original content
-    clone.replaceWith(element)
+    clone.replaceWith(element);
 
     /**
      * @typedef {Object} TextMetrics
@@ -172,8 +171,8 @@ export default class LineClamp {
       firstLineHeight,
       additionalLineHeight,
       lineCount,
-      naturalHeight
-    }
+      naturalHeight,
+    };
   }
 
   /**
@@ -182,7 +181,7 @@ export default class LineClamp {
    */
   watch() {
     if (!this._watching) {
-      window.addEventListener("resize", this.updateHandler)
+      window.addEventListener('resize', this.updateHandler);
 
       // Minimum required to detect changes to text nodes,
       // and wholesale replacement via innerHTML
@@ -191,12 +190,12 @@ export default class LineClamp {
         subtree: true,
         childList: true,
         attributes: true,
-      })
+      });
 
-      this._watching = true
+      this._watching = true;
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -205,12 +204,12 @@ export default class LineClamp {
    * @returns {LineClamp}
    */
   unwatch() {
-    this.observer.disconnect()
-    window.removeEventListener("resize", this.updateHandler)
+    this.observer.disconnect();
+    window.removeEventListener('resize', this.updateHandler);
 
-    this._watching = false
+    this._watching = false;
 
-    return this
+    return this;
   }
 
   /**
@@ -219,26 +218,26 @@ export default class LineClamp {
    */
   apply() {
     if (this.element.offsetHeight) {
-      const previouslyWatching = this._watching
+      const previouslyWatching = this._watching;
 
       // Ignore internally started mutations, lest we recurse into oblivion
-      this.unwatch()
+      this.unwatch();
 
-      this.element.textContent = this.originalWords.join("")
+      this.element.textContent = this.originalWords.join('');
 
       if (this.useSoftClamp) {
-        this.softClamp()
+        this.softClamp();
       } else {
-        this.hardClamp()
+        this.hardClamp();
       }
 
       // Resume observation if previously watching
       if (previouslyWatching) {
-        this.watch(false)
+        this.watch(false);
       }
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -250,37 +249,37 @@ export default class LineClamp {
    */
   hardClamp(skipCheck = true) {
     if (skipCheck || this.shouldClamp()) {
-      let currentText
+      let currentText;
 
       findBoundary(
         1,
         this.originalWords.length,
         (val) => {
-          currentText = this.originalWords.slice(0, val).join(" ")
-          this.element.textContent = currentText
+          currentText = this.originalWords.slice(0, val).join(' ');
+          this.element.textContent = currentText;
 
-          return this.shouldClamp()
+          return this.shouldClamp();
         },
         (val, min, max) => {
           // Add one more word if not on max
           if (val > min) {
-            currentText = this.originalWords.slice(0, max).join(" ")
+            currentText = this.originalWords.slice(0, max).join(' ');
           }
 
           // Then trim letters until it fits
           do {
-            currentText = currentText.slice(0, -1)
-            this.element.textContent = currentText + this.ellipsis
-          } while (this.shouldClamp())
+            currentText = currentText.slice(0, -1);
+            this.element.textContent = currentText + this.ellipsis;
+          } while (this.shouldClamp());
 
           // Broadcast more specific hardClamp event first
-          emit(this, "lineclamp.hardclamp")
-          emit(this, "lineclamp.clamp")
-        }
-      )
+          emit(this, 'lineclamp.hardclamp');
+          emit(this, 'lineclamp.clamp');
+        },
+      );
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -289,47 +288,47 @@ export default class LineClamp {
    * parameters.
    */
   softClamp() {
-    const style = this.element.style
-    const startSize = window.getComputedStyle(this.element).fontSize
-    style.fontSize = ""
+    const { style } = this.element;
+    const startSize = window.getComputedStyle(this.element).fontSize;
+    style.fontSize = '';
 
-    let done = false
-    let shouldClamp
+    let done = false;
+    let shouldClamp;
 
     findBoundary(
       this.minFontSize,
       this.maxFontSize,
       (val) => {
-        style.fontSize = val + "px"
-        shouldClamp = this.shouldClamp()
-        return shouldClamp
+        style.fontSize = `${val}px`;
+        shouldClamp = this.shouldClamp();
+        return shouldClamp;
       },
       (val, min) => {
         if (val > min) {
-          style.fontSize = min + "px"
-          shouldClamp = this.shouldClamp()
+          style.fontSize = `${min}px`;
+          shouldClamp = this.shouldClamp();
         }
-        done = !shouldClamp
-      }
-    )
+        done = !shouldClamp;
+      },
+    );
 
-    const changed = style.fontSize !== startSize
+    const changed = style.fontSize !== startSize;
 
     // Emit specific softClamp event first
     if (changed) {
-      emit(this, "lineclamp.softclamp")
+      emit(this, 'lineclamp.softclamp');
     }
 
     // Don't emit `lineclamp.clamp` event twice.
     if (!done && this.hardClampAsFallback) {
-      this.hardClamp(false)
+      this.hardClamp(false);
     } else if (changed) {
       // hardClamp emits `lineclamp.clamp` too. Only emit from here if we're
       // not also hard clamping.
-      emit(this, "lineclamp.clamp")
+      emit(this, 'lineclamp.clamp');
     }
 
-    return this
+    return this;
   }
 
   /**
@@ -340,23 +339,23 @@ export default class LineClamp {
    * @see LineClamp.maxLines
    */
   shouldClamp() {
-    const { lineCount, textHeight } = this.calculateTextMetrics()
+    const { lineCount, textHeight } = this.calculateTextMetrics();
 
     if (undefined !== this.maxHeight && undefined !== this.maxLines) {
-      return textHeight > this.maxHeight || lineCount > this.maxLines
+      return textHeight > this.maxHeight || lineCount > this.maxLines;
     }
 
     if (undefined !== this.maxHeight) {
-      return textHeight > this.maxHeight
+      return textHeight > this.maxHeight;
     }
 
     if (undefined !== this.maxLines) {
-      return lineCount > this.maxLines
+      return lineCount > this.maxLines;
     }
 
     throw new Error(
-      "maxLines or maxHeight must be set before calling shouldClamp()."
-    )
+      'maxLines or maxHeight must be set before calling shouldClamp().',
+    );
   }
 }
 
@@ -384,24 +383,24 @@ export default class LineClamp {
  */
 function findBoundary(min, max, test, done) {
   // start halfway through the range
-  let cursor = (min + max) / 2
+  let cursor = (min + max) / 2;
 
   while (max > min) {
     if (test(cursor)) {
-      max = cursor
+      max = cursor;
     } else {
-      min = cursor
+      min = cursor;
     }
 
     if (max - min === 1) {
-      done(cursor, min, max)
-      break
+      done(cursor, min, max);
+      break;
     }
 
-    cursor = Math.floor((min + max) / 2)
+    cursor = Math.floor((min + max) / 2);
   }
 }
 
 function emit(instance, type) {
-  instance.element.dispatchEvent(new CustomEvent(type))
+  instance.element.dispatchEvent(new CustomEvent(type));
 }

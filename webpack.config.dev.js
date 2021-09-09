@@ -13,24 +13,24 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
     filename: 'boilerplate.js',
-    library: "boilerplate",
+    library: 'boilerplate',
     libraryTarget: 'umd',
-    libraryExport: 'default' 
+    libraryExport: 'default',
   },
-  
+
   module: {
     rules: [
       {
         test: /\.js?$/,
         exclude: [/node_modules/],
         use: ['babel-loader'],
-      }
+      },
     ],
   },
   // Default mode for Webpack is production.
   // Depending on mode Webpack will apply different things
-  // on the final bundle. For now, we don't need production's JavaScript 
+  // on the final bundle. For now, we don't need production's JavaScript
   // minifying and other things, so let's set mode to development
   mode: 'development',
-  devtool: 'inline-source-map'
+  devtool: 'inline-source-map',
 };
