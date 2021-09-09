@@ -18,9 +18,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '',
     filename: 'boilerplate.js',
-    library: "boilerplate",
+    library: 'boilerplate',
     libraryTarget: 'umd',
-    libraryExport: 'default' 
+    libraryExport: 'default',
   },
   module: {
     rules: [
@@ -28,7 +28,7 @@ module.exports = {
         test: /\.js?$/,
         exclude: [/node_modules/],
         use: ['babel-loader'],
-      }
+      },
     ],
   }
 };

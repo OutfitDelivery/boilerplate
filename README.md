@@ -86,7 +86,7 @@ This is vital to the functioning of the template. After `document.readyState` is
 ```javascript
 template.completeRender();
 ```
-##### ensureAllImagesLoaded()
+##### ensureAllImagesLoaded() 
 We don't want to export until all the images are loaded. We also might not want to run limiters until images have loaded as the aspect ratio of a loaded image can change the results. 
 This promise will return when all images have been loaded in a given section of the screen. (Defaults to the entire document).
 It also takes a timeout (in ms) for how long to wait for images to be load. (Defaults to 60 seconds).
@@ -121,6 +121,24 @@ Adds an overflow if the number of characters is larger than data-char-limit
 template.charLimit();
 ```
 
+###### detectElementOverflow()
+Works out if elements are touching each other https://www.npmjs.com/package/detect-element-overflow
+```javascript
+// boolean true/false clip checks
+template.detectElementOverflow(element, element.parentNode).collidedTop;
+template.detectElementOverflow(element, element.parentNode).collidedBottom;
+template.detectElementOverflow(element, element.parentNode).collidedLeft;
+template.detectElementOverflow(element, element.parentNode).collidedRight;
+template.detectElementOverflow(element, element.parentNode).collidedY;
+template.detectElementOverflow(element, element.parentNode).collidedZ;
+template.detectElementOverflow(element, element.parentNode).collidedAny;
+
+// how much are they touching each other in px
+template.detectElementOverflow(element, element.parentNode).overflowTop;
+template.detectElementOverflow(element, element.parentNode).overflowBottom;
+template.detectElementOverflow(element, element.parentNode).overflowLeft;
+template.detectElementOverflow(element, element.parentNode).overflowRight;
+```
 #### Utilites
 ###### addStyle()
 Can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
