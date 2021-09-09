@@ -1,13 +1,16 @@
-// Webpack uses this to work with directories
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 // This is the main configuration object.
 // Here, you write different options and tell Webpack what to do
 module.exports = {
+  mode: 'production',
+  devtool: 'source-map',
   // Path to your entry point. From this file Webpack will begin its work
-  entry: './modules/boilerplate.js',
+  entry: './modules/index.js',
   // Path and filename of your result bundle.
   // Webpack will bundle all JavaScript into this file
   output: {
@@ -25,17 +28,55 @@ module.exports = {
         exclude: [/node_modules/],
         use: ['babel-loader'],
       },
+      {
+        test: /\.(css|scss)$/,
+        use: [
+            {
+                loader: MiniCssExtractPlugin.loader
+            },
+            {
+                // Interprets `@import` and `url()` like `import/require()` and will resolve them
+                loader: 'css-loader'
+            },
+            {
+                // Loader for webpack to process CSS with PostCSS
+                loader: 'postcss-loader',
+                options: {
+                    postcssOptions: {
+                        plugins: [[ 'autoprefixer' ]]
+                    }
+                }
+            },
+            {
+                // Loads a SASS/SCSS file and compiles it to CSS
+                loader: 'sass-loader'
+            }
+        ]
+    },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [{
-          from: 'css/main.css',
-          to: ''
-      }]
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      filename: 'main.css'
     })
+    // new CopyWebpackPlugin({
+    //   patterns: [{
+    //       from: 'css/main.css',
+    //       to: ''
+    //   }]
+    // })
   ],
-  mode: 'production',
-  devtool: 'source-map',
+  optimization: {
+    minimizer: [
+        // new TerserPlugin({
+        //   sourceMap: true // set to true if you want JS source maps
+        // }),
+        new TerserPlugin(),
+        new OptimizeCSSAssetsPlugin({})
+    ]
+  },
+  // mode: 'production',
+  // devtool: 'source-map',
 };
