@@ -1,8 +1,11 @@
 var fs = require("fs");
 const archiver = require('archiver');
 
+if (!process.env.PWD) {
+  process.env.PWD = process.cwd();
+}
 
-const output = fs.createWriteStream(__dirname + '/boilerplate.zip');
+const output = fs.createWriteStream(process.env.PWD + '/boilerplate.zip');
 const archive = archiver('zip', {
     zlib: { level: 9 } // Sets the compression level.
   });
@@ -22,13 +25,13 @@ archive.on('error', function(err) {
 archive.pipe(output);
 
 // append a file from stream
-const file1 = __dirname + '/js/main.js';
+const file1 = process.env.PWD + '/js/main.js';
 archive.append(fs.createReadStream(file1), { name: '/js/main.js' });
 
-const file2 = __dirname + '/css/styles.css';
+const file2 = process.env.PWD + '/css/styles.css';
 archive.append(fs.createReadStream(file2), { name: '/css/styles.css' });
 
-const file3 = __dirname + '/index.html.mst';
+const file3 = process.env.PWD + '/index.html.mst';
 archive.append(fs.createReadStream(file3), { name: 'index.html.mst' });
 
 

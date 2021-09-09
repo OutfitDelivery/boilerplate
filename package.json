@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --progress --color",
-    "postbuild": "node zip.js",
+    "postbuild": "node .scripts/zip.js",
     "build-ci": "webpack --config webpack.config.js",
     "watch": "webpack --watch --progress --config webpack.config.dev.js",
     "test": "jest",
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "checkbuild": "node ./pre-commit-build.js",
+    "checkbuild": "node .scripts/pre-commit-build.js",
     "cypress:ci": "cypress run",
     "cypress:open": "cypress open"
   },
