@@ -31,10 +31,10 @@ module.exports = {
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [{
-          from: 'css/main.css',
-          to: ''
-      }]
-    })
+        from: 'css/main.css',
+        to: '',
+      }],
+    }),
   ],
   mode: 'production',
   devtool: 'source-map',

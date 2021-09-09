@@ -1,32 +1,32 @@
 const imageCompression = () => {
-  var imageCompressEl = document.querySelectorAll("[data-custom-compression]");
-  var editorString = "?qual=editor";
+  const imageCompressEl = document.querySelectorAll('[data-custom-compression]');
+  const editorString = '?qual=editor';
 
   function checkURL(editorString, url) {
-    if (url.includes(editorString) || url.includes(".svg")) return false;
+    if (url.includes(editorString) || url.includes('.svg')) return false;
     return true;
   }
 
   imageCompressEl.forEach((el) => {
-    //Non Repo Images with data-custom-compression on img element itself
-    var imgSrc = el.getAttribute("src");
+    // Non Repo Images with data-custom-compression on img element itself
+    const imgSrc = el.getAttribute('src');
     console.log(imgSrc);
     if (imgSrc) {
-      //src attribute exists assume that this is an <img> element
+      // src attribute exists assume that this is an <img> element
       if (!checkURL(editorString, imgSrc)) return;
-      el.setAttribute("src", imgSrc + editorString);
+      el.setAttribute('src', imgSrc + editorString);
     } else {
-      var imgEl = el.querySelector("img");
+      const imgEl = el.querySelector('img');
       if (!imgEl) return;
-      var imgURL = imgEl.getAttribute("src");
+      const imgURL = imgEl.getAttribute('src');
       if (!checkURL(editorString, imgURL)) return;
-      imgEl.setAttribute("src", imgURL + editorString);
+      imgEl.setAttribute('src', imgURL + editorString);
 
-      var bkgImgEl = el.querySelector(".outfit-resizable-background");
+      const bkgImgEl = el.querySelector('.outfit-resizable-background');
       if (!bkgImgEl) return;
-      var bkgUrl = bkgImgEl.style.backgroundImage
+      const bkgUrl = bkgImgEl.style.backgroundImage
         .slice(4, -1)
-        .replace(/"/g, "");
+        .replace(/"/g, '');
       if (!checkURL(editorString, bkgUrl)) return;
       bkgImgEl.style.backgroundImage = `url("${bkgUrl}${editorString}")`;
     }
@@ -35,21 +35,19 @@ const imageCompression = () => {
 
 // https://blog.crimx.com/2017/03/09/get-all-images-in-dom-including-background-en/
 // time out is set to 60 seconds as that is as long as the platform timeout
-const ensureAllImagesLoaded = (doc = document, timeout = 6e4) => {
-  return new Promise((resolve, reject) => {
-    loadAllImages(Array.from(searchDOM(doc)), timeout).then(resolve, reject);
-  });
-};
+const ensureAllImagesLoaded = (doc = document, timeout = 6e4) => new Promise((resolve, reject) => {
+  loadAllImages(Array.from(searchDOM(doc)), timeout).then(resolve, reject);
+});
 
 const searchDOM = (doc) => {
   const srcChecker = /url\(\s*?['"]?\s*?(\S+?)\s*?["']?\s*?\)/i;
-  return Array.from(doc.querySelectorAll("*")).reduce((collection, node) => {
+  return Array.from(doc.querySelectorAll('*')).reduce((collection, node) => {
     // bg src
-    let prop = window
+    const prop = window
       .getComputedStyle(node, null)
-      .getPropertyValue("background-image");
+      .getPropertyValue('background-image');
     // match `url(...)`
-    let match = srcChecker.exec(prop);
+    const match = srcChecker.exec(prop);
     if (match) {
       collection.add({ src: match[1], node });
     }
@@ -64,7 +62,7 @@ const searchDOM = (doc) => {
             if (img) {
               collection.add(img);
             }
-          }
+          },
         );
       } catch (e) {}
     }
@@ -92,14 +90,12 @@ const loadImage = ({ src, node }, timeout = 5000) => {
   return Promise.race([imgPromise, timer]);
 };
 
-const loadAllImages = (imgList, timeout = 5000) => {
-  return new Promise((resolve, reject) => {
-    Promise.all(
-      imgList
-        .map((data) => loadImage(data, timeout))
-        .map((p) => p.catch((e) => false))
-    ).then((results) => resolve(results.filter((r) => r)));
-  });
-};
+const loadAllImages = (imgList, timeout = 5000) => new Promise((resolve, reject) => {
+  Promise.all(
+    imgList
+      .map((data) => loadImage(data, timeout))
+      .map((p) => p.catch((e) => false)),
+  ).then((results) => resolve(results.filter((r) => r)));
+});
 
 export { imageCompression, ensureAllImagesLoaded };

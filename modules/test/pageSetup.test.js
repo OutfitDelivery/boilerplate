@@ -16,27 +16,27 @@ beforeEach(() => {
     h1 {
       font-family: 'IBM Plex Sans', sans-serif
     }
-    </style>`
+    </style>`;
 });
 describe('setSize working', () => {
   test('check setSize() runs', () => {
     // let template = new boilerplate();
-    utilities.setSize()
-    expect(document.querySelector('html').style.fontSize).toBe('48.16748px')
+    utilities.setSize();
+    expect(document.querySelector('html').style.fontSize).toBe('48.16748px');
   });
   test('check setSize() runs at known size', () => {
     // Change the viewport to 500px.
     global.innerWidth = 500;
     global.innerHeight = 500;
-    utilities.setSize()
-    expect(document.querySelector('html').style.fontSize).toBe('30.11148px')
+    utilities.setSize();
+    expect(document.querySelector('html').style.fontSize).toBe('30.11148px');
   });
   test('check setSize() runs at known size2', () => {
     // Change the viewport to 500px.
     global.innerWidth = 1500;
     global.innerHeight = 1500;
-    utilities.setSize()
-    expect(document.querySelector('html').style.fontSize).toBe('84.11147999999999px')
+    utilities.setSize();
+    expect(document.querySelector('html').style.fontSize).toBe('84.11147999999999px');
   });
   test('check setSize() runs at resize', async () => {
     // let template = new boilerplate();
@@ -44,7 +44,7 @@ describe('setSize working', () => {
     global.innerWidth = 1500;
     global.innerHeight = 1500;
 
-    utilities.setSize()
+    utilities.setSize();
     expect(document.querySelector('html').style.fontSize).toBe('84.11147999999999px');
 
     // Change the viewport to 500px.
