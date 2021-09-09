@@ -61,22 +61,11 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       filename: 'main.css'
     })
-    // new CopyWebpackPlugin({
-    //   patterns: [{
-    //       from: 'css/main.css',
-    //       to: ''
-    //   }]
-    // })
   ],
   optimization: {
     minimizer: [
-        // new TerserPlugin({
-        //   sourceMap: true // set to true if you want JS source maps
-        // }),
         new TerserPlugin(),
         new OptimizeCSSAssetsPlugin({})
     ]
-  },
-  // mode: 'production',
-  // devtool: 'source-map',
+  }
 };
