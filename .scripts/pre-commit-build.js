@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const bundleFileName = './dist/boilerplate.js';
+const bundleFileName = '../dist/boilerplate.js';
 console.log('checking build');
 
 const getShaOfBundle = function () {
