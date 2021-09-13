@@ -16,7 +16,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Install Dependencies
-        run: npm install --only=prod
+        run: npm i ci
 
       - name: Build for production
         run: npm run build-ci
