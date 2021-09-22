@@ -39,7 +39,7 @@ function textNodesUnder(el) {
 
 // not so simple rounding for line counting purposes
 function simpleRounding(num) {
-  return Math.round(num);
+  return Math.ceil(num);
 }
 // count the number of lines inside of the current direct element
 function countLines(elements, advanced) {
