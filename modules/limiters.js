@@ -38,7 +38,7 @@ function textNodesUnder(el) {
 }
 
 // not so simple rounding for line counting purposes
-function simpleRounding(num) {
+function simpleRounding(num, upwardHeightRounding = false) {
   if (upwardHeightRounding) {
     return Math.ceil(num);
   } else {
@@ -300,7 +300,7 @@ function maxHeightCheck(elements = null, inputLimit = null, upwardHeightRounding
       }
       // block.dataset.limitType = limit;
 
-      const overflow = simpleRounding(scrollHeight) > simpleRounding(elementHeight);
+      const overflow = simpleRounding(scrollHeight, upwardHeightRounding) > simpleRounding(elementHeight, upwardHeightRounding);
       if (overflow && !overflowFound) {
         overflowFound = true;
       }
