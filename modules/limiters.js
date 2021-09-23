@@ -37,9 +37,11 @@ function textNodesUnder(el) {
   return a;
 }
 
-// not so simple rounding for line counting purposes
 function simpleRounding(num) {
   return Math.ceil(num);
+}
+function simpleLineRounding(num) {
+  return Math.round(num);
 }
 // count the number of lines inside of the current direct element
 function countLines(elements, advanced) {
@@ -59,14 +61,14 @@ function countLines(elements, advanced) {
     textNodes.forEach((el) => {
       const metrics = calculateTextMetrics(el);
 
-      const line = simpleRounding(metrics.lineCount);
+      const line = simpleLineRounding(metrics.lineCount);
       // console.log(el, metrics)
       if (line) {
         el.dataset.rawLinesCount = line;
         multiCount += line;
       }
     });
-    multiCount = simpleRounding(multiCount);
+    multiCount = simpleLineRounding(multiCount);
     target.dataset.calculatedLinesCount = multiCount; // adds property for CSS targeting
     target.classList.remove('countingLines');
     return multiCount;
