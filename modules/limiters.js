@@ -38,12 +38,8 @@ function textNodesUnder(el) {
 }
 
 // not so simple rounding for line counting purposes
-function simpleRounding(num, upwardHeightRounding = false) {
-  if (upwardHeightRounding) {
-    return Math.ceil(num);
-  } else {
-    return Math.round(num);
-  }
+function simpleRounding(num) {
+  return Math.ceil(num);
 }
 // count the number of lines inside of the current direct element
 function countLines(elements, advanced) {
@@ -236,7 +232,7 @@ function minLineCheck(element = null, limit = null) {
 * Detailed instruction can be found here:
   https://github.com/aleks-frontend/max-height-check
 */
-function maxHeightCheck(elements = null, inputLimit = null, upwardHeightRounding = false) {
+function maxHeightCheck(elements = null, inputLimit = null) {
   const elType = Object.prototype.toString.call(elements);
   if (
     elements
@@ -300,7 +296,7 @@ function maxHeightCheck(elements = null, inputLimit = null, upwardHeightRounding
       }
       // block.dataset.limitType = limit;
 
-      const overflow = simpleRounding(scrollHeight, upwardHeightRounding) > simpleRounding(elementHeight, upwardHeightRounding);
+      const overflow = simpleRounding(scrollHeight) > simpleRounding(elementHeight);
       if (overflow && !overflowFound) {
         overflowFound = true;
       }
