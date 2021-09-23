@@ -111,7 +111,11 @@ Adds an overflow if the number of lines is lower than data-min-line
 template.minLineCheck();
 ```
 ###### maxHeightCheck()
-Adds an overflow if data-max-height is larger than the element's actual height. It also supports data-max-height="css" and data-max-height="parent" if you want the hight to be set via the css value or the height of the parent 
+Adds an overflow if data-max-height is larger than the element's actual height.
+It also supports:
+- data-max-height="css": max is set from the css value
+- data-max-height="parent": max is set from the height of the parent 
+- data-max-height="self": max is set from the element's own height
 ```javascript
 template.maxHeightCheck();
 ```

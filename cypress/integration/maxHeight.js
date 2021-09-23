@@ -119,5 +119,86 @@ describe('Max height checks ', () => {
       .should('equal', '50');
     cy.get('#example15 [data-max-height]')
       .should('not.have.class', 'overflow');
+
+    cy.get('#example16 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '50');
+    cy.get('#example16 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '50.1875');
+    cy.get('#example16 [data-max-height]')
+      .should('not.have.class', 'overflow');
+
+    cy.get('#example17 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '50');
+    cy.get('#example17 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '49.8906');
+    cy.get('#example17 [data-max-height]')
+      .should('not.have.class', 'overflow');
+
+    cy.get('#example18 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '50');
+    cy.get('#example18 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '49.0938');
+    cy.get('#example18 [data-max-height]')
+      .should('not.have.class', 'overflow');
+
+    cy.get('#example19 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '50');
+    cy.get('#example19 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '49.0156');
+    cy.get('#example19 [data-max-height]')
+      .should('not.have.class', 'overflow');
+
+    cy.get('#example20 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '50');
+    cy.get('#example20 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '48.8906');
+    cy.get('#example20 [data-max-height]')
+      .should('have.class', 'overflow');
+
+    cy.get('#example21 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '93');
+    cy.get('#example21 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '48.8906');
+    cy.get('#example21 [data-max-height]')
+      .should('have.class', 'overflow');
+
+    cy.get('#example22 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '93');
+    cy.get('#example22 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '92.0156');
+    cy.get('#example22 [data-max-height]')
+      .should('not.have.class', 'overflow');
+
+    cy.get('#example23 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '93');
+    cy.get('#example23 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '93.0156');
+    cy.get('#example23 [data-max-height]')
+      .should('not.have.class', 'overflow');
+
+    cy.get('#example24 [data-max-height]')
+      .invoke('attr', 'data-calculated-scroll-height')
+      .should('equal', '93');
+    cy.get('#example24 [data-max-height]')
+      .invoke('attr', 'data-calculated-height')
+      .should('equal', '91.8906');
+    cy.get('#example24 [data-max-height]')
+      .should('have.class', 'overflow');
   });
 });
