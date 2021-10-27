@@ -6,7 +6,7 @@ const path = require('path');
 module.exports = {
   // Default mode for Webpack is production.
   // Depending on mode Webpack will apply different things
-  // on the final bundle. For now, we don't need production's JavaScript 
+  // on the final bundle. For now, we don't need production's JavaScript
   // minifying and other things, so let's set mode to development
   mode: 'development',
   devtool: 'inline-source-map',
@@ -30,5 +30,5 @@ module.exports = {
         use: ['babel-loader'],
       },
     ],
-  }
+  },
 };
