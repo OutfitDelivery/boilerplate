@@ -39,11 +39,11 @@ export default class boilerplate {
       hotReloadOnChange();
     }
     this.events = {};
-    this.overflows = false;
     this.browser = setBrowserType();
     this.camelCase = config.camelCase || false;
     this.exportReduceFont = config.exportReduceFont || 0;
     this.allowNoMetaData = config.allowNoMetaData || false;
+    this.allowOverflowsOnExport = config.allowOverflowsOnExport || false;
     this.ensureImagesLoad = true;
     if (
       typeof config.ensureImagesLoad === 'boolean'
@@ -114,18 +114,18 @@ export default class boilerplate {
       window.addEventListener('message', (e) => {
         try {
           if (e && e.data) {
-            let data = JSON.parse(e.data);
+            let { data } = e;
             // check if there is json data and that it's not a message event from "app.fullstory.com"
-            if (data && !data.__fs) {
-              if (this.camelCase) {
-                data = camelcaseKeys(data);
-              }
-              this.templateProps = { ...this.templateProps, ...data };
-              this.emit('inputs-change', this.templateProps);
-              if (typeof window.inputsChange === 'function') {
-                window.inputsChange(this.templateProps);
-              }
-            }
+            if (data && data._OUTFIT_POST_MESSAGE) {
+							if (this.camelCase) {
+								data = camelcaseKeys(data);
+							}
+							this.templateProps = { ...this.templateProps, ...data };
+							this.emit("inputs-change", this.templateProps);
+							if (typeof window.inputsChange === "function") {
+								window.inputsChange(this.templateProps);
+							}
+						}
           }
         } catch (e) {
           console.error('input update error', e);
@@ -217,15 +217,58 @@ export default class boilerplate {
         throw 'Render failed for logged reason';
       });
   }
-
-  getOverflows() {
-    const overflows = document.querySelectorAll('.overflow, [data-overflow]');
-    if (overflows.length > 0) {
-      this.overflows = overflows;
-      this.emit('overflow', overflows);
-    } else {
-      this.overflows = false;
+  showOverflows() {
+    if (this.overflows) {
+      this.overflows[0].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
     }
+  }
+  get overflows() {
+		let o = document.querySelectorAll(".overflow, [data-overflow]");
+
+		if (o.length > 0) {
+			this.emit("overflow", o);
+			// if (!this.allowOverflowsOnExport) {
+			// stop export if there is an overflow
+			//   window.parent.postMessage(
+			//     {
+			//       type: "fail",
+			//       message:
+			//         "There is an content overflow in the document which means we have stopped you from exporting",
+			//     },
+			//     "*"
+			//   );
+			// }
+			// // disable the export button when there is an overflow
+			// window.parent.postMessage(
+			//   {
+			//     messageSource: "template",
+			//     messageType: "setExport",
+			//     message:
+			//       "There are overflows in the document. Please update the content in order to allow export",
+			//     value: true,
+			//   },
+			//   "*"
+			// );
+			return o;
+			// } else {
+			//    window.parent.postMessage(
+			//      {
+			//        messageSource: "template",
+			//        messageType: "setExport",
+			//        message: '',
+			//        value: false,
+			//      },
+			//      "*"
+			//    );
+			//   return false;
+			// }
+		}
+	}
+  getOverflows() {
     return this.overflows;
   }
 

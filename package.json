@@ -1,6 +1,6 @@
 {
   "name": "boilerplate",
-  "version": "3.0.0",
+  "version": "3.2.1",
   "description": "[![](https://data.jsdelivr.com/v1/package/gh/OutfitDelivery/boilerplate/badge)](https://www.jsdelivr.com/package/gh/OutfitDelivery/boilerplate)",
   "main": "index.js",
   "scripts": {
@@ -60,7 +60,7 @@
     "babel-loader": "^8.2.2",
     "camelcase-keys": "^7.0.0",
     "less": "^4.1.1",
-    "webpack": "^5.31.0",
-    "webpack-cli": "^4.6.0"
+    "webpack": "^5.60.0",
+    "webpack-cli": "^4.9.1"
   }
 }

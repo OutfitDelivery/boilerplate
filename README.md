@@ -47,6 +47,7 @@ let template = new boilerplate({
   fonts: Array, // (default: undefined) an array of fonts that need to be checked are loaded. If these fonts don't load in 3 seconds then the template will stop running. This array is used to ensure that the fonts are all loaded before we run any text validation as the font size can be effect load time of the document.  
   templateProps: Object, // (default: {}) default input values that should be passed into the input-change event before the platform injects the users changes
   trimMarks: Boolean, // (default: false) if this is true the boilerplate will add trim marks around this template. If trim marks are added then you will need to also configure trim marks in the templates format. 
+  allowOverflowsOnExport: Boolean, // (default: false) if this is true the boilerplate will allow overflow on export. By default the renderers will block a render if there is any overflows. This should only be set to true for debugging purposes.
   addCrop: Boolean, // (default: true) if false crop marks will not be added when crop marks are enabled
   placeholderVisibility: String, // (default: "") enables the playment of the placeholder image. Placeholders will show up unless this is set ot hide
   placeholderImages: Array, // (default: []) an array of placeholder images which will be overlayed over the template. When more than one placeholder is passed in they will be placed on sequential pages 
@@ -100,6 +101,8 @@ console.log(images)
 ```
 
 #### Overflow functions
+If there is an overflow the boilerplate will fail the export unless the allowOverflowsOnExport config property is set to true on the boilerplate constructor.
+The boilerplate will also attempt to disable to export button if there is an overflow.
 ###### maxLineCheck()
 Adds an overflow if the number of lines is greater than data-max-line 
 ```javascript
