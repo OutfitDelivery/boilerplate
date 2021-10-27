@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* Font Face Observer v2.1.0 - © Bram Stein. License: BSD-3-Clause */ (function () {
   let f;
   const g = [];

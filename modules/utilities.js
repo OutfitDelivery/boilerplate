@@ -1,4 +1,4 @@
-import FontFaceObserver from './fontfaceobserver.js';
+import FontFaceObserver from './vendor/fontfaceobserver.js';
 
 const defaultsRemoved = () =>
   // ensure that the user has changed important tempalte metadata
@@ -285,7 +285,7 @@ const loadLESS = () => new Promise(async (resolve, reject) => {
         async: true,
         env: 'development',
       };
-      const less = await require('./less.js');
+      const less = await require('./vendor/less.js');
       await less.refresh();
       document
         .querySelectorAll('style[media=""][data-href$=".less"]:not([href])')
