@@ -76,7 +76,7 @@ export default class boilerplate {
           });
         }
       } else {
-        this.templateProps = {};
+        this.templateProps = window.payload || {};
       }
     } catch (e) {
       this.templateProps = {};
