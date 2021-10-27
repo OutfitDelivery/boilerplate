@@ -31,7 +31,9 @@ archive.append(fs.createReadStream(file1), { name: '/js/main.js' });
 const file2 = `${process.env.PWD}/css/styles.css`;
 archive.append(fs.createReadStream(file2), { name: '/css/styles.css' });
 
-const file3 = `${process.env.PWD}/index.html.mst`;
-archive.append(fs.createReadStream(file3), { name: 'index.html.mst' });
+// const file3 = `${process.env.PWD}/index.html.mst`;
+// archive.append(fs.createReadStream(file3), { name: 'index.html.mst' });
 
+const file4 = `${process.env.PWD}/index.html`;
+archive.append(fs.createReadStream(file4), { name: "index.html" });
 archive.finalize();

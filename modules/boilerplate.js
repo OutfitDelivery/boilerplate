@@ -232,41 +232,7 @@ export default class boilerplate {
 
 		if (o.length > 0) {
 			this.emit("overflow", o);
-			// if (!this.allowOverflowsOnExport) {
-			// stop export if there is an overflow
-			//   window.parent.postMessage(
-			//     {
-			//       type: "fail",
-			//       message:
-			//         "There is an content overflow in the document which means we have stopped you from exporting",
-			//     },
-			//     "*"
-			//   );
-			// }
-			// // disable the export button when there is an overflow
-			// window.parent.postMessage(
-			//   {
-			//     messageSource: "template",
-			//     messageType: "setExport",
-			//     message:
-			//       "There are overflows in the document. Please update the content in order to allow export",
-			//     value: true,
-			//   },
-			//   "*"
-			// );
 			return o;
-			// } else {
-			//    window.parent.postMessage(
-			//      {
-			//        messageSource: "template",
-			//        messageType: "setExport",
-			//        message: '',
-			//        value: false,
-			//      },
-			//      "*"
-			//    );
-			//   return false;
-			// }
 		}
 	}
   getOverflows() {
