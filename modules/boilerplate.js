@@ -117,6 +117,7 @@ export default class boilerplate {
             let { data } = e;
             // check if there is json data and that it's not a message event from "app.fullstory.com"
             if (data && data._OUTFIT_POST_MESSAGE) {
+              delete data._OUTFIT_POST_MESSAGE; 
 							if (this.camelCase) {
 								data = camelcaseKeys(data);
 							}
