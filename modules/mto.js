@@ -1,3 +1,6 @@
+/* eslint-disable */
+// This is getting removed so no point linting
+
 // get sidebar element on the current page
 const getSidebar = () => {
   const sidebar = window.top.document.querySelectorAll('.sidebar .current-list');

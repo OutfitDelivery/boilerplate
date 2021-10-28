@@ -28,7 +28,7 @@ import {
   calculateTextMetrics,
 } from './limiters';
 import { imageCompression, ensureAllImagesLoaded } from './images';
-import detectElementOverflow from './detectElementOverflow.js';
+import detectElementOverflow from './detectElementOverflow';
 
 export default class boilerplate {
   constructor(config = {}) {
@@ -111,11 +111,11 @@ export default class boilerplate {
           window.inputsChange(this.templateProps);
         }
       });
-      window.addEventListener('message', (e) => {
+      window.addEventListener('message', (event) => {
         try {
-          if (e && e.data) {
-            let { data } = e;
-            // check if there is json data and that it's not a message event from "app.fullstory.com"
+          if (event && event.data) {
+            let { data } = event;
+            // check if there is json data and that it's not a message event from app.fullstory.com
             if (data && data._OUTFIT_POST_MESSAGE) {
               delete data._OUTFIT_POST_MESSAGE;
               if (this.camelCase) {
@@ -128,8 +128,8 @@ export default class boilerplate {
               }
             }
           }
-        } catch (e) {
-          console.error('input update error', e);
+        } catch (error) {
+          console.error('input update error', error);
         }
       });
 
@@ -147,16 +147,6 @@ export default class boilerplate {
 
     this.events[name].push(listener);
   }
-
-  // removeListener(name, listenerToRemove) {
-  //   if (!this.events[name]) {
-  //     throw new Error(`Can't remove a listener. Event "${name}" doesn't exits.`);
-  //   }
-
-  //   const filterListeners = (listener) => listener !== listenerToRemove;
-
-  //   this.events[name] = this.events[name].filter(filterListeners);
-  // }
 
   // emit sends a message to a callback
   emit(name, data) {

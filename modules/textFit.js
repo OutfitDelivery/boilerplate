@@ -1,6 +1,6 @@
 import {
   getWidth, getHeight, countLines, simpleRounding,
-} from './limiters.js';
+} from './limiters';
 /**
  * textFit v3.1.0
  * Previously known as jQuery.textFit
@@ -14,24 +14,6 @@ import {
  * Uses binary search to fit text with minimal layout calls.
  * Version 2.0 does not use jQuery.
  */
-/* global define:true, document:true, window:true, HTMLElement:true */
-
-// (function (root, factory) {
-//   "use strict";
-
-//   // UMD shim
-//   if (typeof define === "function" && define.amd) {
-//     // AMD
-//     define([], factory);
-//   } else if (typeof exports === "object") {
-//     // Node/CommonJS
-//     module.exports = factory();
-//   } else {
-//     // Browser
-//     root.textFit = factory();
-//   }
-// })(typeof global === "object" ? global : this, function () {
-//   "use strict";
 
 const defaultSettings = {
   alignVert: false, // if true, textFit will align vertically using css tables
@@ -39,13 +21,16 @@ const defaultSettings = {
   multiLine: false, // if true, textFit will not set white-space: no-wrap
   stopOverflow: false, // if true, a error we be thrown if the content is overflowing
   fontUnit: 'rem', // what unit should the final font be. using rems or mm is sometimes useful
-  fontChangeSize: 0.01, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
+  // how much should the font size by ajusted by each time.
+  // 0.1 and 0.01 is useful for when using a rem font unit
+  fontChangeSize: 0.01,
   minFontSize: 0.3,
   maxFontSize: 1,
   maxLine: false,
   growInSize: false, // set the width and height of the element to 100% to allow the element to grow
   containerChecks: [],
-  reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
+  // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
+  reProcess: true,
   widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
   alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
   display: 'inline-block', // in case you need to change this
@@ -214,7 +199,9 @@ function processItem(el, settings) {
     console.log('textFit font changed to:', size + settings.fontUnit);
   }
   // updating font if differs:
-  if (innerSpan.style.fontSize != size + settings.fontUnit) innerSpan.style.fontSize = size + settings.fontUnit;
+  if (innerSpan.style.fontSize !== size + settings.fontUnit) {
+    innerSpan.style.fontSize = size + settings.fontUnit;
+  }
 
   // add the required CSS in order to stop overflows
   if (Number.isInteger(maxLine) || settings.stopOverflow) {

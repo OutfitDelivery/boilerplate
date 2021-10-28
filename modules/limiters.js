@@ -1,5 +1,4 @@
-import LineClamp from './lineClamp.js';
-// import detectElementOverflow from './detectElementOverflow.js';
+import LineClamp from './lineClamp';
 
 function hasHeightValue(el, target) {
   if (el.isSameNode(target)) {
@@ -44,7 +43,7 @@ function simpleLineRounding(num) {
   return Math.round(num);
 }
 // count the number of lines inside of the current direct element
-function countLines(elements, advanced) {
+function countLines(elements) {
   const elType = Object.prototype.toString.call(elements);
   if (
     elType !== '[object Array]'
@@ -134,7 +133,7 @@ function getHeight(el) {
     height = height - padding_top - padding_bottom - border_top - border_bottom;
   }
   el.dataset.calculatedHeight = height; // adds property for debuging
-  if (simpleRounding(height) != el.scrollHeight) {
+  if (simpleRounding(height) !== el.scrollHeight) {
     el.dataset.calculatedScrollHeight = el.scrollHeight; // adds property for debuging
   }
   return height;
@@ -153,7 +152,7 @@ function getWidth(el) {
     width = width - padding_left - padding_right - border_left - border_right;
   }
   el.dataset.calculatedWidth = width; // adds property for debuging
-  if (simpleRounding(width) != el.scrollWidth) {
+  if (simpleRounding(width) !== el.scrollWidth) {
     el.dataset.calculatedScrollWidth = el.scrollWidth; // adds property for debuging
   }
   return width;
@@ -334,7 +333,7 @@ function charLimit(elements = null, limit = null) {
 
     const tokenValue = element.querySelectorAll('.token-value');
 
-    if (tokenValue.length != 0) {
+    if (tokenValue.length !== 0) {
       element = tokenValue.item(0);
     }
     const code = element.innerText;
@@ -347,14 +346,14 @@ function charLimit(elements = null, limit = null) {
     }
     if (overflow) {
       // Check Token Again
-      if (tokenValue.length != 0) {
+      if (tokenValue.length !== 0) {
         element.parentNode.classList.add('overflow');
       } else {
         element.classList.add('overflow');
       }
     } else {
       // Check Token Again
-      if (tokenValue.length != 0) {
+      if (tokenValue.length !== 0) {
         element.parentNode.classList.remove('overflow');
       } else {
         element.classList.remove('overflow');
@@ -365,5 +364,14 @@ function charLimit(elements = null, limit = null) {
 }
 
 export {
-  charLimit, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines, calculateTextMetrics, lineClamp, minLineCheck, simpleRounding,
+  charLimit,
+  maxHeightCheck,
+  maxLineCheck,
+  getWidth,
+  getHeight,
+  countLines,
+  calculateTextMetrics,
+  lineClamp,
+  minLineCheck,
+  simpleRounding,
 };

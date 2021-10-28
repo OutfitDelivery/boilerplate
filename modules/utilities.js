@@ -1,8 +1,8 @@
-import FontFaceObserver from './vendor/fontfaceobserver.js';
+import FontFaceObserver from './vendor/fontfaceobserver';
 
-const defaultsRemoved = () =>
+const defaultsRemoved = () => {
   // ensure that the user has changed important tempalte metadata
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     if (!window.top.defaultsRemovedChecked) {
       window.top.defaultsRemovedChecked = true;
 
@@ -18,7 +18,8 @@ const defaultsRemoved = () =>
           'style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])',
         ),
       );
-      // styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico ")); // allowed injected style until the ID is added to target this
+      // styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico "));
+      // allowed injected style until the ID is added to target this
       if (styles.length > 0) {
         console.log(
           '%cIt is best practice not use styles in the html document. Please move all the styles to an external styles.css or styles.less file for constancy',
@@ -100,6 +101,7 @@ const defaultsRemoved = () =>
     }
     resolve();
   });
+};
 const setOutfitState = () => {
   let mode = window.location.href.includes('exports') ? 'export' : false;
   mode = !mode && window.location.href.includes('templates') ? 'template' : mode;
@@ -118,7 +120,7 @@ const setOutfitState = () => {
 const highestZ = () => (
   Array.from(document.querySelectorAll('body *'))
     .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
-    .filter((a) => !isNaN(a))
+    .filter((a) => !Number.isNaN(a))
     .sort()
     .pop() + 1
 );
@@ -304,14 +306,14 @@ const hotReloadOnChange = () => {
     && typeof BroadcastChannel === 'function'
   ) {
     const bc = new BroadcastChannel('hot-reload');
-    bc.onmessage = (ev) => {
+    bc.onmessage = () => {
       if (!window.top.reloading) {
         window.top.reloading = true;
         window.top.location.reload();
       }
     };
     const bc2 = new BroadcastChannel('fs-sync');
-    bc2.onmessage = (ev) => {
+    bc2.onmessage = () => {
       if (!window.top.reloading) {
         window.top.reloading = true;
         window.top.location.reload();

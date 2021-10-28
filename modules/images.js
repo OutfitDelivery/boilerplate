@@ -33,12 +33,6 @@ const imageCompression = () => {
   });
 };
 
-// https://blog.crimx.com/2017/03/09/get-all-images-in-dom-including-background-en/
-// time out is set to 60 seconds as that is as long as the platform timeout
-const ensureAllImagesLoaded = (doc = document, timeout = 6e4) => new Promise((resolve, reject) => {
-  loadAllImages(Array.from(searchDOM(doc)), timeout).then(resolve, reject);
-});
-
 const searchDOM = (doc) => {
   const srcChecker = /url\(\s*?['"]?\s*?(\S+?)\s*?["']?\s*?\)/i;
   return Array.from(doc.querySelectorAll('*')).reduce((collection, node) => {
@@ -90,12 +84,18 @@ const loadImage = ({ src, node }, timeout = 5000) => {
   return Promise.race([imgPromise, timer]);
 };
 
-const loadAllImages = (imgList, timeout = 5000) => new Promise((resolve, reject) => {
+const loadAllImages = (imgList, timeout = 5000) => new Promise((resolve) => {
   Promise.all(
     imgList
       .map((data) => loadImage(data, timeout))
-      .map((p) => p.catch((e) => false)),
+      .map((p) => p.catch(() => false)),
   ).then((results) => resolve(results.filter((r) => r)));
+});
+
+// https://blog.crimx.com/2017/03/09/get-all-images-in-dom-including-background-en/
+// time out is set to 60 seconds as that is as long as the platform timeout
+const ensureAllImagesLoaded = (doc = document, timeout = 6e4) => new Promise((resolve, reject) => {
+  loadAllImages(Array.from(searchDOM(doc)), timeout).then(resolve, reject);
 });
 
 export { imageCompression, ensureAllImagesLoaded };
