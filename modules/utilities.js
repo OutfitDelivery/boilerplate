@@ -1,10 +1,10 @@
-import FontFaceObserver from "./fontfaceobserver.js";
+import FontFaceObserver from './vendor/fontfaceobserver';
 
-const defaultsRemoved = () =>
-	// ensure that the user has changed important tempalte metadata
-	new Promise((resolve, reject) => {
-		if (!window.top.defaultsRemovedChecked) {
-			window.top.defaultsRemovedChecked = true;
+const defaultsRemoved = () => {
+  // ensure that the user has changed important tempalte metadata
+  new Promise((resolve) => {
+    if (!window.top.defaultsRemovedChecked) {
+      window.top.defaultsRemovedChecked = true;
 
 			if (!document.querySelector('link[href$="main.css"]')) {
 				console.log(
@@ -13,18 +13,19 @@ const defaultsRemoved = () =>
 				);
 			}
 
-			const styles = Array.from(
-				document.querySelectorAll(
-					"style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])"
-				)
-			);
-			// styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico ")); // allowed injected style until the ID is added to target this
-			if (styles.length > 0) {
-				console.log(
-					"%cIt is best practice not use styles in the html document. Please move all the styles to an external styles.css or styles.less file for constancy",
-					"background: #E41E46; color: white"
-				);
-			}
+      const styles = Array.from(
+        document.querySelectorAll(
+          'style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])',
+        ),
+      );
+      // styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico "));
+      // allowed injected style until the ID is added to target this
+      if (styles.length > 0) {
+        console.log(
+          '%cIt is best practice not use styles in the html document. Please move all the styles to an external styles.css or styles.less file for constancy',
+          'background: #E41E46; color: white',
+        );
+      }
 
 			let scripts = Array.from(
 				document.querySelectorAll("script:not(#inputInjection):not([src])")
@@ -86,22 +87,23 @@ const defaultsRemoved = () =>
 				);
 			}
 
-			// check if comment has been removed from body
-			if (
-				[...document.head.childNodes].some((node) => {
-					if (node && node.data && node.nodeType === 8) {
-						return node.data.includes("Template Admin Build Instructions");
-					}
-				})
-			) {
-				console.log(
-					"%cPlease remove the 'Template Admin Build Instructions' comment from the top of the document",
-					"background: #94B7BB; color: #111820"
-				);
-			}
-		}
-		resolve();
-	});
+      // check if comment has been removed from body
+      if (
+        [...document.head.childNodes].some((node) => {
+          if (node && node.data && node.nodeType === 8) {
+            return node.data.includes('Template Admin Build Instructions');
+          }
+        })
+      ) {
+        console.log(
+          "%cPlease remove the 'Template Admin Build Instructions' comment from the top of the document",
+          'background: #94B7BB; color: #111820',
+        );
+      }
+    }
+    resolve();
+  });
+};
 const setOutfitState = () => {
 	let mode = window.location.href.includes("exports") ? "export" : false;
 	mode =
@@ -121,12 +123,13 @@ const setOutfitState = () => {
 	return mode;
 };
 
-const highestZ = () =>
-	Array.from(document.querySelectorAll("body *"))
-		.map((a) => parseFloat(window.getComputedStyle(a).zIndex))
-		.filter((a) => !isNaN(a))
-		.sort()
-		.pop() + 1;
+const highestZ = () => (
+  Array.from(document.querySelectorAll('body *'))
+    .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
+    .filter((a) => !Number.isNaN(a))
+    .sort()
+    .pop() + 1
+);
 
 const detectRender = () => {
 	const agent = navigator.userAgent;
@@ -286,34 +289,34 @@ const domReady = new Promise((resolve, reject) => {
 
 // wait for the window to laod or continue if it has already loaded
 const winLoad = new Promise((resolve, reject) => {
-	if (document.readyState === "complete") {
-		resolve();
-	} else {
-		window.addEventListener("load", resolve);
-		window.addEventListener("error", reject);
-	}
+  if (document.readyState === 'complete') {
+    resolve();
+  } else {
+    window.addEventListener('load', resolve);
+    window.addEventListener('error', reject);
+  }
 });
 
 const hotReloadOnChange = () => {
-	if (
-		(state === "document" || state === "template") &&
-		typeof BroadcastChannel === "function"
-	) {
-		const bc = new BroadcastChannel("hot-reload");
-		bc.onmessage = (ev) => {
-			if (!window.top.reloading) {
-				window.top.reloading = true;
-				window.top.location.reload();
-			}
-		};
-		const bc2 = new BroadcastChannel("fs-sync");
-		bc2.onmessage = (ev) => {
-			if (!window.top.reloading) {
-				window.top.reloading = true;
-				window.top.location.reload();
-			}
-		};
-	}
+  if (
+    (state === 'document' || state === 'template')
+    && typeof BroadcastChannel === 'function'
+  ) {
+    const bc = new BroadcastChannel('hot-reload');
+    bc.onmessage = () => {
+      if (!window.top.reloading) {
+        window.top.reloading = true;
+        window.top.location.reload();
+      }
+    };
+    const bc2 = new BroadcastChannel('fs-sync');
+    bc2.onmessage = () => {
+      if (!window.top.reloading) {
+        window.top.reloading = true;
+        window.top.location.reload();
+      }
+    };
+  }
 };
 
 export {

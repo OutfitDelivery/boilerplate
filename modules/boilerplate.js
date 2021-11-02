@@ -27,7 +27,7 @@ import {
   calculateTextMetrics,
 } from './limiters';
 import { imageCompression, ensureAllImagesLoaded } from './images';
-import detectElementOverflow from './detectElementOverflow.js';
+import detectElementOverflow from './detectElementOverflow';
 
 export default class boilerplate {
 	constructor(config = {}) {

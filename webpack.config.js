@@ -2,7 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 
 // This is the main configuration object.
 // Here, you write different options and tell Webpack what to do
@@ -31,41 +31,41 @@ module.exports = {
       {
         test: /\.(css|scss)$/,
         use: [
-            {
-                loader: MiniCssExtractPlugin.loader
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            // Interprets `@import` and `url()` like `import/require()` and will resolve them
+            loader: 'css-loader',
+          },
+          {
+            // Loader for webpack to process CSS with PostCSS
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [['autoprefixer']],
+              },
             },
-            {
-                // Interprets `@import` and `url()` like `import/require()` and will resolve them
-                loader: 'css-loader'
-            },
-            {
-                // Loader for webpack to process CSS with PostCSS
-                loader: 'postcss-loader',
-                options: {
-                    postcssOptions: {
-                        plugins: [[ 'autoprefixer' ]]
-                    }
-                }
-            },
-            {
-                // Loads a SASS/SCSS file and compiles it to CSS
-                loader: 'sass-loader'
-            }
-        ]
-    },
+          },
+          {
+            // Loads a SASS/SCSS file and compiles it to CSS
+            loader: 'sass-loader',
+          },
+        ],
+      },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
-      filename: 'main.css'
-    })
+      filename: 'main.css',
+    }),
   ],
   optimization: {
     minimizer: [
-        new TerserPlugin(),
-        new OptimizeCSSAssetsPlugin({})
-    ]
-  }
+      new TerserPlugin(),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
+  },
 };
