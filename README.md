@@ -7,6 +7,7 @@ If this is your first template maybe have a look at Delivery Academy for a great
 
 ## Usage in Outfit
 Download [boilerplate.zip](https://github.com/OutfitDelivery/boilerplate/raw/master/boilerplate.zip) from the boilerplate repo.
+For muchtache tempaltes download [boilerplate-mst.zip](https://github.com/OutfitDelivery/boilerplate/raw/master/boilerplate-mst.zip)
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
@@ -151,6 +152,13 @@ template.detectElementOverflow(element, element.parentNode).overflowRight;
 Can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
 ```javascript
 template.addStyle('body { background: red; }')
+```
+### setupPlaceholder()
+adds the placeholder images to the template. 
+```javascript
+template.setupPlaceholder("show","https://outfit.io/assert/image.jpg");
+template.setupPlaceholder(inputs['placeholder-visibility'],[inputs['placeholder-1']]);
+template.setupPlaceholder(inputs['placeholder-visibility'],[inputs['placeholder-1'],inputs['placeholder-2']]);
 ```
 
 ### [Replace.js](modules/replace.js) (aka formatters)
