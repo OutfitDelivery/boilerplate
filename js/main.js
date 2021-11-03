@@ -10,14 +10,14 @@ const template = new boilerplate({
 
 // This function will run whenever there is a change to any text input, resize and on inital load
 template.on('inputs-change', async (inputs) => {
-  const { accounts, team, user } = inputs;
+  const { account, team, user } = inputs;
   console.log(inputs);
 
   template.trimMarks = inputs.trimMarks;
   template.setupPlaceholder(inputs['placeholder-1']); // remove this line if you are not using a placeholder image
   // This is where you can do all your magic
   document.querySelectorAll('h1').forEach((element) => {
-    element.innerText = `Welcome to ${accounts.name}!`;
+    element.innerText = `Welcome to ${account.name}!`;
   });
   template.textFit(document.querySelectorAll('h1'), {
 		fontUnit: '%',

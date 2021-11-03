@@ -32,7 +32,6 @@ import detectElementOverflow from './detectElementOverflow';
 export default class boilerplate {
 	#trimMarks = 0;
 	#bleed = 0;
-
 	constructor(config = {}) {
 		console.clear();
 		this.state = setOutfitState();
@@ -230,10 +229,10 @@ export default class boilerplate {
 			if (!value) {
 				this.#trimMarks = 0;
 			} else {
-				if (typeof value == "number") {
-					this.#trimMarks = value;
-				} else {
+				if (typeof value == "boolean") {
 					this.#trimMarks = 4.41;
+				} else {
+					this.#trimMarks = value;
 				}
 			}
 			document.body.style.setProperty("--trim", this.#trimMarks);
