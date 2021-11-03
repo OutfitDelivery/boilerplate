@@ -30,13 +30,13 @@ import { imageCompression, ensureAllImagesLoaded } from './images';
 import detectElementOverflow from './detectElementOverflow';
 
 export default class boilerplate {
-	#trimMarks = 0;
+	#trim = 0;
 	#bleed = 0;
 	constructor(config = {}) {
 		console.clear();
 		this.state = setOutfitState();
 		this.exportReduceFont = config.exportReduceFont || 0;
-		this.trimMarks = config.trimMarks;
+		this.trim = config.trimMarks;
 
 		this.bleed = config.bleed || 3;
 		if (config.hotReloadOnChange) {
@@ -57,7 +57,7 @@ export default class boilerplate {
 		if (config.placeholderVisibility) {
 			setupPlaceholder(config.placeholderImages, config.placeholderVisibility);
 		}
-
+		addCropMarks();
 		if (config.cssVariables) {
 			this.addStyle(`:root{${config.cssVariables}}`);
 		}
@@ -213,6 +213,10 @@ export default class boilerplate {
 		}
 	}
 
+	get bleed() {
+		return this.#bleed;
+	}
+
 	set bleed(value) {
 		if (value !== this.#bleed) {
 			this.#bleed = value;
@@ -220,25 +224,24 @@ export default class boilerplate {
 		}
 	}
 
-	get trimMarks() {
-		return this.#trimMarks;
+	get trim() {
+		return this.#trim;
 	}
 
-	set trimMarks(value) {
-		if (value !== this.#trimMarks) {
+	set trim(value) {
+		if (value !== this.#trim) {
 			if (!value) {
-				this.#trimMarks = 0;
+				this.#trim = 0;
 			} else {
 				if (typeof value == "boolean") {
-					this.#trimMarks = 4.41;
+					this.#trim = 7.41;
 				} else {
-					this.#trimMarks = value;
+					this.#trim = value;
 				}
 			}
-			document.body.style.setProperty("--trim", this.#trimMarks);
-			document.body.setAttribute("data-trim", Boolean(this.#trimMarks));
-			setSize(Boolean(this.#trimMarks) || false, this.exportReduceFont || 0);
-			addCropMarks(this.#trimMarks);
+			document.body.style.setProperty("--trim", this.#trim);
+			document.body.setAttribute("data-trim", Boolean(this.#trim));
+			setSize(Boolean(this.#trim) || false, this.exportReduceFont || 0);
 		}
 	}
 

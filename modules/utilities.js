@@ -8,7 +8,7 @@ const defaultsRemoved = () => {
       window.top.defaultsRemovedChecked = true;
 
       if (!document.querySelector('link[href$="main.css"]')) {
-        console.log('%cPlease include main.css in order to ensure that export is correct', 'background: #E41E46; color: white',);
+        console.log('%cPlease include main.css in order to ensure that export is correct', 'background: #E41E46; color: white');
       }
 
       const styles = Array.from(
@@ -135,40 +135,38 @@ const detectRender = () => {
 const pageHeightSetup = () => {
   const render = detectRender();
   if (render === '2.1') {
-    return 'calc(100vh - 1px)';
+    return true;
   }
   if (render === '1.1') {
-    return '100vh';
+    return false;
   }
   if (render === '1.0') {
-    return '100vh';
+    return false;
   }
   if (render === '2.0') {
-    return 'calc(100vh - 1px)';
+    return true;
   }
-  return '100vh';
+  return false;
 };
 
 // Fix for the resizable background images - fullscreen and digital vairaitons only
-const addCropMarks = (trimMarks) => {
+const addCropMarks = () => {
   // crop and bleed
-
-  const pageHeight = pageHeightSetup();
+  const pageHeightFix = pageHeightSetup();
   document.querySelectorAll('.page').forEach((page) => {
-    // eslint-disable-next-line no-param-reassign
-    page.style.height = pageHeight;
-    page.querySelectorAll('.crop-marks').forEach((mark) => mark.remove()); // remove before readding to avoid duplicates
-    if (Boolean(trimMarks)) {
+    if (pageHeightFix) page.classList.add('minus1');
+
+    if (!page.querySelector('.crop-mark')) {
       page.insertAdjacentHTML(
         'afterbegin', `<div class="crop-marks">
   <div class="crop-mark top-left" ></div>
   <div class="crop-mark top-right" ></div>
   <div class="crop-mark bottom-left" ></div>
   <div class="crop-mark bottom-right" ></div>
-  </div>`);
+  </div>`,
+      );
     }
   });
-  return pageHeight;
 };
 
 const fontsLoaded = (fontsListed) => new Promise((resolve, reject) => {

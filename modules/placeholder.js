@@ -2,8 +2,8 @@ export default function setupPlaceholder(placeholderImages = [], placeholderVisi
   if (placeholderImages && typeof placeholderImages === 'string') {
     // eslint-disable-next-line no-param-reassign
     placeholderImages = [placeholderImages];
-	}
-	document.querySelectorAll('.placeholderImage').forEach((e) => e.remove());
+  }
+  document.querySelectorAll('.placeholderImage').forEach((e) => e.remove());
   // If array length < 1 or the first item is "" or null or undefined
   if (
     placeholderImages.length < 1

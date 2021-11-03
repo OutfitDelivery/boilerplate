@@ -13,19 +13,19 @@ template.on('inputs-change', async (inputs) => {
   const { account, team, user } = inputs;
   console.log(inputs);
 
-  template.trimMarks = inputs.trimMarks;
+  template.trim = inputs.trimMarks;
   template.setupPlaceholder(inputs['placeholder-1']); // remove this line if you are not using a placeholder image
   // This is where you can do all your magic
   document.querySelectorAll('h1').forEach((element) => {
     element.innerText = `Welcome to ${account.name}!`;
   });
   template.textFit(document.querySelectorAll('h1'), {
-		fontUnit: '%',
-		minFontSize: 50,
-		maxFontSize: 100,
-		widthOnly: true,
-		maxLine: 1,
-	}); // this code will use textfit to keep the element on a single line or overflow if it can't at half the font-size
+    fontUnit: '%',
+    minFontSize: 50,
+    maxFontSize: 100,
+    widthOnly: true,
+    maxLine: 1,
+  }); // this code will use textfit to keep the element on a single line or overflow if it can't at half the font-size
 
   await template.ensureAllImagesLoaded();
   template.maxHeightCheck(document.querySelectorAll('.container'));

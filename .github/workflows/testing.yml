@@ -1,4 +1,4 @@
-name: move test push to testing folder on s3
+name: Test build
 
 on:
  push:
@@ -16,12 +16,15 @@ jobs:
       - name: Install Dependencies
         run: npm i ci
 
+      - name: Lint code
+        run: npm run lint
+
       - name: Build for production
         run: npm run build
         
       - name: Test build
         run: npm run test
-        
+
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete

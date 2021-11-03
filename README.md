@@ -92,12 +92,12 @@ template.completeRender();
 changing the bleed amount is as easy as pie. This changes the amount of white space added around the container and is useful for print/digital templates.
 ```javascript
 template.bleed = 3;
-template.trimMarks = 3;
+template.trim = 3;
 ```
 Trim marks can also be set like a Boolean value. This will add or remove trim marks of 4.41mm to the template.
 ```javascript
-template.trimMarks = true;
-template.trimMarks = false;
+template.trim = true;
+template.trim = false;
 ```
 
 ##### ensureAllImagesLoaded() 
