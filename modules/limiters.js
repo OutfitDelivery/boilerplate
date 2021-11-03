@@ -1,4 +1,6 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-param-reassign */
+// eslint-disable-next-line import/no-cycle
 import LineClamp from './lineClamp';
 
 function hasHeightValue(el, target) {
@@ -9,6 +11,7 @@ function hasHeightValue(el, target) {
     return el;
   }
   // eslint-disable-next-line no-use-before-define
+  // eslint-disable-next-line no-restricted-globals
   if (['inline', 'inline-block'].includes(window.getComputedStyle(el).display) || isNaN(getHeight(el))) {
     return hasHeightValue(el.parentElement, target);
   }
@@ -135,7 +138,7 @@ function getHeight(el) {
     const paddingBottom = parseFloat(style.getPropertyValue('padding-bottom'));
     const borderTop = parseFloat(style.getPropertyValue('border-top-width'));
     const borderBottom = parseFloat(
-      style.getPropertyValue('border-bottom-width')
+      style.getPropertyValue('border-bottom-width'),
     );
     height = height - paddingTop - paddingBottom - borderTop - borderBottom;
   }
@@ -151,12 +154,12 @@ function getWidth(el) {
   const style = window.getComputedStyle(el, null);
   let width = parseFloat(style.getPropertyValue('width'));
   const boxSizing = style.getPropertyValue('box-sizing');
-  if (boxSizing === "border-box") {
-    const paddingLeft = parseFloat(style.getPropertyValue("padding-left"));
-    const paddingRight = parseFloat(style.getPropertyValue("padding-right"));
-    const borderLeft = parseFloat(style.getPropertyValue("border-left-width"));
+  if (boxSizing === 'border-box') {
+    const paddingLeft = parseFloat(style.getPropertyValue('padding-left'));
+    const paddingRight = parseFloat(style.getPropertyValue('padding-right'));
+    const borderLeft = parseFloat(style.getPropertyValue('border-left-width'));
     const borderRight = parseFloat(
-      style.getPropertyValue("border-right-width")
+      style.getPropertyValue('border-right-width'),
     );
     width = width - paddingLeft - paddingRight - borderLeft - borderRight;
   }
@@ -367,6 +370,7 @@ function charLimit(elements = null, limit = null) {
       }
     } else {
       // Check Token Again
+      // eslint-disable-next-line no-lonely-if
       if (tokenValue.length !== 0) {
         element.parentNode.classList.remove('overflow');
       } else {

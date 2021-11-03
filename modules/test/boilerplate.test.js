@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+// eslint-disable-next-line import/no-named-as-default-member
 import Boilerplate from '../boilerplate';
 
 test('1 + 2 to equal 3', () => {
@@ -57,6 +59,7 @@ describe('import tests', () => {
   });
   test('check error get thrown if no html is found', async () => {
     try {
+      // eslint-disable-next-line no-unused-vars
       const template = new Boilerplate({ variables: { test: 'hey' } });
     } catch (e) {
       expect(e).toBe(
@@ -162,6 +165,7 @@ describe('import tests', () => {
 //       expect(e).to.include('Please add the build card ID in the document meta tags');
 //     })
 //   });
+// eslint-disable-next-line max-len
 //   test('check start() throws expected errors if "Template Admin Build Instructions" comment has not been removed', async () => {
 //     let template = new Boilerplate();
 //     document.head.innerHTML = `<!--  Template Admin Build Instructions
@@ -177,6 +181,7 @@ describe('import tests', () => {
 //     return utilities.defaultsRemoved().then(() => {
 //       expect(true).toBe(false);
 //     }).catch(e => {
+// eslint-disable-next-line max-len
 //       expect(e).to.include('Please remove the "Template Admin Build Instructions" comment from the top of the document');
 //     })
 //   });

@@ -71,46 +71,44 @@
         </div>
         <div class="test-row rich">
           <div id="example5">
-            <style type="text/less">
-              #example5 {
-                .row {
+            <style >
+                #example5 .row {
                 display: grid;
                 grid-template-rows: 1fr;
                 grid-template-columns: 1fr 1fr;
                 column-gap: 10mm;
                 height: 100%;
                 font-size: 10.5pt;
-                .column {
-                  line-height: 1.4;
-                  letter-spacing: -0.03mm;
-                  .paragraph {
-                    line-height: 1.33333;
-                    margin-bottom: 2mm;
-                  }
-                  .cta {
-                    margin-bottom: 3mm;
-                  }
-                  .locator-block {
-                      display: flex;
-                      align-items: flex-start;
-                      align-content: flex-start;
-                      width: 100%;
-                      .locator {
-                          display: inline-block;
-                          svg {
-                              margin: 1mm;
-                              width: 3.8mm;
-                          }
-                      }
-                      .locator-branch {
-                          display: flex;
-                          margin-top: auto;
-                          margin-bottom: auto;
-                          margin-left: 1.7mm;
-                      }
-                  }
-                }
               }
+              #example5 .row .column {
+                line-height: 1.4;
+                letter-spacing: -0.03mm;
+              }
+              #example5 .row .column .paragraph {
+                line-height: 1.33333;
+                margin-bottom: 2mm;
+              }
+              #example5 .row .column .cta {
+                margin-bottom: 3mm;
+              }
+              #example5 .row .column .locator-block {
+                display: flex;
+                align-items: flex-start;
+                align-content: flex-start;
+                width: 100%;
+              }
+              #example5 .row .column .locator-block .locator {
+                display: inline-block;
+              }
+              #example5 .row .column .locator-block .locator svg {
+                margin: 1mm;
+                width: 3.8mm;
+              }
+              #example5 .row .column .locator-block .locator-branch {
+                display: flex;
+                margin-top: auto;
+                margin-bottom: auto;
+                margin-left: 1.7mm;
               }
             </style>
             <div class="row">

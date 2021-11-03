@@ -2,8 +2,8 @@ const imageCompression = () => {
   const imageCompressEl = document.querySelectorAll('[data-custom-compression]');
   const editorString = '?qual=editor';
 
-  function checkURL(editorString, url) {
-    if (url.includes(editorString) || url.includes('.svg')) return false;
+  function checkURL(check, url) {
+    if (url.includes(check) || url.includes(".svg")) return false;
     return true;
   }
 

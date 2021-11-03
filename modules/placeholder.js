@@ -7,8 +7,8 @@ export default function setupPlaceholder(placeholderImages = [], placeholderVisi
   // If array length < 1 or the first item is "" or null or undefined
   if (
     placeholderImages.length < 1
-		|| !placeholderImages[0]
-		|| placeholderVisibility === 'hide'
+    || !placeholderImages[0]
+    || placeholderVisibility === 'hide'
   ) {
     return;
   }

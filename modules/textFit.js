@@ -1,3 +1,12 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-useless-catch */
+/* eslint-disable no-use-before-define */
+/* eslint-disable prefer-const */
+/* eslint-disable radix */
+/* eslint-disable max-len */
+/* eslint-disable no-param-reassign */
 import {
   getWidth, getHeight, countLines, simpleRounding,
 } from './limiters';
@@ -58,14 +67,14 @@ export default function textFit(els, options) {
   const elType = Object.prototype.toString.call(els);
   if (
     elType !== '[object Array]'
-		&& elType !== '[object NodeList]'
-		&& elType !== '[object HTMLCollection]'
+    && elType !== '[object NodeList]'
+    && elType !== '[object HTMLCollection]'
   ) {
     els = [els];
   }
 
   // Process each el we've passed.
-  for (let i = 0; i < els.length; i++) {
+  for (let i = 0; i < els.length; i += 1) {
     try {
       processItem(els[i], settings);
     } catch (e) {
@@ -82,7 +91,7 @@ export default function textFit(els, options) {
 function processItem(el, settings) {
   if (
     !isElement(el)
-		|| (!settings.reProcess && el.getAttribute('textFitted'))
+    || (!settings.reProcess && el.getAttribute('textFitted'))
   ) {
     return false;
   }
@@ -168,7 +177,7 @@ function processItem(el, settings) {
     innerSpan.style.fontSize = mid + settings.fontUnit;
 
     const scrollWidth = getWidth(innerSpan) <= originalWidth;
-    const scrollHeight =			settings.widthOnly || getHeight(innerSpan) <= originalHeight;
+    const scrollHeight = settings.widthOnly || getHeight(innerSpan) <= originalHeight;
 
     // check if too many lines and if it is then we need to adjust the font size accordingly
     let maxLines = false;
@@ -247,7 +256,7 @@ function processItem(el, settings) {
     innerSpan.style.height = `${height}px`;
     if (
       settings.alignVertWithFlexbox
-			&& !el.classList.contains('textFitAlignVertFlex')
+      && !el.classList.contains('textFitAlignVertFlex')
     ) {
       el.className = `${el.className} textFitAlignVertFlex`;
     }
@@ -259,8 +268,8 @@ function isElement(o) {
   return typeof HTMLElement === 'object'
     ? o instanceof HTMLElement // DOM2
     : o
-				&& typeof o === 'object'
-				&& o !== null
-				&& o.nodeType === 1
-				&& typeof o.nodeName === 'string';
+        && typeof o === 'object'
+        && o !== null
+        && o.nodeType === 1
+        && typeof o.nodeName === 'string';
 }

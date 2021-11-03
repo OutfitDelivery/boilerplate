@@ -8,6 +8,7 @@
     "extends": [
         "airbnb-base"
     ],
+    "ignorePatterns": ["js", "readme.md"],
     "parserOptions": {
         "ecmaVersion": 12
     },

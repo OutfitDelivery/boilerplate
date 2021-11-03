@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
 import FontFaceObserver from './vendor/fontfaceobserver';
 
@@ -83,6 +84,7 @@ const defaultsRemoved = () => {
           if (node && node.data && node.nodeType === 8) {
             return node.data.includes('Template Admin Build Instructions');
           }
+          return false;
         })
       ) {
         console.log("%cPlease remove the 'Template Admin Build Instructions' comment from the top of the document", 'background: #94B7BB; color: #111820');
@@ -212,6 +214,7 @@ const setBrowserType = () => {
     isIE: /Trident/.test(navigator.userAgent),
     isChrome: /Google Inc/.test(navigator.vendor),
     isChromiumBased: !!window.chrome && !/Edge/.test(navigator.userAgent),
+    // eslint-disable-next-line no-undef
     isTouchScreen: 'ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch),
     isIOS: /(iPhone|iPad|iPod)/.test(navigator.platform),
     isMac: window.navigator.appVersion.includes('Mac'),
