@@ -25,9 +25,15 @@ html {
   width: 100vw;
   .bleed {
     position: absolute;
-    inset: calc(calc(var(--bleed) * -1) * 1mm); 
+    top: calc(calc(var(--bleed) * -1) * 1mm); 
+    left: calc(calc(var(--bleed) * -1) * 1mm); 
+    right: calc(calc(var(--bleed) * -1) * 1mm); 
+    bottom: calc(calc(var(--bleed) * -1) * 1mm); 
     [data-trim="true"] & {
-      inset: calc(var(--trim) * 1mm);
+      top: calc(var(--trim) * 1mm);
+      left: calc(var(--trim) * 1mm);
+      right: calc(var(--trim) * 1mm);
+      bottom: calc(var(--trim) * 1mm);
     }
   }
 }
