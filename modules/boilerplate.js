@@ -30,19 +30,23 @@ import { imageCompression, ensureAllImagesLoaded } from './images';
 import detectElementOverflow from './detectElementOverflow';
 
 export default class boilerplate {
+	#trimMarks = 0;
+	#bleed = 0;
+
 	constructor(config = {}) {
 		console.clear();
 		this.state = setOutfitState();
-		this.trimMarks = config.trimMarks || false;
+		this.exportReduceFont = config.exportReduceFont || 0;
+		this.trimMarks = config.trimMarks;
+
+		this.bleed = config.bleed || 3;
 		if (config.hotReloadOnChange) {
 			hotReloadOnChange();
 		}
 		this.events = {};
 		this.browser = setBrowserType();
 		this.camelCase = config.camelCase || false;
-		this.exportReduceFont = config.exportReduceFont || 0;
 		this.allowNoMetaData = config.allowNoMetaData || false;
-		this.allowOverflowsOnExport = config.allowOverflowsOnExport || false;
 		this.ensureImagesLoad = true;
 		if (
 			typeof config.ensureImagesLoad === "boolean" &&
@@ -50,16 +54,9 @@ export default class boilerplate {
 		) {
 			this.ensureImagesLoad = false;
 		}
-		if (config.trimMarks) {
-			document.body.setAttribute("data-trim", config.trimMarks);
-		}
-		if (!(typeof config.addCrop === "boolean" && config.addCrop === false)) {
-			addCropMarks(this.trimMarks);
-		}
-		setSize(config.trimMarks || false, config.exportReduceFont || 0);
 
 		if (config.placeholderVisibility) {
-			setupPlaceholder(config.placeholderVisibility, config.placeholderImages);
+			setupPlaceholder(config.placeholderImages, config.placeholderVisibility);
 		}
 
 		if (config.cssVariables) {
@@ -131,7 +128,7 @@ export default class boilerplate {
 				}
 			});
 
-			if (state === "document") {
+			if (this.state === "document") {
 				imageCompression();
 			}
 		});
@@ -145,16 +142,6 @@ export default class boilerplate {
 
 		this.events[name].push(listener);
 	}
-
-	// removeListener(name, listenerToRemove) {
-	//   if (!this.events[name]) {
-	//     throw new Error(`Can't remove a listener. Event "${name}" doesn't exits.`);
-	//   }
-
-	//   const filterListeners = (listener) => listener !== listenerToRemove;
-
-	//   this.events[name] = this.events[name].filter(filterListeners);
-	// }
 
 	// emit sends a message to a callback
 	emit(name, data) {
@@ -188,7 +175,7 @@ export default class boilerplate {
 		}
 		Promise.all(checkList)
 			.then(() => {
-				if (this.getOverflows()) {
+				if (this.overflows) {
 					console.log(
 						"%cThis will export with overflow errors",
 						"background: #1F2A44; color: white;font-size:16px;"
@@ -216,6 +203,7 @@ export default class boilerplate {
 				throw "Render failed for logged reason";
 			});
 	}
+
 	showOverflows() {
 		if (this.overflows) {
 			this.overflows[0].scrollIntoView({
@@ -225,16 +213,43 @@ export default class boilerplate {
 			});
 		}
 	}
+
+	set bleed(value) {
+		if (value !== this.#bleed) {
+			this.#bleed = value;
+			document.body.style.setProperty("--bleed", this.#bleed);
+		}
+	}
+
+	get trimMarks() {
+		return this.#trimMarks;
+	}
+
+	set trimMarks(value) {
+		if (value !== this.#trimMarks) {
+			if (!value) {
+				this.#trimMarks = 0;
+			} else {
+				if (typeof value == "number") {
+					this.#trimMarks = value;
+				} else {
+					this.#trimMarks = 4.41;
+				}
+			}
+			document.body.style.setProperty("--trim", this.#trimMarks);
+			document.body.setAttribute("data-trim", Boolean(this.#trimMarks));
+			setSize(Boolean(this.#trimMarks) || false, this.exportReduceFont || 0);
+			addCropMarks(this.#trimMarks);
+		}
+	}
+
 	get overflows() {
-		let o = document.querySelectorAll(".overflow, [data-overflow]");
+		const o = document.querySelectorAll(".overflow, [data-overflow]");
 
 		if (o.length > 0) {
 			this.emit("overflow", o);
 			return o;
 		}
-	}
-	getOverflows() {
-		return this.overflows;
 	}
 
 	dynamicReplace() {
@@ -243,43 +258,42 @@ export default class boilerplate {
 
 	textFit() {
 		const t = textFit.apply(this, arguments);
-		this.getOverflows();
+		this.overflows;
 		return t;
 	}
 
 	maxLineCheck() {
 		const t = maxLineCheck.apply(this, arguments);
-		this.getOverflows();
+		this.overflows;
 		return t;
 	}
 
 	minLineCheck() {
 		const t = minLineCheck.apply(this, arguments);
-		this.getOverflows();
+		this.overflows;
 		return t;
 	}
 
 	maxHeightCheck() {
 		const t = maxHeightCheck.apply(this, arguments);
-		this.getOverflows();
+		this.overflows;
 		return t;
 	}
 
 	charLimit() {
 		const t = charLimit.apply(this, arguments);
-		this.getOverflows();
+		this.overflows;
 		return t;
-		ß;
 	}
 
 	highestZindex() {
 		return highestZ();
-  }
-  
+	}
+
 	setupPlaceholder() {
 		return setupPlaceholder.apply(this, arguments);
-  }
-  
+	}
+
 	ensureAllImagesLoaded() {
 		return ensureAllImagesLoaded.apply(this, arguments);
 	}

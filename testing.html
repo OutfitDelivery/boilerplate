@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html async>
+
+<head>
+  <title>test</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="sam" />
+  <meta name="scope" content="DTB-123" />
+  <meta name="build" content="DTB-123" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css"
+    href="dist/main.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<style>
+  .container {
+    background-color: rgb(246, 175, 175);
+  }
+</style>
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit,   
+        aliqua. </h1>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- <script src="https://outfit-assets-production.s3.amazonaws.com/template/3.3.0/boilerplate.js"></script> -->
+<script src="dist/boilerplate.js"></script>
+<script>
+   var payload = { trimMarks: true }
+  // Please put all config needed for the tempate into the array bellow
+    const template = new boilerplate();
+
+    // This function will run whenever there is a change to any text input, resize and on inital load
+    template.on('inputs-change', async (inputs) => {
+      const { team, user, accounts } = inputs;
+      console.log(inputs);
+
+      template.trimMarks = true;
+      template.setupPlaceholder('https://dg31sz3gwrwan.cloudfront.net/poster/338186/62855731-4-optimized.jpg');
+      // This is where you can do all your magic
+      template.textFit(document.querySelectorAll('h1'), {
+        fontUnit: '%', minFontSize: 30, maxFontSize: 100, widthOnly: true, maxLine: 1
+      });
+
+      await template.ensureAllImagesLoaded();
+      // template.dynamicReplace();
+      // template.maxHeightCheck();
+      // template.maxLineCheck();
+      // template.charLimit();
+      template.completeRender();
+    });
+
+</script>
+
+</html>
