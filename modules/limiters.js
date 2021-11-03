@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import LineClamp from './lineClamp';
 
 function hasHeightValue(el, target) {
@@ -7,6 +8,7 @@ function hasHeightValue(el, target) {
   if (el.classList.contains('textFitted')) {
     return el;
   }
+  // eslint-disable-next-line no-use-before-define
   if (['inline', 'inline-block'].includes(window.getComputedStyle(el).display) || isNaN(getHeight(el))) {
     return hasHeightValue(el.parentElement, target);
   }
@@ -16,18 +18,18 @@ function hasHeightValue(el, target) {
 function textNodesUnder(el) {
   let n = null; let a = []; const
     walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+  // eslint-disable-next-line no-cond-assign
   while (n = walk.nextNode()) {
     if (n.textContent.trim()) {
       const { parentElement } = n;
-      // if (parentElement.isSameNode(el)) {
-      //   return [el];
-      // }
+
       const e = hasHeightValue(parentElement, el);
       // console.log(e)
 
       // if (e) exits and ins't already returned then add it to the list of elements to line check
       if (e && !a.includes(e)) {
-        // if (e) has got a child in (a) then we need to remove that child to prevent double up of counting
+        // if (e) has got a child in (a) then we need to remove the child
+        // this is done to prevent the child from being counted twice
         a = a.filter((i) => !e.contains(i));
         a.push(e);
       }
@@ -42,6 +44,25 @@ function simpleRounding(num) {
 function simpleLineRounding(num) {
   return Math.round(num);
 }
+
+// returns lineCount and line hieght info from this libaray https://github.com/tvanc/lineclamp
+function calculateTextMetrics(elements, config) {
+  const elType = Object.prototype.toString.call(elements);
+  if (
+    elType !== '[object Array]'
+    && elType !== '[object NodeList]'
+    && elType !== '[object HTMLCollection]'
+  ) {
+    elements = [elements];
+  }
+  const result = [].slice.call(elements)
+    .map((element) => new LineClamp(element, config).calculateTextMetrics());
+  if (result.length === 1) {
+    return result[0];
+  }
+  return result;
+}
+
 // count the number of lines inside of the current direct element
 function countLines(elements) {
   const elType = Object.prototype.toString.call(elements);
@@ -72,6 +93,7 @@ function countLines(elements) {
     target.classList.remove('countingLines');
     return multiCount;
   });
+  // eslint-disable-next-line eqeqeq
   if (result.length == 1) {
     return result[0];
   }
@@ -82,6 +104,7 @@ const clampDefaults = {
   maxLines: 1, minFontSize: 18, useSoftClamp: true, ellipsis: '...',
 };
 function lineClamp(elements, config) {
+  // eslint-disable-next-line no-param-reassign
   config = Object.assign(clampDefaults, config);
   // config = { ...clampDefaults, ...config }
   const elType = Object.prototype.toString.call(elements);
@@ -90,6 +113,7 @@ function lineClamp(elements, config) {
     && elType !== '[object NodeList]'
     && elType !== '[object HTMLCollection]'
   ) {
+    // eslint-disable-next-line no-param-reassign
     elements = [elements];
   }
   return [].slice.call(elements).map((element) => {
@@ -101,36 +125,19 @@ function lineClamp(elements, config) {
   });
 }
 
-// returns lineCount and line hieght info from this libaray https://github.com/tvanc/lineclamp
-function calculateTextMetrics(elements, config) {
-  const elType = Object.prototype.toString.call(elements);
-  if (
-    elType !== '[object Array]'
-    && elType !== '[object NodeList]'
-    && elType !== '[object HTMLCollection]'
-  ) {
-    elements = [elements];
-  }
-  const result = [].slice.call(elements).map((element) => new LineClamp(element, config).calculateTextMetrics());
-  if (result.length == 1) {
-    return result[0];
-  }
-  return result;
-}
-
 // Calculate height without padding.
 function getHeight(el) {
   const style = window.getComputedStyle(el, null);
   let height = parseFloat(style.getPropertyValue('height'));
-  const box_sizing = style.getPropertyValue('box-sizing');
-  if (box_sizing === 'border-box') {
-    const padding_top = parseFloat(style.getPropertyValue('padding-top'));
-    const padding_bottom = parseFloat(style.getPropertyValue('padding-bottom'));
-    const border_top = parseFloat(style.getPropertyValue('border-top-width'));
-    const border_bottom = parseFloat(
-      style.getPropertyValue('border-bottom-width'),
+  const boxSizing = style.getPropertyValue('box-sizing');
+  if (boxSizing === 'border-box') {
+    const paddingTop = parseFloat(style.getPropertyValue('padding-top'));
+    const paddingBottom = parseFloat(style.getPropertyValue('padding-bottom'));
+    const borderTop = parseFloat(style.getPropertyValue('border-top-width'));
+    const borderBottom = parseFloat(
+      style.getPropertyValue('border-bottom-width')
     );
-    height = height - padding_top - padding_bottom - border_top - border_bottom;
+    height = height - paddingTop - paddingBottom - borderTop - borderBottom;
   }
   el.dataset.calculatedHeight = height; // adds property for debuging
   if (simpleRounding(height) !== el.scrollHeight) {
@@ -143,13 +150,15 @@ function getHeight(el) {
 function getWidth(el) {
   const style = window.getComputedStyle(el, null);
   let width = parseFloat(style.getPropertyValue('width'));
-  const box_sizing = style.getPropertyValue('box-sizing');
-  if (box_sizing === 'border-box') {
-    const padding_left = parseFloat(style.getPropertyValue('padding-left'));
-    const padding_right = parseFloat(style.getPropertyValue('padding-right'));
-    const border_left = parseFloat(style.getPropertyValue('border-left-width'));
-    const border_right = parseFloat(style.getPropertyValue('border-right-width'));
-    width = width - padding_left - padding_right - border_left - border_right;
+  const boxSizing = style.getPropertyValue('box-sizing');
+  if (boxSizing === "border-box") {
+    const paddingLeft = parseFloat(style.getPropertyValue("padding-left"));
+    const paddingRight = parseFloat(style.getPropertyValue("padding-right"));
+    const borderLeft = parseFloat(style.getPropertyValue("border-left-width"));
+    const borderRight = parseFloat(
+      style.getPropertyValue("border-right-width")
+    );
+    width = width - paddingLeft - paddingRight - borderLeft - borderRight;
   }
   el.dataset.calculatedWidth = width; // adds property for debuging
   if (simpleRounding(width) !== el.scrollWidth) {
@@ -170,7 +179,7 @@ function maxLineCheck(elements = null, limit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return false;
+  if (window.state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll('[data-max-line]');
   blocks.forEach((block) => {
     if (limit && !block.dataset.customOverflowMessage) {
@@ -186,6 +195,7 @@ function maxLineCheck(elements = null, limit = null) {
       overflowFound = true;
     }
 
+    // eslint-disable-next-line no-unused-expressions
     (overflow)
       ? block.classList.add('overflow')
       : block.classList.remove('overflow');
@@ -193,7 +203,7 @@ function maxLineCheck(elements = null, limit = null) {
   return overflowFound;
 }
 
-function minLineCheck(element = null, limit = null) {
+function minLineCheck(elements = null, limit = null) {
   const elType = Object.prototype.toString.call(elements);
   if (
     elements
@@ -205,7 +215,7 @@ function minLineCheck(element = null, limit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return false;
+  if (window.state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll('[data-min-line]');
   blocks.forEach((block) => {
     if (limit && !block.dataset.customOverflowMessage) {
@@ -222,6 +232,7 @@ function minLineCheck(element = null, limit = null) {
       overflowFound = true;
     }
 
+    // eslint-disable-next-line no-unused-expressions
     (overflow)
       ? block.classList.add('overflow')
       : block.classList.remove('overflow');
@@ -245,7 +256,7 @@ function maxHeightCheck(elements = null, inputLimit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return false;
+  if (window.state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll('[data-max-height]');
   blocks.forEach((block) => {
     const { scrollHeight, dataset } = block;
@@ -262,6 +273,7 @@ function maxHeightCheck(elements = null, inputLimit = null) {
         limit = 'self';
       } else if (maxHeight === 'css') {
         limit = 'css';
+      // eslint-disable-next-line no-restricted-globals
       } else if (isNaN(limit)) {
         limit = 'self';
         // defaulting to self type if not number
@@ -273,13 +285,13 @@ function maxHeightCheck(elements = null, inputLimit = null) {
     if (limit) {
       switch (limit) {
         case 'parent':
-          var parent = block.parentNode;
-          elementHeight = getHeight(parent);
+          elementHeight = getHeight(block.parentNode);
           break;
         case 'self':
           elementHeight = getHeight(block);
           break;
         case 'css':
+          // eslint-disable-next-line no-case-declarations
           const computedBlockStyle = window.getComputedStyle(block);
           elementHeight = parseFloat(computedBlockStyle.maxHeight);
           if (!elementHeight) {
@@ -291,7 +303,8 @@ function maxHeightCheck(elements = null, inputLimit = null) {
           break;
         default:
           elementHeight = getHeight(block);
-          // this means that the limit is a number passed in and not based on the element scrollheight
+          // this means that the limit is a number passed in
+          // and not based on the element scrollheight
           elementHeight = limit;
           break;
       }
@@ -301,7 +314,8 @@ function maxHeightCheck(elements = null, inputLimit = null) {
       if (overflow && !overflowFound) {
         overflowFound = true;
       }
-      overflow
+      // eslint-disable-next-line no-unused-expressions
+      (overflow)
         ? block.classList.add('overflow')
         : block.classList.remove('overflow');
     }
@@ -322,7 +336,7 @@ function charLimit(elements = null, limit = null) {
   }
 
   let overflowFound = false;
-  if (state === 'projectPreview') return false;
+  if (window.state === 'projectPreview') return false;
   const blocks = elements || document.querySelectorAll('[data-char-limit]');
   blocks.forEach((element) => {
     if (limit && !element.dataset.customOverflowMessage) {
