@@ -1,6 +1,4 @@
-// import { setSize } from '../pageSetup.js'
-const boilerplate = require('../boilerplate').default;
-const utilities = require('../utilities');
+import * as utilities from '../utilities';
 
 beforeEach(() => {
   document.head.innerHTML = `

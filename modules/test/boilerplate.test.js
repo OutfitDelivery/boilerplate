@@ -1,48 +1,49 @@
-const boilerplate = require('../boilerplate').default;
-const utilities = require('../utilities');
+/* eslint-disable import/no-named-as-default */
+// eslint-disable-next-line import/no-named-as-default-member
+import Boilerplate from '../boilerplate';
 
 test('1 + 2 to equal 3', () => {
   expect(1 + 2).toBe(3);
 });
 describe('import tests', () => {
   test('boilerpalte import', () => {
-    const template = new boilerplate({});
+    const template = new Boilerplate({});
     expect(template);
   });
   test('boilerpalte import without object', () => {
-    const template = new boilerplate();
+    const template = new Boilerplate();
     expect(template);
   });
   test('boilerpalte import without fonts', () => {
-    const template = new boilerplate();
+    const template = new Boilerplate();
     expect(template.fonts).toBe(undefined);
     expect(template.textFit).toBeInstanceOf(Function);
   });
   test('boilerpalte fonts will be turned into arrays ', () => {
-    const template = new boilerplate({ fonts: 'PUT_ALL_FONT_NAMES_HERE' });
+    const template = new Boilerplate({ fonts: 'PUT_ALL_FONT_NAMES_HERE' });
     expect(template.fonts).toStrictEqual(['PUT_ALL_FONT_NAMES_HERE']);
   });
   test('boilerpalte fonts can be an array', () => {
-    const template = new boilerplate({ fonts: ['PUT_ALL_FONT_NAMES_HERE'] });
+    const template = new Boilerplate({ fonts: ['PUT_ALL_FONT_NAMES_HERE'] });
     expect(template.fonts).toStrictEqual(['PUT_ALL_FONT_NAMES_HERE']);
   });
   test('boilerpalte blank font arrays ', () => {
-    const template = new boilerplate({ fonts: [] });
+    const template = new Boilerplate({ fonts: [] });
     expect(template.fonts).toStrictEqual([]);
   });
   test('boilerpalte fonts can be an array of many items', () => {
-    const template = new boilerplate({ fonts: ['Outfit', 'Bendgio Sans'] });
+    const template = new Boilerplate({ fonts: ['Outfit', 'Bendgio Sans'] });
     expect(template.fonts).toStrictEqual(['Outfit', 'Bendgio Sans']);
   });
   test('check default values are be set', () => {
-    const template = new boilerplate();
+    const template = new Boilerplate();
     expect(template.fonts).toStrictEqual(undefined);
     expect(template.ensureImagesLoad).toStrictEqual(true);
     expect(template.exportReduceFont).toStrictEqual(0);
     // expect(template.variables).toStrictEqual({});
   });
   test('check values can be changed', () => {
-    const template = new boilerplate({
+    const template = new Boilerplate({
       fonts: ['Test'],
       ensureImagesLoad: false,
       addCrop: false,
@@ -58,7 +59,8 @@ describe('import tests', () => {
   });
   test('check error get thrown if no html is found', async () => {
     try {
-      const template = new boilerplate({ variables: { test: 'hey' } });
+      // eslint-disable-next-line no-unused-vars
+      const template = new Boilerplate({ variables: { test: 'hey' } });
     } catch (e) {
       expect(e).toBe(
         "No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }",
@@ -73,7 +75,7 @@ describe('import tests', () => {
 //   });
 
 //   test('check start() throws expected errors if title is missing', () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //       <title>PUT_TEMPLATE_NAME_HERE</title>`;
 //     return utilities.defaultsRemoved().then(() => {
@@ -83,7 +85,7 @@ describe('import tests', () => {
 //     });
 //   });
 //   test('check start() throws expected errors if title is missing 2', () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `<title></title>`;
 //     return utilities.defaultsRemoved().then(() => {
 //       expect(true).toBe(false);
@@ -92,7 +94,7 @@ describe('import tests', () => {
 //     });
 //   });
 //   test('check start() throws expected errors if html meta tag name is missing', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //       <title>Title</title>
 //       <meta name="template-built-by" content="PUT_YOUR_NAME_HERE"/>`
@@ -103,7 +105,7 @@ describe('import tests', () => {
 //       })
 //   })
 //   test('check start() throws expected errors if html meta tag name is missing 2', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //     <title>Title</title>
 //     <meta name="template-built-by" content=""/>`
@@ -114,7 +116,7 @@ describe('import tests', () => {
 //     })
 //   });
 //   test('check start() throws expected errors if html meta tag scope is missing', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //     <title>Title</title>
 //     <meta name="template-built-by" content="Sam"/>
@@ -126,7 +128,7 @@ describe('import tests', () => {
 //     })
 //   });
 //   test('check start() throws expected errors if html meta tag scope is missing 2', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //     <title>Title</title>
 //     <meta name="template-built-by" content="Sam"/>
@@ -138,7 +140,7 @@ describe('import tests', () => {
 //     })
 //   });
 //   test('check start() throws expected errors if html meta tag build is missing', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //     <title>Title</title>
 //     <meta name="template-built-by" content="Sam"/>
@@ -151,7 +153,7 @@ describe('import tests', () => {
 //     })
 //   });
 //   test('check start() throws expected errors if html meta tag build is missing', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `
 //     <title>Title</title>
 //     <meta name="template-built-by" content="Sam"/>
@@ -163,8 +165,9 @@ describe('import tests', () => {
 //       expect(e).to.include('Please add the build card ID in the document meta tags');
 //     })
 //   });
+// eslint-disable-next-line max-len
 //   test('check start() throws expected errors if "Template Admin Build Instructions" comment has not been removed', async () => {
-//     let template = new boilerplate();
+//     let template = new Boilerplate();
 //     document.head.innerHTML = `<!--  Template Admin Build Instructions
 //       1. Fill Out Title Meta-Data
 //       2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
@@ -178,6 +181,7 @@ describe('import tests', () => {
 //     return utilities.defaultsRemoved().then(() => {
 //       expect(true).toBe(false);
 //     }).catch(e => {
+// eslint-disable-next-line max-len
 //       expect(e).to.include('Please remove the "Template Admin Build Instructions" comment from the top of the document');
 //     })
 //   });

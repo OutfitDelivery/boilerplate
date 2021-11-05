@@ -1,4 +1,50 @@
-import { getHeight } from './limiters.js';
+import { getHeight } from './limiters';
+
+/**
+ * Performs a binary search for the point in a contigous range where a given
+ * test callback will go from returning true to returning false.
+ *
+ * Since this uses a binary-search algorithm this is an O(log n) function,
+ * where n = max - min.
+ *
+ * @param {Number} min
+ * The lower boundary of the range.
+ *
+ * @param {Number} max
+ * The upper boundary of the range.
+ *
+ * @param test
+ * A callback that receives the current value in the range and returns a truthy or falsy value.
+ *
+ * @param done
+ * A function to perform when complete. Receives the following parameters
+ * - cursor
+ * - maxPassingValue
+ * - minFailingValue
+ */
+function findBoundary(min, max, test, done) {
+  // start halfway through the range
+  let cursor = (min + max) / 2;
+
+  while (max > min) {
+    if (test(cursor)) {
+      max = cursor;
+    } else {
+      min = cursor;
+    }
+
+    if (max - min === 1) {
+      done(cursor, min, max);
+      break;
+    }
+
+    cursor = Math.floor((min + max) / 2);
+  }
+}
+
+function emit(instance, type) {
+  instance.element.dispatchEvent(new CustomEvent(type));
+}
 
 /**
  * Reduces font size or trims text to make it fit within specified bounds.
@@ -357,50 +403,4 @@ export default class LineClamp {
       'maxLines or maxHeight must be set before calling shouldClamp().',
     );
   }
-}
-
-/**
- * Performs a binary search for the point in a contigous range where a given
- * test callback will go from returning true to returning false.
- *
- * Since this uses a binary-search algorithm this is an O(log n) function,
- * where n = max - min.
- *
- * @param {Number} min
- * The lower boundary of the range.
- *
- * @param {Number} max
- * The upper boundary of the range.
- *
- * @param test
- * A callback that receives the current value in the range and returns a truthy or falsy value.
- *
- * @param done
- * A function to perform when complete. Receives the following parameters
- * - cursor
- * - maxPassingValue
- * - minFailingValue
- */
-function findBoundary(min, max, test, done) {
-  // start halfway through the range
-  let cursor = (min + max) / 2;
-
-  while (max > min) {
-    if (test(cursor)) {
-      max = cursor;
-    } else {
-      min = cursor;
-    }
-
-    if (max - min === 1) {
-      done(cursor, min, max);
-      break;
-    }
-
-    cursor = Math.floor((min + max) / 2);
-  }
-}
-
-function emit(instance, type) {
-  instance.element.dispatchEvent(new CustomEvent(type));
 }

@@ -1,4 +1,5 @@
-// render has an issue with replaceAll causing errors to be thrown which stops the render. This is a pollyfil for all renders
+// render has an issue with replaceAll causing errors to be thrown which stops the render.
+// This is a pollyfil for all renders
 String.prototype.replaceAll = function (str, newStr) {
   // If a regex pattern
   if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
@@ -7,14 +8,6 @@ String.prototype.replaceAll = function (str, newStr) {
   // If a string
   return this.split(str).join(newStr);
 };
-
-function dynamicReplace(selector = null, data = null, colour = null) {
-  if (selector != null && data != null) {
-    dynamicReplaceMulti(selector, data, colour);
-  } else {
-    dynamicReplaceSingle();
-  }
-}
 
 function dynamicReplaceMulti(target, data, colour) {
   const targets = document.querySelectorAll(target);
@@ -26,8 +19,8 @@ function dynamicReplaceMulti(target, data, colour) {
       const lookup = item[1];
 
       if (
-        target.innerText.includes(lookup) != -1
-        && (inputValue != '' || inputValue.length != 0)
+        target.innerText.includes(lookup) !== -1
+        && (inputValue !== '' || inputValue.length !== 0)
       ) {
         target.innerHTML = target.innerHTML.replaceAll(lookup, inputValue); // If found replace
       } else {
@@ -51,10 +44,18 @@ function dynamicReplaceSingle() {
     const lookup = el.dataset.replaceFrom;
     const replace = el.dataset.replaceTo;
 
-    if (text.search(lookup) != -1 && (replace != '' || replace.length != 0)) {
+    if (text.search(lookup) !== -1 && (replace !== '' || replace.length !== 0)) {
       el.innerHTML = html.replaceAll(lookup, replace);
     }
   });
+}
+
+function dynamicReplace(selector = null, data = null, colour = null) {
+  if (selector !== null && data !== null) {
+    dynamicReplaceMulti(selector, data, colour);
+  } else {
+    dynamicReplaceSingle();
+  }
 }
 
 export { dynamicReplace, dynamicReplaceSingle, dynamicReplaceMulti };

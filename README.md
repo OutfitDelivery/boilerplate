@@ -7,6 +7,7 @@ If this is your first template maybe have a look at Delivery Academy for a great
 
 ## Usage in Outfit
 Download [boilerplate.zip](https://github.com/OutfitDelivery/boilerplate/raw/master/boilerplate.zip) from the boilerplate repo.
+For muchtache tempaltes download [boilerplate-mst.zip](https://github.com/OutfitDelivery/boilerplate/raw/master/boilerplate-mst.zip)
 
 Then just upload this zip file under the `New Template` section in Outfit! 
 
@@ -46,8 +47,9 @@ Here is a list of the available config options:
 let template = new boilerplate({
   fonts: Array, // (default: undefined) an array of fonts that need to be checked are loaded. If these fonts don't load in 3 seconds then the template will stop running. This array is used to ensure that the fonts are all loaded before we run any text validation as the font size can be effect load time of the document.  
   templateProps: Object, // (default: {}) default input values that should be passed into the input-change event before the platform injects the users changes
-  trimMarks: Boolean, // (default: false) if this is true the boilerplate will add trim marks around this template. If trim marks are added then you will need to also configure trim marks in the templates format. 
-  addCrop: Boolean, // (default: true) if false crop marks will not be added when crop marks are enabled
+  trimMarks: Number, // (default: 0) setting this to true will add trimmarks of 4.41mm to the template. If you set it to a number it will use that as the bleed amount. 
+  bleed: Number, // (default: 3) this is the amount of bleed that should be added inside of the trimmarks 
+  allowOverflowsOnExport: Boolean, // (default: false) if this is true the boilerplate will allow overflow on export. By default the renderers will block a render if there is any overflows. This should only be set to true for debugging purposes.
   placeholderVisibility: String, // (default: "") enables the playment of the placeholder image. Placeholders will show up unless this is set ot hide
   placeholderImages: Array, // (default: []) an array of placeholder images which will be overlayed over the template. When more than one placeholder is passed in they will be placed on sequential pages 
   domReadyLoad: Boolean, // (default: false) should the template code run after the DOMContentLoaded event or the load event. By default this is the load event and setting this to true will use the DOMContentLoaded event instead
@@ -86,6 +88,18 @@ This is vital to the functioning of the template. After `document.readyState` is
 ```javascript
 template.completeRender();
 ```
+##### bleed and trimMarks (aka crop)
+changing the bleed amount is as easy as pie. This changes the amount of white space added around the container and is useful for print/digital templates.
+```javascript
+template.bleed = 3;
+template.trim = 3;
+```
+Trim marks can also be set like a Boolean value. This will add or remove trim marks of 4.41mm to the template.
+```javascript
+template.trim = true;
+template.trim = false;
+```
+
 ##### ensureAllImagesLoaded() 
 We don't want to export until all the images are loaded. We also might not want to run limiters until images have loaded as the aspect ratio of a loaded image can change the results. 
 This promise will return when all images have been loaded in a given section of the screen. (Defaults to the entire document).
@@ -100,6 +114,8 @@ console.log(images)
 ```
 
 #### Overflow functions
+If there is an overflow the boilerplate will fail the export unless the allowOverflowsOnExport config property is set to true on the boilerplate constructor.
+The boilerplate will also attempt to disable to export button if there is an overflow.
 ###### maxLineCheck()
 Adds an overflow if the number of lines is greater than data-max-line 
 ```javascript
@@ -148,6 +164,13 @@ template.detectElementOverflow(element, element.parentNode).overflowRight;
 Can be used to add inline styles if required. It is the only safe way to add css varibles. Please pass all CSS varibles into the boilerplates cssVariables option 
 ```javascript
 template.addStyle('body { background: red; }')
+```
+### setupPlaceholder()
+adds the placeholder images to the template to help with building of template. Please remove this code on any finsihed project 
+```javascript
+template.setupPlaceholder("https://outfit.io/assert/image.jpg"); // single image
+template.setupPlaceholder("https://outfit.io/assert/image.jpg", "hide"); // single image but hidden
+template.setupPlaceholder([inputs['placeholder-1'],inputs['placeholder-2']], inputs['placeholder-visibility']); // array of images plus visibility is also an input
 ```
 
 ### [Replace.js](modules/replace.js) (aka formatters)

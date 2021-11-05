@@ -4,9 +4,7 @@ html,body,p,ol,ul,li,dl,dt,dd,blockquote,figure,fieldset,legend,textarea,pre,ifr
 * {
   -webkit-font-smoothing: antialiased;
 }
-
 html {
-  --trimOffset: 0;
   font-size: 16px;
   color: #000000;
   word-break: break-word;
@@ -25,6 +23,22 @@ html {
   position: relative; 
   height: 100vh;
   width: 100vw;
+  &.minus1 {
+    height: calc(100vh - 1px);
+  }
+  .bleed {
+    position: absolute;
+    top: calc(calc(var(--bleed) * -1) * 1mm); 
+    left: calc(calc(var(--bleed) * -1) * 1mm); 
+    right: calc(calc(var(--bleed) * -1) * 1mm); 
+    bottom: calc(calc(var(--bleed) * -1) * 1mm); 
+    [data-trim="true"] & {
+      top: calc(calc(var(--trim) - var(--bleed)) * 1mm);
+      left: calc(calc(var(--trim) - var(--bleed)) * 1mm);
+      right: calc(calc(var(--trim) - var(--bleed)) * 1mm);
+      bottom: calc(calc(var(--trim) - var(--bleed)) * 1mm);
+    }
+  }
 }
 
 .container {
@@ -67,12 +81,6 @@ sub {
 sub {
   top: 0.4em;
 }   
-
-/* Hiding Placeholder Elements on Export */
-.is-export-mode .placeholder__container,
-.is-export-mode .placeholder__trigger {
-  display: none;
-}     
 
 /* Dynamic Inject container style */
 .js-dynamicInjectMaster { display: none; }
@@ -122,12 +130,12 @@ sub {
 
 .placeholderImage {
   position: absolute;
-  top: 3mm;
-  left: 3mm;
-  bottom: 3mm;
-  right: 3mm;
-  width: calc(100% - 6mm);
-  height: calc(100% - 6mm);
+  top: calc(var(--bleed) * 1mm);
+  left: calc(var(--bleed) * 1mm);
+  bottom: calc(var(--bleed) * 1mm);
+  right: calc(var(--bleed) * 1mm);
+  width: calc(100% - calc(var(--bleed) * 2 * 1mm));
+  height: calc(100% - calc(var(--bleed) * 2 * 1mm));
   background-repeat: no-repeat;
   background-size: contain;
   opacity: 0.4;
@@ -135,10 +143,35 @@ sub {
   pointer-events:none;
 }
 
+.crop-marks {
+  [data-trim="false"] & {
+    display: none;
+  }
+}
 .crop-mark {
   position: absolute;
-  height: 28.81px;
-  width: 28.81px;
+  width: calc(calc(var(--trim)) * 1mm);
+  height: calc(calc(var(--trim)) * 1mm);
+  &::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    left: calc(var(--trim) * 1mm);
+    height: calc(calc(
+      var(--trim) - var(--bleed)) * 1mm);
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    top: calc(var(--trim) * 1mm);
+    width: calc(calc(
+      var(--trim) - var(--bleed)) * 1mm);
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1;
+  }
 }
 .crop-marks .crop-mark.top-left {
   top: 0;
@@ -158,20 +191,6 @@ sub {
   bottom: 0;
   right: 0;
   transform: rotate(180deg);
-}
-
-[data-trim="true"] .bleed {
-  --trimOffset: 4.41mm;
-}
-[data-trim="false"] .bleed, .bleed {
-  --trimOffset: -3mm;
-}
-.bleed {
-  position: absolute;
-  top: var(--trimOffset);
-  left: var(--trimOffset);
-  bottom: var(--trimOffset);
-  right: var(--trimOffset);
 }
 
 a { 

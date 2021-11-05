@@ -1,4 +1,4 @@
-name: move test push to testing folder on s3
+name: Test build
 
 on:
  push:
@@ -21,7 +21,7 @@ jobs:
         
       - name: Test build
         run: npm run test
-        
+
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
@@ -38,3 +38,6 @@ jobs:
         env: 
           TEST_ACCOUNT_EMAIL: ${{ secrets.TEST_ACCOUNT_EMAIL }}
           TEST_ACCOUNT_PASSWORD: ${{ secrets.TEST_ACCOUNT_PASSWORD }}
+
+      # - name: Lint code
+      #   run: npm run lint

@@ -1,55 +1,46 @@
 <!DOCTYPE html>
 <html async>
+
 <head>
-    <title>name</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="template-built-by" content="testte"/>
-    <meta name="scope" content="DTB-123"/>
-    <meta name="build" content="DTB-456"/>
-    <meta name="updates" content=""/>
-    <link rel="stylesheet" type="text/css" href="https://outfit-assets-production.s3.amazonaws.com/template/3.0/main.css">
-  </head>
-  <style>
-      @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+  <!-- Template Admin Build Instructions 
+        1. Fill Out Title Meta-Data
+        2. Fill Out Scope Card Meta-Data (you can find this number linked on the Jira Card)
+        3. Fill Out Build Card Meta-Data (you can find this number linked on the Jira Card)
+        4. Ensure you are using external css and js files 
+        5. Include fonts in the boilerplate config if needed
+        6. Add your inputs to the template inputs tab
+        7. Have a lovely day 
+        8. Remove this comment
+        9. Create an amazing template
+  -->
+  <title>PUT_TEMPLATE_NAME_HERE</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="template-built-by" content="PUT_YOUR_NAME_HERE" />
+  <meta name="scope" content="DTB-PUT_JIRA_NUMBER_HERE" />
+  <meta name="build" content="DTB-PUT_JIRA_NUMBER_HERE" />
+  <meta name="updates" content="" />
+  <link rel="stylesheet" type="text/css"
+    href="https://outfit-assets-production.s3.amazonaws.com/template/3.3.0/main.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
 
-      body {
-          font-family: 'IBM Plex Sans', sans-serif;
-      }
-  </style>
-  <body>
-    <div class="page">
-      <div class="bleed">
-        <div class="container">
-          <h1 data-max-line='1'>testing text </h1>
-        </div>
-      </div> 
+<body>
+  <div class="page">
+    <div class="bleed">
+      <div class="container">
+        <h1>To get started follow the rules at the top of the code</h1>
+        <p class="body-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+        aliqua. Turpis egestas pretium aenean pharetra. Orci eu lobortis elementum nibh tellus molestie. Vulputate dignissim
+        suspendisse in est. Vel pharetra vel turpis nunc. Malesuada nunc vel risus commodo. Nisi vitae suscipit tellus mauris.
+        Posuere morbi leo urna molestie at elementum eu. Urna duis convallis convallis tellus. Urna molestie at elementum eu.
+        Nunc sed blandit libero volutpat.</p>
+      </div>
     </div>
+  </div>
+</body>
 
-   <script src="./dist/boilerplate.js"></script>
-   <script>
-      let template = new boilerplate({
-        fonts: ['IBM Plex Sans'],
-        camelCase: true,
-        templateProps: {"test-input_test": "hey"}
-      });
+<script src="https://outfit-assets-production.s3.amazonaws.com/template/3.3.0/boilerplate.js"></script>
+<script src="js/main.js"></script>
 
-      // This function will run whenever there is a change to any text input
-      template.on("inputs-change", (e) => {
-        console.log('inputs-change', e);
-        // template.textFit(document.querySelectorAll('h1'), { minFontSize: 0.5, maxFontSize: 2 });
-        template.maxLineCheck();
-        let t = template.lineClamp(document.querySelector('h1'), { maxFontSize: 200 });
-        console.log('t', t)
-        let count = template.countLines(document.querySelectorAll('h1'))
-        console.table({count})
-        let calculateTextMetrics = template.calculateTextMetrics(document.querySelectorAll('h1'))
-        console.table(calculateTextMetrics)
-        // template.maxHeightCheck();
-        // template.charLimit();
-        // template.dynamicReplace();
-        template.completeRender();
-      });
-    </script>
-  </body>
 </html>

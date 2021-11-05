@@ -1,16 +1,15 @@
-import FontFaceObserver from './fontfaceobserver.js';
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
+import FontFaceObserver from './vendor/fontfaceobserver';
 
-const defaultsRemoved = () =>
+const defaultsRemoved = () => {
   // ensure that the user has changed important tempalte metadata
-  new Promise((resolve, reject) => {
+  Promise((resolve) => {
     if (!window.top.defaultsRemovedChecked) {
       window.top.defaultsRemovedChecked = true;
 
       if (!document.querySelector('link[href$="main.css"]')) {
-        console.log(
-          '%cPlease include main.css in order to ensure that export is correct',
-          'background: #E41E46; color: white',
-        );
+        console.log('%cPlease include main.css in order to ensure that export is correct', 'background: #E41E46; color: white');
       }
 
       const styles = Array.from(
@@ -18,7 +17,8 @@ const defaultsRemoved = () =>
           'style:not([data-href]):not(.injectedStyle):not(#mceDefaultStyles):not(#mceStyles):not([id^=less])',
         ),
       );
-      // styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico ")); // allowed injected style until the ID is added to target this
+      // styles = styles.filter((e) => !e.innerHTML.startsWith("\n    .mce-ico "));
+      // allowed injected style until the ID is added to target this
       if (styles.length > 0) {
         console.log(
           '%cIt is best practice not use styles in the html document. Please move all the styles to an external styles.css or styles.less file for constancy',
@@ -50,9 +50,7 @@ const defaultsRemoved = () =>
 
       const builtBy = document.querySelector('meta[name="template-built-by"]');
       if (
-        builtBy
-        && (builtBy.getAttribute('content') === ''
-          || builtBy.getAttribute('content') === 'PUT_YOUR_NAME_HERE')
+        builtBy && (builtBy.getAttribute('content') === '' || builtBy.getAttribute('content') === 'PUT_YOUR_NAME_HERE')
       ) {
         console.log(
           '%cPlease add your name in the document meta tags',
@@ -62,9 +60,7 @@ const defaultsRemoved = () =>
 
       const scopeCard = document.querySelector('meta[name="scope"]');
       if (
-        scopeCard
-        && (scopeCard.getAttribute('content') === ''
-          || scopeCard.getAttribute('content') === 'DTB-PUT_JIRA_NUMBER_HERE')
+        scopeCard && (scopeCard.getAttribute('content') === '' || scopeCard.getAttribute('content') === 'DTB-PUT_JIRA_NUMBER_HERE')
       ) {
         console.log(
           '%cPlease add the scope card ID in the document meta tags',
@@ -74,9 +70,7 @@ const defaultsRemoved = () =>
 
       const builtCard = document.querySelector('meta[name="build"]');
       if (
-        builtCard
-        && (builtCard.getAttribute('content') === ''
-          || builtCard.getAttribute('content') === 'DTB-PUT_JIRA_NUMBER_HERE')
+        builtCard && (builtCard.getAttribute('content') === '' || builtCard.getAttribute('content') === 'DTB-PUT_JIRA_NUMBER_HERE')
       ) {
         console.log(
           '%cPlease add the build card ID in the document meta tags',
@@ -90,16 +84,15 @@ const defaultsRemoved = () =>
           if (node && node.data && node.nodeType === 8) {
             return node.data.includes('Template Admin Build Instructions');
           }
+          return false;
         })
       ) {
-        console.log(
-          "%cPlease remove the 'Template Admin Build Instructions' comment from the top of the document",
-          'background: #94B7BB; color: #111820',
-        );
+        console.log("%cPlease remove the 'Template Admin Build Instructions' comment from the top of the document", 'background: #94B7BB; color: #111820');
       }
     }
     resolve();
   });
+};
 const setOutfitState = () => {
   let mode = window.location.href.includes('exports') ? 'export' : false;
   mode = !mode && window.location.href.includes('templates') ? 'template' : mode;
@@ -118,7 +111,7 @@ const setOutfitState = () => {
 const highestZ = () => (
   Array.from(document.querySelectorAll('body *'))
     .map((a) => parseFloat(window.getComputedStyle(a).zIndex))
-    .filter((a) => !isNaN(a))
+    .filter((a) => !Number.isNaN(a))
     .sort()
     .pop() + 1
 );
@@ -127,11 +120,14 @@ const detectRender = () => {
   const agent = navigator.userAgent;
   if (agent.includes('OPTION 2.1')) {
     return '2.1';
-  } if (agent.includes('OPTION 1.1')) {
+  }
+  if (agent.includes('OPTION 1.1')) {
     return '1.1';
-  } if (agent.includes('OPTION 1.0')) {
+  }
+  if (agent.includes('OPTION 1.0')) {
     return '1.0';
-  } if (agent.includes('OPTION 2.0')) {
+  }
+  if (agent.includes('OPTION 2.0')) {
     return '2.0';
   }
   return 'unknown';
@@ -141,71 +137,50 @@ const detectRender = () => {
 const pageHeightSetup = () => {
   const render = detectRender();
   if (render === '2.1') {
-    return 'calc(100vh - 1px)';
-  } if (render === '1.1') {
-    return '100vh';
-  } if (render === '1.0') {
-    return '100vh';
-  } if (render === '2.0') {
-    return 'calc(100vh - 1px)';
+    return true;
   }
-  return '100vh';
+  if (render === '1.1') {
+    return false;
+  }
+  if (render === '1.0') {
+    return false;
+  }
+  if (render === '2.0') {
+    return true;
+  }
+  return false;
 };
 
 // Fix for the resizable background images - fullscreen and digital vairaitons only
-const addCropMarks = (trimMarks) => {
+const addCropMarks = () => {
   // crop and bleed
-  const cropSVG = '<svg class="crop-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.6 21.6" xmlns:v="https://vecta.io/nano"><path d="M21 15V0m-6 21H0" fill="none" stroke="#000" stroke-width="0.25" stroke-miterlimit="10.0131"/></svg>';
+  const pageHeightFix = pageHeightSetup();
+  document.querySelectorAll('.page').forEach((page) => {
+    if (pageHeightFix) page.classList.add('minus1');
 
-  const pageHeight = pageHeightSetup();
-  const pages = document.querySelectorAll('.page');
-  pages.forEach((page) => {
-    page.style.height = pageHeight;
-    if (trimMarks) {
+    if (!page.querySelector('.crop-mark')) {
       page.insertAdjacentHTML(
-        'afterbegin',
-        `<div class="crop-marks">
-  <div class="crop-mark top-left">${cropSVG}</div>
-  <div class="crop-mark top-right">${cropSVG}</div>
-  <div class="crop-mark bottom-left">${cropSVG}</div>
-  <div class="crop-mark bottom-right">${cropSVG}</div>
+        'afterbegin', `<div class="crop-marks">
+  <div class="crop-mark top-left" ></div>
+  <div class="crop-mark top-right" ></div>
+  <div class="crop-mark bottom-left" ></div>
+  <div class="crop-mark bottom-right" ></div>
   </div>`,
       );
     }
   });
-
-  Array.prototype.slice
-    .call(document.querySelectorAll('.bleed'))
-    .forEach((bleed) => {
-      bleed.style.cssText = trimMarks
-        ? 'position: absolute; top: 4.41mm; right: 4.41mm; bottom: 4.41mm; left: 4.41mm;'
-        : 'position: absolute; top: -3mm; right: -3mm; bottom: -3mm; left: -3mm';
-    });
-  if (!trimMarks) {
-    document.querySelectorAll('.outfit-resizable-background').forEach((el) => {
-      el.parentNode.style.left = '0';
-      el.parentNode.style.right = '0';
-      el.parentNode.style.top = '0';
-      el.parentNode.style.bottom = '0';
-      el.parentNode.style.width = '100%';
-      el.parentNode.style.height = '100%';
-    });
-  }
-  return pageHeight;
 };
 
 const fontsLoaded = (fontsListed) => new Promise((resolve, reject) => {
   if (
-    (fontsListed && fontsListed.length < 1)
-      || fontsListed[0] === 'PUT_ALL_FONT_NAMES_HERE'
+    (fontsListed && fontsListed.length < 1) || fontsListed[0] === 'PUT_ALL_FONT_NAMES_HERE'
   ) {
+    // eslint-disable-next-line prefer-promise-reject-errors
     reject(
       "No fonts were put in the boilerplate config. For example { fonts: ['IBM Plex Sans'] }",
     );
   } else {
-    Promise.all(
-      fontsListed.map((font) => new FontFaceObserver(font).load()),
-    )
+    Promise.all(fontsListed.map((font) => new FontFaceObserver(font).load()))
       .then((el) => {
         resolve(el);
       })
@@ -223,9 +198,7 @@ const setSize = (trimMarks, exportReduceFont) => {
   const preliminaryCalc = vmin * 2 + vmax * 1.4 + vh * 2;
 
   // Reducing the preliminaryCalc value by reduceVal in export mode and in Firefox preview mode
-  const finalCalc = window.state === 'exports'
-    ? preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc
-    : preliminaryCalc;
+  const finalCalc = window.state === 'exports' ? preliminaryCalc - (exportReduceFont / 100) * preliminaryCalc : preliminaryCalc;
 
   document.documentElement.style.fontSize = `${finalCalc}px`;
   return finalCalc;
@@ -241,7 +214,8 @@ const setBrowserType = () => {
     isIE: /Trident/.test(navigator.userAgent),
     isChrome: /Google Inc/.test(navigator.vendor),
     isChromiumBased: !!window.chrome && !/Edge/.test(navigator.userAgent),
-    isTouchScreen: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+    // eslint-disable-next-line no-undef
+    isTouchScreen: 'ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch),
     isIOS: /(iPhone|iPad|iPod)/.test(navigator.platform),
     isMac: window.navigator.appVersion.includes('Mac'),
   };
@@ -257,9 +231,7 @@ const setBrowserType = () => {
 // wait for the dom to laod or continue if it has already loaded
 const domReady = new Promise((resolve, reject) => {
   if (
-    document.readyState === 'complete'
-    || document.readyState === 'loaded'
-    || document.readyState === 'interactive'
+    document.readyState === 'complete' || document.readyState === 'loaded' || document.readyState === 'interactive'
   ) {
     resolve();
   } else {
@@ -278,40 +250,21 @@ const winLoad = new Promise((resolve, reject) => {
   }
 });
 
-const loadLESS = () => new Promise(async (resolve, reject) => {
-  try {
-    if (document.querySelector('[type="text/less"]') !== null) {
-      window.less = {
-        async: true,
-        env: 'development',
-      };
-      const less = await require('./less.js');
-      await less.refresh();
-      document
-        .querySelectorAll('style[media=""][data-href$=".less"]:not([href])')
-        .forEach((e) => e.remove());
-    }
-
-    resolve();
-  } catch (e) {
-    reject(e);
-  }
-});
-
 const hotReloadOnChange = () => {
   if (
+    // eslint-disable-next-line no-undef
     (state === 'document' || state === 'template')
     && typeof BroadcastChannel === 'function'
   ) {
     const bc = new BroadcastChannel('hot-reload');
-    bc.onmessage = (ev) => {
+    bc.onmessage = () => {
       if (!window.top.reloading) {
         window.top.reloading = true;
         window.top.location.reload();
       }
     };
     const bc2 = new BroadcastChannel('fs-sync');
-    bc2.onmessage = (ev) => {
+    bc2.onmessage = () => {
       if (!window.top.reloading) {
         window.top.reloading = true;
         window.top.location.reload();
@@ -323,7 +276,6 @@ const hotReloadOnChange = () => {
 export {
   defaultsRemoved,
   hotReloadOnChange,
-  loadLESS,
   winLoad,
   domReady,
   highestZ,

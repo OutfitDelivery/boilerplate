@@ -2,14 +2,19 @@
     "env": {
         "browser": true,
         "es2021": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     "extends": [
         "airbnb-base"
     ],
+    "ignorePatterns": ["js", "readme.md"],
     "parserOptions": {
         "ecmaVersion": 12
     },
     "rules": {
+        "no-console": "off",
+        "no-underscore-dangle": "off",
+        "prefer-rest-params": "off"
     }
 }

@@ -1,7 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import {
   defaultsRemoved,
-  loadLESS,
   winLoad,
   domReady,
   highestZ,
@@ -28,41 +27,37 @@ import {
   calculateTextMetrics,
 } from './limiters';
 import { imageCompression, ensureAllImagesLoaded } from './images';
-import detectElementOverflow from './detectElementOverflow.js';
+import detectElementOverflow from './detectElementOverflow';
 
 export default class boilerplate {
+  #trim = 0;
+  #bleed = 0;
   constructor(config = {}) {
     console.clear();
-    this.trimMarks = config.trimMarks || false;
-    this.state = setOutfitState(this.trimMarks);
+    this.state = setOutfitState();
+    this.exportReduceFont = config.exportReduceFont || 0;
+    this.trim = config.trimMarks;
+
+    this.bleed = config.bleed || 3;
     if (config.hotReloadOnChange) {
       hotReloadOnChange();
     }
     this.events = {};
-    this.overflows = false;
     this.browser = setBrowserType();
     this.camelCase = config.camelCase || false;
-    this.exportReduceFont = config.exportReduceFont || 0;
     this.allowNoMetaData = config.allowNoMetaData || false;
     this.ensureImagesLoad = true;
     if (
-      typeof config.ensureImagesLoad === 'boolean'
-      && config.ensureImagesLoad === false
+      typeof config.ensureImagesLoad === "boolean" &&
+      config.ensureImagesLoad === false
     ) {
       this.ensureImagesLoad = false;
     }
-    if (config.trimMarks) {
-      document.body.setAttribute('data-trim', config.trimMarks);
-    }
-
-    if (!(typeof config.addCrop === 'boolean' && config.addCrop === false)) {
-      addCropMarks(this.trimMarks);
-    }
-    setSize(config.trimMarks || false, config.exportReduceFont || 0);
 
     if (config.placeholderVisibility) {
-      setupPlaceholder(config.placeholderVisibility, config.placeholderImages);
+      setupPlaceholder(config.placeholderImages, config.placeholderVisibility);
     }
+    addCropMarks();
     if (config.cssVariables) {
       this.addStyle(`:root{${config.cssVariables}}`);
     }
@@ -76,15 +71,15 @@ export default class boilerplate {
           });
         }
       } else {
-        this.templateProps = {};
+        this.templateProps = window.payload || {};
       }
     } catch (e) {
       this.templateProps = {};
-      console.log('templateProps is not a valid JSON object');
+      console.log("templateProps is not a valid JSON object");
     }
 
     // all these checks need to be done before the tempalte code can be run
-    const checkList = [loadLESS()];
+    const checkList = [];
     if (config.fonts) {
       this.fonts = config.fonts;
       if (!Array.isArray(this.fonts)) {
@@ -99,40 +94,40 @@ export default class boilerplate {
     }
 
     Promise.all(checkList).then(() => {
-      this.emit('run', this.templateProps);
-      this.emit('inputs-change', this.templateProps);
-      if (typeof window.inputsChange === 'function') {
+      this.emit("run", this.templateProps);
+      this.emit("inputs-change", this.templateProps);
+      if (typeof window.inputsChange === "function") {
         window.inputsChange(this.templateProps);
       }
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         setSize(this.trimMarks, this.exportReduceFont);
-        this.emit('inputs-change', this.templateProps);
-        if (typeof window.inputsChange === 'function') {
+        this.emit("inputs-change", this.templateProps);
+        if (typeof window.inputsChange === "function") {
           window.inputsChange(this.templateProps);
         }
       });
-      window.addEventListener('message', (e) => {
+      window.addEventListener("message", (e) => {
         try {
           if (e && e.data) {
-            let data = JSON.parse(e.data);
-            // check if there is json data and that it's not a message event from "app.fullstory.com"
-            if (data && !data.__fs) {
+            let { data } = e;
+            if (data && data._OUTFIT_POST_MESSAGE) {
+              delete data._OUTFIT_POST_MESSAGE;
               if (this.camelCase) {
                 data = camelcaseKeys(data);
               }
               this.templateProps = { ...this.templateProps, ...data };
-              this.emit('inputs-change', this.templateProps);
-              if (typeof window.inputsChange === 'function') {
+              this.emit("inputs-change", this.templateProps);
+              if (typeof window.inputsChange === "function") {
                 window.inputsChange(this.templateProps);
               }
             }
           }
         } catch (e) {
-          console.error('input update error', e);
+          console.error("input update error", e);
         }
       });
 
-      if (state === 'document') {
+      if (this.state === "document") {
         imageCompression();
       }
     });
@@ -147,16 +142,6 @@ export default class boilerplate {
     this.events[name].push(listener);
   }
 
-  // removeListener(name, listenerToRemove) {
-  //   if (!this.events[name]) {
-  //     throw new Error(`Can't remove a listener. Event "${name}" doesn't exits.`);
-  //   }
-
-  //   const filterListeners = (listener) => listener !== listenerToRemove;
-
-  //   this.events[name] = this.events[name].filter(filterListeners);
-  // }
-
   // emit sends a message to a callback
   emit(name, data) {
     if (this.events[name]) {
@@ -169,15 +154,15 @@ export default class boilerplate {
   }
 
   // textValidation(callback)
-  addStyle(styles = '') {
-    const css = document.createElement('style');
-    css.classList = 'injectedStyle';
+  addStyle(styles = "") {
+    const css = document.createElement("style");
+    css.classList = "injectedStyle";
     if (css.styleSheet) {
       css.styleSheet.cssText = styles;
     } else {
       css.appendChild(document.createTextNode(styles));
     }
-    document.getElementsByTagName('head')[0].appendChild(css);
+    document.getElementsByTagName("head")[0].appendChild(css);
     return css;
   }
 
@@ -189,20 +174,20 @@ export default class boilerplate {
     }
     Promise.all(checkList)
       .then(() => {
-        if (this.getOverflows()) {
+        if (this.overflows) {
           console.log(
-            '%cThis will export with overflow errors',
-            'background: #1F2A44; color: white;font-size:16px;',
+            "%cThis will export with overflow errors",
+            "background: #1F2A44; color: white;font-size:16px;"
           );
         }
         const loadTime = Date.now() - window.performance.timing.navigationStart;
         console.info(`Document has finished rendering in ${loadTime}ms`);
-        document.dispatchEvent(new Event('printready'));
+        document.dispatchEvent(new Event("printready"));
 
         if (
-          this.state === 'document'
-          || this.state === 'template'
-          || this.state === 'local'
+          this.state === "document" ||
+          this.state === "template" ||
+          this.state === "local"
         ) {
           // set timeout is used here to push this to the end of the heap which means it will load after everything else
           setTimeout(() => {
@@ -214,19 +199,59 @@ export default class boilerplate {
       })
       .catch((err) => {
         console.error(err);
-        throw 'Render failed for logged reason';
+        throw "Render failed for logged reason";
       });
   }
 
-  getOverflows() {
-    const overflows = document.querySelectorAll('.overflow, [data-overflow]');
-    if (overflows.length > 0) {
-      this.overflows = overflows;
-      this.emit('overflow', overflows);
-    } else {
-      this.overflows = false;
+  showOverflows() {
+    if (this.overflows) {
+      this.overflows[0].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
     }
-    return this.overflows;
+  }
+
+  get bleed() {
+    return this.#bleed;
+  }
+
+  set bleed(value) {
+    if (value !== this.#bleed) {
+      this.#bleed = value;
+      document.body.style.setProperty("--bleed", this.#bleed);
+    }
+  }
+
+  get trim() {
+    return this.#trim;
+  }
+
+  set trim(value) {
+    if (value !== this.#trim) {
+      if (!value) {
+        this.#trim = 0;
+      } else {
+        if (typeof value == "boolean") {
+          this.#trim = 7.41;
+        } else {
+          this.#trim = value;
+        }
+      }
+      document.body.style.setProperty("--trim", this.#trim);
+      document.body.setAttribute("data-trim", Boolean(this.#trim));
+      setSize(Boolean(this.#trim) || false, this.exportReduceFont || 0);
+    }
+  }
+
+  get overflows() {
+    const o = document.querySelectorAll(".overflow, [data-overflow]");
+
+    if (o.length > 0) {
+      this.emit("overflow", o);
+      return o;
+    }
   }
 
   dynamicReplace() {
@@ -235,37 +260,40 @@ export default class boilerplate {
 
   textFit() {
     const t = textFit.apply(this, arguments);
-    this.getOverflows();
+    this.overflows;
     return t;
   }
 
   maxLineCheck() {
     const t = maxLineCheck.apply(this, arguments);
-    this.getOverflows();
+    this.overflows;
     return t;
   }
 
   minLineCheck() {
     const t = minLineCheck.apply(this, arguments);
-    this.getOverflows();
+    this.overflows;
     return t;
   }
 
   maxHeightCheck() {
     const t = maxHeightCheck.apply(this, arguments);
-    this.getOverflows();
+    this.overflows;
     return t;
   }
 
   charLimit() {
     const t = charLimit.apply(this, arguments);
-    this.getOverflows();
+    this.overflows;
     return t;
-    ß;
   }
 
   highestZindex() {
     return highestZ();
+  }
+
+  setupPlaceholder() {
+    return setupPlaceholder.apply(this, arguments);
   }
 
   ensureAllImagesLoaded() {

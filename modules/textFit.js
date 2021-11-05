@@ -1,6 +1,15 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-useless-catch */
+/* eslint-disable no-use-before-define */
+/* eslint-disable prefer-const */
+/* eslint-disable radix */
+/* eslint-disable max-len */
+/* eslint-disable no-param-reassign */
 import {
   getWidth, getHeight, countLines, simpleRounding,
-} from './limiters.js';
+} from './limiters';
 /**
  * textFit v3.1.0
  * Previously known as jQuery.textFit
@@ -14,24 +23,6 @@ import {
  * Uses binary search to fit text with minimal layout calls.
  * Version 2.0 does not use jQuery.
  */
-/* global define:true, document:true, window:true, HTMLElement:true */
-
-// (function (root, factory) {
-//   "use strict";
-
-//   // UMD shim
-//   if (typeof define === "function" && define.amd) {
-//     // AMD
-//     define([], factory);
-//   } else if (typeof exports === "object") {
-//     // Node/CommonJS
-//     module.exports = factory();
-//   } else {
-//     // Browser
-//     root.textFit = factory();
-//   }
-// })(typeof global === "object" ? global : this, function () {
-//   "use strict";
 
 const defaultSettings = {
   alignVert: false, // if true, textFit will align vertically using css tables
@@ -39,13 +30,16 @@ const defaultSettings = {
   multiLine: false, // if true, textFit will not set white-space: no-wrap
   stopOverflow: false, // if true, a error we be thrown if the content is overflowing
   fontUnit: 'rem', // what unit should the final font be. using rems or mm is sometimes useful
-  fontChangeSize: 0.01, // how much should the font size by ajusted by each time. 0.1 and 0.01 is useful for when using a rem font unit
+  // how much should the font size by ajusted by each time.
+  // 0.1 and 0.01 is useful for when using a rem font unit
+  fontChangeSize: 0.01,
   minFontSize: 0.3,
   maxFontSize: 1,
   maxLine: false,
   growInSize: false, // set the width and height of the element to 100% to allow the element to grow
   containerChecks: [],
-  reProcess: true, // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
+  // if true, textFit will re-process already-fit nodes. Set to 'false' for better performance
+  reProcess: true,
   widthOnly: false, // if true, textFit will fit text to element width, regardless of text height
   alignVertWithFlexbox: false, // if true, textFit will use flexbox for vertical alignment
   display: 'inline-block', // in case you need to change this
@@ -73,14 +67,14 @@ export default function textFit(els, options) {
   const elType = Object.prototype.toString.call(els);
   if (
     elType !== '[object Array]'
-      && elType !== '[object NodeList]'
-      && elType !== '[object HTMLCollection]'
+    && elType !== '[object NodeList]'
+    && elType !== '[object HTMLCollection]'
   ) {
     els = [els];
   }
 
   // Process each el we've passed.
-  for (let i = 0; i < els.length; i++) {
+  for (let i = 0; i < els.length; i += 1) {
     try {
       processItem(els[i], settings);
     } catch (e) {
@@ -90,12 +84,15 @@ export default function textFit(els, options) {
 }
 
 /**
-   * The meat. Given an el, make the text inside it fit its parent.
-   * @param  {DOMElement} el       Child el.
-   * @param  {Object} settings     Options for fit.
-   */
+ * The meat. Given an el, make the text inside it fit its parent.
+ * @param  {DOMElement} el       Child el.
+ * @param  {Object} settings     Options for fit.
+ */
 function processItem(el, settings) {
-  if (!isElement(el) || (!settings.reProcess && el.getAttribute('textFitted'))) {
+  if (
+    !isElement(el)
+    || (!settings.reProcess && el.getAttribute('textFitted'))
+  ) {
     return false;
   }
 
@@ -104,10 +101,13 @@ function processItem(el, settings) {
     el.setAttribute('textFitted', 1);
   }
 
-  let innerSpan; let originalHeight; let originalHTML; let
-    originalWidth;
-  let low; let mid; let
-    high;
+  let innerSpan;
+  let originalHeight;
+  let originalHTML;
+  let originalWidth;
+  let low;
+  let mid;
+  let high;
   const { containerChecks } = settings;
 
   // if we are going to let the text get larger then we need to adjust the size to give a larger originalHeight and originalWidth
@@ -128,15 +128,11 @@ function processItem(el, settings) {
   if (!originalWidth || (!settings.widthOnly && !originalHeight)) {
     if (!settings.widthOnly) {
       throw new Error(
-        `Set a height and width on the target element ${
-          el.outerHTML
-        } before using textFit!`,
+        `Set a height and width on the target element ${el.outerHTML} before using textFit!`,
       );
     } else {
       throw new Error(
-        `Set a width on the target element ${
-          el.outerHTML
-        } before using textFit!`,
+        `Set a width on the target element ${el.outerHTML} before using textFit!`,
       );
     }
   }
@@ -156,10 +152,7 @@ function processItem(el, settings) {
     innerSpan = textFittedSpan;
     // Remove vertical align if we're reprocessing.
     if (innerSpan.classList.contains('textFitAlignVert')) {
-      innerSpan.className = innerSpan.className.replace(
-        'textFitAlignVert',
-        '',
-      );
+      innerSpan.className = innerSpan.className.replace('textFitAlignVert', '');
       innerSpan.style.height = '';
       el.className.replace('textFitAlignVertFlex', '');
     }
@@ -194,12 +187,14 @@ function processItem(el, settings) {
     }
 
     // check the parent containers for overflows and adjust the font size accordingly to prevent them
-    const containerOverflow = [].slice.call(containerChecks).some((container) => {
-      if (container.scrollHeight > simpleRounding(getHeight(container))) {
-        return true;
-      }
-      return false;
-    });
+    const containerOverflow = [].slice
+      .call(containerChecks)
+      .some((container) => {
+        if (container.scrollHeight > simpleRounding(getHeight(container))) {
+          return true;
+        }
+        return false;
+      });
 
     // console.log(scrollWidt h, scrollHeight, !maxLines, !containerOverflow)
     if (scrollWidth && scrollHeight && !maxLines && !containerOverflow) {
@@ -214,7 +209,9 @@ function processItem(el, settings) {
     console.log('textFit font changed to:', size + settings.fontUnit);
   }
   // updating font if differs:
-  if (innerSpan.style.fontSize != size + settings.fontUnit) innerSpan.style.fontSize = size + settings.fontUnit;
+  if (innerSpan.style.fontSize !== size + settings.fontUnit) {
+    innerSpan.style.fontSize = size + settings.fontUnit;
+  }
 
   // add the required CSS in order to stop overflows
   if (Number.isInteger(maxLine) || settings.stopOverflow) {
@@ -259,7 +256,7 @@ function processItem(el, settings) {
     innerSpan.style.height = `${height}px`;
     if (
       settings.alignVertWithFlexbox
-        && !el.classList.contains('textFitAlignVertFlex')
+      && !el.classList.contains('textFitAlignVertFlex')
     ) {
       el.className = `${el.className} textFitAlignVertFlex`;
     }
@@ -271,8 +268,8 @@ function isElement(o) {
   return typeof HTMLElement === 'object'
     ? o instanceof HTMLElement // DOM2
     : o
-          && typeof o === 'object'
-          && o !== null
-          && o.nodeType === 1
-          && typeof o.nodeName === 'string';
+        && typeof o === 'object'
+        && o !== null
+        && o.nodeType === 1
+        && typeof o.nodeName === 'string';
 }

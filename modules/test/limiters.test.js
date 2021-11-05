@@ -1,6 +1,4 @@
-import {
-  charLimit, dynamicAssign, maxHeightCheck, maxLineCheck, getWidth, getHeight, countLines,
-} from '../limiters';
+import { getHeight, countLines } from '../limiters';
 
 describe('getHeight', () => {
   test('check getHeight() runs', () => {
