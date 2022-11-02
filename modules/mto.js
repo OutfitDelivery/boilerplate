@@ -1,15 +1,14 @@
 /* eslint-disable */
 // This is getting removed so no point linting
-//
+
 // get sidebar element on the current page
 const getSidebar = () => {
-  const sidebar = window.top.document.querySelectorAll(
-    ".sidebar .current-list"
-  );
+  let sidebar = window.top.document.querySelectorAll(".sidebar .current-list");
   if (sidebar.length > 0) {
-    return [].slice.call(sidebar).pop();
+    return [...sidebar].pop();
+  } else {
+    return undefined;
   }
-  return undefined;
 };
 const hideInput = (inputValue) => {
   getSidebar()
@@ -20,23 +19,22 @@ const hideInput = (inputValue) => {
       }
     });
 };
-
 const setupMTO = (
   teamMetadata,
   teamsAllowed = "",
   inputName = "Team metadata"
-) =>
-  new Promise((resolve, reject) => {
+) => {
+  return new Promise((resolve, reject) => {
     try {
       // const sidebar = getSidebar();
       // state isn't global in v2 so this line is needed for that version but shouldn't be included in v3
-      // const state = document.body.getAttribute("document-state");
+      const state = document.body.getAttribute("document-state");
       if (!state) {
         reject("please set the state attribute");
       }
       // if we are on any other page then we don't need to do anything to the sidebar and we can skip everything
       if (state === "template") {
-        const mtoNotSupported = () => {
+        let mtoNotSupported = () => {
           if (
             getSidebar()?.firstChild?.firstChild?.lastChild?.innerText ==
             inputName
@@ -52,9 +50,11 @@ const setupMTO = (
         // turn teamsAllowed from string into array
         teamsAllowed = teamsAllowed
           .toLowerCase()
+          .split("_")
+          .join(" ")
           .split(",")
           .filter((n) => n);
-        const hideTeamsThatAreNotAllowed = () => {
+        let hideTeamsThatAreNotAllowed = () => {
           if (teamsAllowed.length > 0) {
             // if we are only allowing the user to select some of the teams then we should remove the ones that the user hasn't got access to.
             if (
@@ -77,7 +77,7 @@ const setupMTO = (
                   ) {
                     inputOption.remove();
                   } else {
-                    const span = inputOption.querySelector("span");
+                    let span = inputOption.querySelector("span");
                     // remove 4 digit number from start of input
                     if (span.innerText.match(/^[0-9]{4}/g)) {
                       span.innerText = span.innerText.substring(7);
@@ -92,7 +92,7 @@ const setupMTO = (
             hideInput(inputName);
           }
         };
-        setInterval(() => hideTeamsThatAreNotAllowed(), 300);
+        setInterval(() => hideTeamsThatAreNotAllowed(), 500);
         hideTeamsThatAreNotAllowed();
       }
       if (state === "template") {
@@ -113,5 +113,4 @@ const setupMTO = (
       reject(error);
     }
   });
-
-export { setupMTO, getSidebar };
+};
